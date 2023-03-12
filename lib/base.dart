@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import 'package:my_server_status/widgets/bottom_nav_bar.dart';
 
+import 'package:my_server_status/providers/servers_provider.dart';
 import 'package:my_server_status/config/app_screens.dart';
 import 'package:my_server_status/models/app_screen.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -31,9 +30,12 @@ class _BaseState extends State<Base> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final serversProvider = Provider.of<ServersProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
-    List<AppScreen> screens = screensServerConnected;
+    List<AppScreen> screens = serversProvider.selectedServer != null
+      ? screensServerConnected
+      : screensSelectServer;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(

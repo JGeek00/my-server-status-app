@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+import 'package:my_server_status/models/app_log.dart';
 import 'package:my_server_status/functions/conversions.dart';
 
 class AppConfigProvider with ChangeNotifier {
@@ -25,6 +26,8 @@ class AppConfigProvider with ChangeNotifier {
   int _showNameTimeLogs = 0;
 
   String? _doNotRememberVersion;
+
+  final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
     return _appInfo;
@@ -84,6 +87,10 @@ class AppConfigProvider with ChangeNotifier {
     return _doNotRememberVersion;
   }
 
+  List<AppLog> get logs {
+    return _logs;
+  }
+
   void setDbInstance(Database db) {
     _dbInstance = db;
   }
@@ -99,6 +106,11 @@ class AppConfigProvider with ChangeNotifier {
 
   void setShowingSnackbar(bool status) async {
     _showingSnackbar = status;
+    notifyListeners();
+  }
+
+  void addLog(AppLog log) {
+    _logs.add(log);
     notifyListeners();
   }
 

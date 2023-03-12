@@ -43,6 +43,8 @@ dependencies:
   flutter_displaymode: ^0.5.0
   dynamic_color: ^1.6.2
   animations: ^2.0.7
+  uuid: ^3.0.7
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:

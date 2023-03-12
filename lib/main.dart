@@ -5,18 +5,23 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/base.dart';
 import 'package:my_server_status/config/theme.dart';
+import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/providers/servers_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   final appConfigProvider = AppConfigProvider();
+  final serversProvider = ServersProvider();
 
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: ((context) => serversProvider)
+        ),
         ChangeNotifierProvider(
           create: ((context) => appConfigProvider)
         ),
