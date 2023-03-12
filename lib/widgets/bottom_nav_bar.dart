@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:my_server_status/config/app_screens.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/models/app_screen.dart';
+
+class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final appConfigProvider = Provider.of<AppConfigProvider>(context);
+
+    List<AppScreen> screens = screensServerConnected;
+
+
+    String translatedName(String key) {
+      switch (key) {
+        case 'home':
+          return AppLocalizations.of(context)!.home;
+
+        case 'settings':
+          return AppLocalizations.of(context)!.settings;
+
+        default:
+          return '';
+      }
+    }
+
+    return NavigationBar(
+      selectedIndex: appConfigProvider.selectedScreen,
+      destinations: screens.map((screen) => NavigationDestination(
+        icon: Icon(
+          screen.icon,
+          color: screens[appConfigProvider.selectedScreen] == screen
+            ? Theme.of(context).colorScheme.onSecondaryContainer
+            : Theme.of(context).colorScheme.onSurfaceVariant,
+        ), 
+        label: translatedName(screen.name)
+      )).toList(),
+      onDestinationSelected: (value) {
+        appConfigProvider.setSelectedScreen(value);
+      },
+    );
+  }
+}
