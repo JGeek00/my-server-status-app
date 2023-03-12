@@ -1,16 +1,15 @@
-# my_server_status
+# My Server Status
+My Server Status is a mobile application developed with Flutter that shows the user realtime information about a server's hardware.
+<br>
+❗️ <b>IMPORTANT</b> ❗️
+This application gets the information from an external API. You must deploy the API to your server to use this application. Check [this repository](https://github.com/JGeek00/my-server-status-api) to learn more.
 
-A new Flutter project.
+<p>
+⚠️ <b>APPLICATION UNDER DEVELOPMENT</b> ⚠️
+</p>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<br>
+<br>
+<br>
+<br>
+<b>Created by JGeek00</b>
