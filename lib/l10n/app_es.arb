@@ -90,5 +90,7 @@
   "logDetails": "Detalles del registro",
   "noSavedLogs": "No hay registros guardados",
   "copyLogsClipboard": "Copiar logs al portapapeles",
-  "logsCopiedClipboard": "Registros copiados al portapapeles"
+  "logsCopiedClipboard": "Registros copiados al portapapeles",
+  "loadingHardwareInfo": "Cargando información del hardware...",
+  "hardwareInfoNotLoaded": "No se ha podido cargar la información del hardware."
 }

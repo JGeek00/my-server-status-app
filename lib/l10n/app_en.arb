@@ -90,5 +90,7 @@
   "logDetails": "Log details",
   "noSavedLogs": "No saved logs",
   "copyLogsClipboard": "Copy logs to clipboard",
-  "logsCopiedClipboard": "Logs copied to clipboard"
+  "logsCopiedClipboard": "Logs copied to clipboard",
+  "loadingHardwareInfo": "Loading hardware information...",
+  "hardwareInfoNotLoaded": "Hardware information could not be loaded."
 }

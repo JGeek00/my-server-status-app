@@ -1,4 +1,5 @@
 import 'package:my_server_status/functions/conversions.dart';
+import 'package:my_server_status/models/server_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,21 @@ class ServersProvider with ChangeNotifier {
 
   bool? _serverConnected;
 
+  final ServerInfo _serverInfo = ServerInfo(
+    loadStatus: 0, // 0 = loading, 1 = loaded, 2 = error
+    data: null
+  );
+
   Server? get selectedServer {
     return _selectedServer;
   }
 
   bool? get serverConnected {
     return _serverConnected;
+  }
+
+  ServerInfo get serverInfo {
+    return _serverInfo;
   }
  
   void setDbInstance(Database db) {
@@ -40,6 +50,16 @@ class ServersProvider with ChangeNotifier {
 
   void setServerConnected(bool status) {
     _serverConnected = status;
+    notifyListeners();
+  }
+
+  void setServerInfoLoadStatus(int status) {
+    _serverInfo.loadStatus = status;
+    notifyListeners();
+  }
+
+  void setServerInfoData(ServerInfoData data) {
+    _serverInfo.data = data;
     notifyListeners();
   }
  
