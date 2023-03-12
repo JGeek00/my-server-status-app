@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -11,6 +12,9 @@ class AppConfigProvider with ChangeNotifier {
 
   PackageInfo? _appInfo;
 
+  AndroidDeviceInfo? _androidDeviceInfo;
+  IosDeviceInfo? _iosDeviceInfo;
+
   int _selectedScreen = 0;
 
   bool _showingSnackbar = false;
@@ -21,16 +25,20 @@ class AppConfigProvider with ChangeNotifier {
 
   int _overrideSslCheck = 0;
 
-  int _hideZeroValues = 0;
-
-  int _showNameTimeLogs = 0;
-
   String? _doNotRememberVersion;
 
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
     return _appInfo;
+  }
+
+  AndroidDeviceInfo? get androidDeviceInfo {
+    return _androidDeviceInfo;
+  }
+
+  IosDeviceInfo? get iosDeviceInfo {
+    return _iosDeviceInfo;
   }
 
   ThemeMode get selectedTheme {
@@ -59,10 +67,6 @@ class AppConfigProvider with ChangeNotifier {
     return _overrideSslCheck == 1 ? true : false;
   }
 
-  bool get hideZeroValues {
-    return _hideZeroValues == 1 ? true : false;
-  }
-
   int get selectedScreen {
     return _selectedScreen;
   }
@@ -79,10 +83,6 @@ class AppConfigProvider with ChangeNotifier {
     return _staticColor;
   }
 
-  bool get showNameTimeLogs {
-    return _showNameTimeLogs == 1 ? true : false;
-  }
-
   String? get doNotRememberVersion {
     return _doNotRememberVersion;
   }
@@ -97,6 +97,14 @@ class AppConfigProvider with ChangeNotifier {
 
   void setAppInfo(PackageInfo appInfo) {
     _appInfo = appInfo;
+  }
+  
+  void setAndroidInfo(AndroidDeviceInfo deviceInfo) {
+    _androidDeviceInfo = deviceInfo;
+  }
+
+  void setIosInfo(IosDeviceInfo deviceInfo) {
+    _iosDeviceInfo = deviceInfo;
   }
 
   void setSelectedScreen(int screen) {
@@ -118,30 +126,6 @@ class AppConfigProvider with ChangeNotifier {
     final updated = await _updateOverrideSslCheck(status == true ? 1 : 0);
     if (updated == true) {
       _overrideSslCheck = status == true ? 1 : 0;
-      notifyListeners();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  Future<bool> setHideZeroValues(bool status) async {
-    final updated = await _updateSetHideZeroValues(status == true ? 1 : 0);
-    if (updated == true) {
-      _hideZeroValues = status == true ? 1 : 0;
-      notifyListeners();
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  Future<bool> setShowNameTimeLogs(bool status) async {
-    final updated = await _updateShowNameTimeLogsDb(status == true ? 1 : 0);
-    if (updated == true) {
-      _showNameTimeLogs = status == true ? 1 : 0;
       notifyListeners();
       return true;
     }
@@ -295,10 +279,8 @@ class AppConfigProvider with ChangeNotifier {
   void saveFromDb(Database dbInstance, Map<String, dynamic> dbData) {
     _selectedTheme = dbData['theme'];
     _overrideSslCheck = dbData['overrideSslCheck'];
-    _hideZeroValues = dbData['hideZeroValues'];
     _useDynamicColor = convertFromIntToBool(dbData['useDynamicColor'])!;
     _staticColor = dbData['staticColor'];
-    _showNameTimeLogs = dbData['showNameTimeLogs'];
     _doNotRememberVersion = dbData['doNotRememberVersion'];
 
     _dbInstance = dbInstance;
