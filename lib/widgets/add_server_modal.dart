@@ -257,9 +257,7 @@ class _AddServerModalState extends State<AddServerModal> {
         user: userController.text, 
         password: passwordController.text, 
         defaultServer: defaultServer,
-        authToken: homeAssistant == true 
-          ? encodeBase64UserPass(userController.text, passwordController.text)
-          : '',
+        authToken: encodeBase64UserPass(userController.text, passwordController.text),
       );
       setState(() => isConnecting = true);
 
@@ -347,9 +345,7 @@ class _AddServerModalState extends State<AddServerModal> {
         user: userController.text, 
         password: passwordController.text, 
         defaultServer: defaultServer,
-        authToken: homeAssistant == true 
-          ? encodeBase64UserPass(userController.text, passwordController.text)
-          : '',
+        authToken: encodeBase64UserPass(userController.text, passwordController.text),
       );
       
       final result = await login(serverObj);

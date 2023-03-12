@@ -13,7 +13,7 @@ Future<Map<String, dynamic>> apiRequest({
   required String type,
   bool? overrideTimeout,
 }) async {
-  final String connectionString = "${server.connectionMethod}://${server.domain}${server.port != null ? ':${server.port}' : ""}${server.path ?? ""}/$urlPath";
+  final String connectionString = "${server.connectionMethod}://${server.domain}${server.port != null ? ':${server.port}' : ""}${server.path ?? ""}$urlPath";
   try {
     HttpClient httpClient = HttpClient();
     if (method == 'get') {
