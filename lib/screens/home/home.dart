@@ -47,6 +47,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     if (result['result'] == 'success') {
       widget.serversProvider.setServerInfoData(result['data']);
       widget.serversProvider.setServerInfoLoadStatus(1);
+      widget.serversProvider.setServerConnected(true);
     }
     else {
       widget.serversProvider.setServerConnected(false);

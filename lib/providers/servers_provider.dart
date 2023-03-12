@@ -162,7 +162,7 @@ class ServersProvider with ChangeNotifier {
     try {
       return await _dbInstance!.transaction((txn) async {
         await txn.rawUpdate(
-          'UPDATE servers SET name = ?, connectionMethod = ?, domain = ?, path = ?, port = ?, user = ?, password = ?, authToken = ?, WHERE id = "${server.id}"',
+          'UPDATE servers SET name = ?, connectionMethod = ?, domain = ?, path = ?, port = ?, user = ?, password = ?, authToken = ? WHERE id = "${server.id}"',
           [server.name, server.connectionMethod, server.domain, server.path, server.port, server.user, server.password, server.authToken]
         );
         return null;
