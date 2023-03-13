@@ -92,7 +92,7 @@ class ArcBase extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var base = Paint()
-      ..color = color.withOpacity(0.2)
+      ..color = color.withOpacity(0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = arcWidth.toDouble()
       ..strokeCap = StrokeCap.round;
