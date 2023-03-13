@@ -92,5 +92,10 @@
   "copyLogsClipboard": "Copy logs to clipboard",
   "logsCopiedClipboard": "Logs copied to clipboard",
   "loadingHardwareInfo": "Loading hardware information...",
-  "hardwareInfoNotLoaded": "Hardware information could not be loaded."
+  "hardwareInfoNotLoaded": "Hardware information could not be loaded.",
+  "refresh": "Refresh",
+  "ramUsed": "RAM used",
+  "swapUsed": "Swap used",
+  "memory": "Memory",
+  "available": "Available"
 }

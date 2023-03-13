@@ -92,5 +92,10 @@
   "copyLogsClipboard": "Copiar logs al portapapeles",
   "logsCopiedClipboard": "Registros copiados al portapapeles",
   "loadingHardwareInfo": "Cargando información del hardware...",
-  "hardwareInfoNotLoaded": "No se ha podido cargar la información del hardware."
+  "hardwareInfoNotLoaded": "No se ha podido cargar la información del hardware.",
+  "refresh": "Refrescar",
+  "ramUsed": "RAM usada",
+  "swapUsed": "Swap usada",
+  "memory": "Memoria",
+  "available": "Disponible"
 }

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_server_status/screens/home/arc_chart.dart';
 import 'package:my_server_status/screens/home/home_appbar.dart';
 
+import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/functions/intermediate_color_generator.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/services/http_requests.dart';
@@ -96,6 +97,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             ? serversProvider.serverInfo.data!.cpu.cpuTemperature.main
             : 100;
 
+          final memoryInfo = serversProvider.serverInfo.data!.memory;
+
           return ListView(
             children: [
               Container(
@@ -136,78 +139,195 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                     Container(
                       margin: const EdgeInsets.only(top: 24),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    ArcChart(
-                                      percentage: serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble(), 
-                                      arcWidth: 7, 
-                                      color: generateIntermediateColor(
-                                        serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble()
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      ArcChart(
+                                        percentage: serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble(), 
+                                        arcWidth: 7, 
+                                        color: generateIntermediateColor(
+                                          serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble()
+                                        ),
+                                        size: 100
                                       ),
-                                      size: 100
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/resources/cpu.svg',
-                                      color: Theme.of(context).colorScheme.onSurface,
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                  ],
+                                      SvgPicture.asset(
+                                        'assets/resources/cpu.svg',
+                                        color: Theme.of(context).colorScheme.onSurface,
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "${serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toInt().toString()}%",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500
-                                ),
-                              )
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  "${serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toInt().toString()}%",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    ArcChart(
-                                      percentage: cpuTemp.toDouble(), 
-                                      arcWidth: 7, 
-                                      color: generateIntermediateColor(cpuTemp.toDouble()),
-                                      size: 100
-                                    ),
-                                    const Icon(
-                                      Icons.thermostat,
-                                      size: 40,
-                                    )
-                                  ],
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      ArcChart(
+                                        percentage: cpuTemp.toDouble(), 
+                                        arcWidth: 7, 
+                                        color: generateIntermediateColor(cpuTemp.toDouble()),
+                                        size: 100
+                                      ),
+                                      const Icon(
+                                        Icons.thermostat,
+                                        size: 40,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "${serversProvider.serverInfo.data!.cpu.cpuTemperature.main.toString()}ºC",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500
-                                ),
-                              )
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  "${serversProvider.serverInfo.data!.cpu.cpuTemperature.main.toString()}ºC",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     )
                   ],
                 ),
-              )
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${AppLocalizations.of(context)!.memory} (RAM)",
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "${convertMemoryToGb(memoryInfo.memLayout[0].size)} GB ${memoryInfo.memLayout[0].type}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: [
+                                      ArcChart(
+                                        percentage: (memoryInfo.mem.active/memoryInfo.mem.total)*100, 
+                                        arcWidth: 7, 
+                                        color: generateIntermediateColor(
+                                          (memoryInfo.mem.active/memoryInfo.mem.total)*100
+                                        ),
+                                        size: 100
+                                      ),
+                                      const Icon(
+                                        Icons.memory_rounded,
+                                        size: 40,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "${((memoryInfo.mem.active/memoryInfo.mem.total)*100).toInt().toString()}%",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: SizedBox(
+                              height: 100,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!.ramUsed,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700
+                                        ),
+                                      ),
+                                      Text("${convertMemoryToGb(memoryInfo.mem.active)} GB (${((memoryInfo.mem.active/memoryInfo.mem.total)*100).toInt().toString()}%)")
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!.swapUsed,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700
+                                        ),
+                                      ),
+                                      Text("${convertMemoryToGb(memoryInfo.mem.swapused)} GB (${((memoryInfo.mem.swapused/memoryInfo.mem.swaptotal)*100).toInt().toString()}%)")
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              
             ],
           );
 
@@ -231,6 +351,12 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                     fontSize: 22,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
+                ),
+                const SizedBox(height: 30),
+                TextButton.icon(
+                  onPressed: requestHardwareInfo, 
+                  icon: const Icon(Icons.refresh_rounded), 
+                  label: Text(AppLocalizations.of(context)!.refresh)
                 )
               ],
             ),
