@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -98,6 +99,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             : 100;
 
           final memoryInfo = serversProvider.serverInfo.data!.memory;
+
+          int currentIndexStorage = 0;   // To know current index on storage map
 
           return ListView(
             children: [
@@ -327,7 +330,77 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                   ],
                 ),
               ),
-              
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.storage,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "${convertMemoryToGb(serversProvider.serverInfo.data!.storage.fsSize.map((i) => i.size).reduce((a, b) => a+b))} GB",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    ...serversProvider.serverInfo.data!.storage.fsSize.map(
+                      (item) {
+                        currentIndexStorage++;
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(item.mount),
+                                  Text("${item.use}%")
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            LinearPercentIndicator(
+                              lineHeight: 4,
+                              percent: item.use/100,
+                              barRadius: const Radius.circular(5),
+                              progressColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                            ),
+                            const SizedBox(height: 8),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(AppLocalizations.of(context)!.storageUsageString(convertMemoryToGb(item.available), convertMemoryToGb(item.used)))                            ],
+                              ),
+                            ),
+                            if (currentIndexStorage < serversProvider.serverInfo.data!.storage.fsSize.length) const SizedBox(height: 20),
+                          ],
+                        );
+                      }
+                    ).toList()
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16)
             ],
           );
 

@@ -97,5 +97,6 @@
   "ramUsed": "RAM used",
   "swapUsed": "Swap used",
   "memory": "Memory",
-  "available": "Available"
+  "storage": "Storage",
+  "storageUsageString": "{used} GB of {total} GB used"
 }
