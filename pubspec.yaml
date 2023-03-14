@@ -82,7 +82,7 @@ flutter:
     - assets/other/get_google_play.png
     - assets/resources/github.svg
     - assets/resources/google-play.svg
-    - assets/resources/cpu.svg
+    - assets/resources/memory.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -161,12 +161,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         ),
                                         size: 100
                                       ),
-                                      SvgPicture.asset(
-                                        'assets/resources/cpu.svg',
-                                        color: Theme.of(context).colorScheme.onSurface,
-                                        width: 40,
-                                        height: 40,
-                                      ),
+                                      const Icon(
+                                        Icons.memory_rounded,
+                                        size: 40,
+                                      )
                                     ],
                                   ),
                                 ),
@@ -271,9 +269,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         ),
                                         size: 100
                                       ),
-                                      const Icon(
-                                        Icons.memory_rounded,
-                                        size: 40,
+                                      SvgPicture.asset(
+                                        'assets/resources/memory.svg',
+                                        height: 40,
+                                        width: 40,
+                                        color: Theme.of(context).colorScheme.onSurface,
                                       )
                                     ],
                                   ),
