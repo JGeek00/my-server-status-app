@@ -94,8 +94,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             ),
           );
         case 1: 
-          final cpuTemp = serversProvider.serverInfo.data!.cpu.cpuTemperature.main <= 100 
-            ? serversProvider.serverInfo.data!.cpu.cpuTemperature.main
+          final cpuTemp = serversProvider.serverInfo.data!.cpu.temp.main <= 100 
+            ? serversProvider.serverInfo.data!.cpu.temp.main
             : 100;
 
           final memoryInfo = serversProvider.serverInfo.data!.memory;
@@ -123,7 +123,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "${serversProvider.serverInfo.data!.cpu.cpu.manufacturer} ${serversProvider.serverInfo.data!.cpu.cpu.brand}",
+                              "${serversProvider.serverInfo.data!.cpu.info.manufacturer} ${serversProvider.serverInfo.data!.cpu.info.brand}",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -132,7 +132,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                           ],
                         ),
                         Text(
-                          "${serversProvider.serverInfo.data!.cpu.cpuCurrentSpeed.avg} GHz",
+                          "${serversProvider.serverInfo.data!.cpu.speed.avg} GHz",
                           style: const TextStyle(
                             fontWeight: FontWeight.w500
                           ),
@@ -154,10 +154,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                     alignment: AlignmentDirectional.center,
                                     children: [
                                       ArcChart(
-                                        percentage: serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble(), 
+                                        percentage: serversProvider.serverInfo.data!.cpu.load.currentLoad.toDouble(), 
                                         arcWidth: 7, 
                                         color: generateIntermediateColor(
-                                          serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toDouble()
+                                          serversProvider.serverInfo.data!.cpu.load.currentLoad.toDouble()
                                         ),
                                         size: 100
                                       ),
@@ -170,7 +170,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  "${serversProvider.serverInfo.data!.cpu.cpuCurrentLoad.currentLoad.toInt().toString()}%",
+                                  "${serversProvider.serverInfo.data!.cpu.load.currentLoad.toInt().toString()}%",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w500
                                   ),
@@ -203,7 +203,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  "${serversProvider.serverInfo.data!.cpu.cpuTemperature.main.toString()}ºC",
+                                  "${serversProvider.serverInfo.data!.cpu.temp.main.toString()}ºC",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w500
                                   ),
@@ -236,7 +236,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "${convertMemoryToGb(memoryInfo.memLayout.map((i) => i.size).reduce((a, b) => a+b))} GB ${memoryInfo.memLayout[0].type}",
+                              "${convertMemoryToGb(memoryInfo.layout.map((i) => i.size).reduce((a, b) => a+b))} GB ${memoryInfo.layout[0].type}",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -262,10 +262,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                     alignment: AlignmentDirectional.center,
                                     children: [
                                       ArcChart(
-                                        percentage: (memoryInfo.mem.active/memoryInfo.mem.total)*100, 
+                                        percentage: (memoryInfo.info.active/memoryInfo.info.total)*100, 
                                         arcWidth: 7, 
                                         color: generateIntermediateColor(
-                                          (memoryInfo.mem.active/memoryInfo.mem.total)*100
+                                          (memoryInfo.info.active/memoryInfo.info.total)*100
                                         ),
                                         size: 100
                                       ),
@@ -280,7 +280,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  "${((memoryInfo.mem.active/memoryInfo.mem.total)*100).toInt().toString()}%",
+                                  "${((memoryInfo.info.active/memoryInfo.info.total)*100).toInt().toString()}%",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w500
                                   ),
@@ -305,7 +305,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                           fontWeight: FontWeight.w700
                                         ),
                                       ),
-                                      Text("${convertMemoryToGb(memoryInfo.mem.active)} GB (${((memoryInfo.mem.active/memoryInfo.mem.total)*100).toInt().toString()}%)")
+                                      Text("${convertMemoryToGb(memoryInfo.info.active)} GB (${((memoryInfo.info.active/memoryInfo.info.total)*100).toInt().toString()}%)")
                                     ],
                                   ),
                                   Row(
@@ -317,7 +317,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                           fontWeight: FontWeight.w700
                                         ),
                                       ),
-                                      Text("${convertMemoryToGb(memoryInfo.mem.swapused)} GB (${((memoryInfo.mem.swapused/memoryInfo.mem.swaptotal)*100).toInt().toString()}%)")
+                                      Text("${convertMemoryToGb(memoryInfo.info.swapused)} GB (${((memoryInfo.info.swapused/memoryInfo.info.swaptotal)*100).toInt().toString()}%)")
                                     ],
                                   ),
                                 ],
@@ -349,7 +349,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "${convertMemoryToGb(serversProvider.serverInfo.data!.storage.fsSize.map((i) => i.size).reduce((a, b) => a+b))} GB",
+                              "${convertMemoryToGb(serversProvider.serverInfo.data!.storageFs.map((i) => i.size).reduce((a, b) => a+b))} GB",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -360,7 +360,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    ...serversProvider.serverInfo.data!.storage.fsSize.map(
+                    ...serversProvider.serverInfo.data!.storageFs.map(
                       (item) {
                         currentIndexStorage++;
                         return Column(
@@ -389,10 +389,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(AppLocalizations.of(context)!.storageUsageString(convertMemoryToGb(item.available), convertMemoryToGb(item.used)))                            ],
+                                  Text(AppLocalizations.of(context)!.storageUsageString(convertMemoryToGb(item.size), convertMemoryToGb(item.used)))                            ],
                               ),
                             ),
-                            if (currentIndexStorage < serversProvider.serverInfo.data!.storage.fsSize.length) const SizedBox(height: 20),
+                            if (currentIndexStorage < serversProvider.serverInfo.data!.storageFs.length) const SizedBox(height: 20),
                           ],
                         );
                       }

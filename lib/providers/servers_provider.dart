@@ -1,4 +1,5 @@
 import 'package:my_server_status/functions/conversions.dart';
+import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class ServersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setServerInfoData(ServerInfoData data) {
+  void setServerInfoData(GeneralInfo data) {
     _serverInfo.data = data;
     notifyListeners();
   }

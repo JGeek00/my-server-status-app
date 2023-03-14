@@ -4,12 +4,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:my_server_status/models/app_log.dart';
-import 'package:my_server_status/models/cpu_info.dart';
-import 'package:my_server_status/models/memory_info.dart';
-import 'package:my_server_status/models/network_info.dart';
+import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server.dart';
-import 'package:my_server_status/models/server_info.dart';
-import 'package:my_server_status/models/storage_info.dart';
 
 Future<Map<String, dynamic>> apiRequest({
   required Server server, 
@@ -182,83 +178,58 @@ Future login(Server server) async {
 }
 
 Future getHardwareInfo(Server server) async {
-  try {
-    final result = await Future.wait([
-      getRequest(server, '/v1/cpu'),
-      getRequest(server, '/v1/memory'),
-      getRequest(server, '/v1/storage'),
-      getRequest(server, '/v1/network'),
-    ]);
+  final result = await apiRequest(
+    server: server,
+    method: 'get',
+    urlPath: '/v1/general-info', 
+    type: 'general_info'
+  );
 
-    if (
-      result[0].statusCode == 200 &&
-      result[1].statusCode == 200 &&
-      result[2].statusCode == 200 &&
-      result[3].statusCode == 200
-    ) {
-      final ServerInfoData info = ServerInfoData(
-        cpu: CpuInfo.fromJson(json.decode(result[0].body)), 
-        memory: MemoryInfo.fromJson(json.decode(result[1].body)), 
-        storage: StorageInfo.fromJson(json.decode(result[2].body)), 
-        network: NetworkInfo.fromJson(json.decode(result[3].body))
-      );
+  if (result['hasResponse'] == true) {
+    if (result['statusCode'] == 200) {
       return {
         'result': 'success',
-        'data': info
+        'data': GeneralInfo.fromJson(jsonDecode(result['body']))
+      };
+    }
+    else if (result['statusCode'] == 401) {
+      return {
+        'result': 'invalid_username_password',
+        'log': AppLog(
+          type: 'general_info', 
+          dateTime: DateTime.now(), 
+          message: 'invalid_username_password',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+    else if (result['statusCode'] == 500) {
+      return {
+        'result': 'server_error',
+        'log': AppLog(
+          type: 'general_info', 
+          dateTime: DateTime.now(), 
+          message: 'server_error',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
       };
     }
     else {
       return {
-        'result': 'error', 
-        'message': 'Error fetch hardware info',
+        'result': 'error',
         'log': AppLog(
-          type: 'get_hardware_info', 
+          type: 'general_info', 
           dateTime: DateTime.now(), 
-          statusCode: result.map((e) => e.statusCode).toString(),
-          resBody: result.map((e) => e.body).toString(),
-          message: 'Error fetch hardware info',
+          message: 'error_code_not_expected',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
         )
       };
     }
-  } on SocketException {
-    return {
-      'result': 'no_connection', 
-      'message': 'SocketException',
-      'log': AppLog(
-        type: 'get_hardware_info', 
-        dateTime: DateTime.now(), 
-        message: 'SocketException'
-      )
-    };
-  } on TimeoutException {
-    return {
-      'result': 'no_connection', 
-      'message': 'TimeoutException',
-      'log': AppLog(
-        type: 'get_hardware_info', 
-        dateTime: DateTime.now(), 
-        message: 'TimeoutException'
-      )
-    };
-  } on HandshakeException {
-    return {
-      'result': 'ssl_error', 
-      'message': 'HandshakeException',
-      'log': AppLog(
-        type: 'get_hardware_info', 
-        dateTime: DateTime.now(), 
-        message: 'HandshakeException'
-      )
-    };
-  } catch (e) {
-    return {
-      'result': 'error', 
-      'message': e.toString(),
-      'log': AppLog(
-        type: 'get_hardware_info', 
-        dateTime: DateTime.now(), 
-        message: e.toString()
-      )
-    };
+  }
+  else {
+    return result;
   }
 }
