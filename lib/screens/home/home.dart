@@ -484,6 +484,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         ? Icons.check_rounded
                                         : Icons.cancel_rounded,
                                       size: 18,
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -534,7 +535,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 Text(item.mac)
                               ],
                             ),
-                            if (currentIndexNetwork < serversProvider.serverInfo.data!.network.length) const SizedBox(height: 20),
+                            if (currentIndexNetwork < serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').length) const SizedBox(height: 20),
                           ],
                         );
                       }
@@ -542,7 +543,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16)
             ],
           );
 
