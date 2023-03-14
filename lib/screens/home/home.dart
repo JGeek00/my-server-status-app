@@ -120,6 +120,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           final memoryInfo = serversProvider.serverInfo.data!.memory;
 
           int currentIndexStorage = 0;   // To know current index on storage map
+          int currentIndexNetwork = 0;   // To know current index on network map
+
+          final int numNetworkInterfaces = serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').length;
 
           return ListView(
             children: [
@@ -412,6 +415,126 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                               ),
                             ),
                             if (currentIndexStorage < serversProvider.serverInfo.data!.storageFs.length) const SizedBox(height: 20),
+                          ],
+                        );
+                      }
+                    ).toList()
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.network,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              numNetworkInterfaces > 1
+                                ? AppLocalizations.of(context)!.nInterfaces(numNetworkInterfaces.toString())
+                                : AppLocalizations.of(context)!.oneInterface,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    ...serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').map(
+                      (item) {
+                        currentIndexNetwork++;
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      item.type == 'wired' ? Icons.settings_ethernet_rounded : Icons.wifi_rounded
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Text(
+                                      item.iface,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      item.operstate == 'up' 
+                                        ? Icons.check_rounded
+                                        : Icons.cancel_rounded,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      item.operstate == 'up' 
+                                        ? AppLocalizations.of(context)!.up
+                                        : AppLocalizations.of(context)!.down,
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "IPv4",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                                Text(item.ip4)
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "IPv6",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                                Text(item.ip6)
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "MAC",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                                Text(item.mac)
+                              ],
+                            ),
+                            if (currentIndexNetwork < serversProvider.serverInfo.data!.network.length) const SizedBox(height: 20),
                           ],
                         );
                       }

@@ -109,5 +109,10 @@
   "second5": "5 seconds",
   "autoRefreshValue": "{time} seconds",
   "settingsSavedSuccessfully": "Settings saved successfully.",
-  "autoRefreshWarning": "Setting a low refresh time could cause an increment of CPU usage on the server."
+  "autoRefreshWarning": "Setting a low refresh time could cause an increment of CPU usage on the server.",
+  "network": "Network",
+  "nInterfaces": "{number} network interfaces",
+  "oneInterface": "1 network interface",
+  "up": "Up",
+  "down": "Down"
 }
