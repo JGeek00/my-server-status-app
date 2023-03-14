@@ -1,6 +1,6 @@
 {
   "home": "Inicio",
-  "settings": "Settings",
+  "settings": "Ajustes",
   "invalidPort": "Puerto inválido",
   "invalidPath": "Ruta inválida",
   "invalidIpDomain": "Dominio o IP inválido",
