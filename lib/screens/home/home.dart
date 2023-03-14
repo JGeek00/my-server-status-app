@@ -235,7 +235,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "${convertMemoryToGb(memoryInfo.memLayout[0].size)} GB ${memoryInfo.memLayout[0].type}",
+                              "${convertMemoryToGb(memoryInfo.memLayout.map((i) => i.size).reduce((a, b) => a+b))} GB ${memoryInfo.memLayout[0].type}",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
