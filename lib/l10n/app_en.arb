@@ -98,5 +98,16 @@
   "swapUsed": "Swap used",
   "memory": "Memory",
   "storage": "Storage",
-  "storageUsageString": "{used} GB of {total} GB used"
+  "storageUsageString": "{used} GB of {total} GB used",
+  "autoRefreshTime": "Auto refresh time",
+  "autoRefreshTimeDescription": "The Home data is refreshed automatically",
+  "disabled": "Disabled",
+  "second1": "1 second",
+  "second2": "2 seconds",
+  "second3": "3 seconds",
+  "second4": "4 seconds",
+  "second5": "5 seconds",
+  "autoRefreshValue": "{time} seconds",
+  "settingsSavedSuccessfully": "Settings saved successfully.",
+  "autoRefreshWarning": "Setting a low refresh time could cause an increment of CPU usage on the server."
 }

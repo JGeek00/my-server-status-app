@@ -72,18 +72,18 @@ class SettingsScreen extends StatelessWidget {
               : AppLocalizations.of(context)!.noServerSelected,
             onTap: navigateServers,
           ),
-          // CustomListTile(
-          //   icon: Icons.settings,
-          //   title: AppLocalizations.of(context)!.generalSettings,
-          //   subtitle: AppLocalizations.of(context)!.generalSettingsDescription,
-          //   onTap: () => {
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (context) => const GeneralSettings()
-          //       )
-          //     )
-          //   },
-          // ),
+          CustomListTile(
+            icon: Icons.settings,
+            title: AppLocalizations.of(context)!.generalSettings,
+            subtitle: AppLocalizations.of(context)!.generalSettingsDescription,
+            onTap: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const GeneralSettings()
+                )
+              )
+            },
+          ),
           CustomListTile(
             icon: Icons.build_outlined,
             title: AppLocalizations.of(context)!.advancedSettings,

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/functions/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,19 +20,19 @@ class AdvancedSettings extends StatelessWidget {
     Future updateSslCheck(bool newStatus) async {
       final result = await appConfigProvider.setOverrideSslCheck(newStatus);
       if (result == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.restartAppTakeEffect),
-            backgroundColor: Colors.green,
-          )
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.restartAppTakeEffect, 
+          color: Colors.green
         );
       }
       else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.cannotUpdateSettings),
-            backgroundColor: Colors.red,
-          )
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.cannotUpdateSettings, 
+          color: Colors.red
         );
       }
     }

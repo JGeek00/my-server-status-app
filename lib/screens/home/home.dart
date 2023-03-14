@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -43,6 +45,7 @@ class HomeScreenWidget extends StatefulWidget {
 }
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
+  Timer? refreshTimer;
 
   Future requestHardwareInfo() async {
     final result = await getHardwareInfo(widget.serversProvider.selectedServer!);
@@ -62,14 +65,30 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   void initState() {
     if (widget.serversProvider.selectedServer != null) {
       requestHardwareInfo();
+      if (widget.appConfigProvider.autoRefreshTime > 0) {
+        refreshTimer = Timer.periodic(
+          Duration(seconds: widget.appConfigProvider.autoRefreshTime), (_) => requestHardwareInfo()
+        );
+      }
     }
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (refreshTimer != null) {
+      refreshTimer!.cancel();
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
+
+    if (serversProvider.selectedServer == null && refreshTimer != null) {
+      refreshTimer!.cancel();
+    }
 
     Widget body() {
       switch (serversProvider.serverInfo.loadStatus) {

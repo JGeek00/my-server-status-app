@@ -98,5 +98,16 @@
   "swapUsed": "Swap usada",
   "memory": "Memoria",
   "storage": "Almacenamiento",
-  "storageUsageString": "{used} GB de {total} GB en uso"
+  "storageUsageString": "{used} GB de {total} GB en uso",
+  "autoRefreshTime": "Tiempo de refresco automático",
+  "autoRefreshTimeDescription": "Los datos de Inicio se refrescan automáticamente",
+  "disabled": "Desactivado",
+  "second1": "1 segundo",
+  "second2": "2 segundos",
+  "second3": "3 segundos",
+  "second4": "4 segundos",
+  "second5": "5 segundos",
+  "autoRefreshValue": "{time} segundos",
+  "settingsSavedSuccessfully": "Ajustes guardados correctamente.",
+  "autoRefreshWarning": "Seleccionar un tiempo de refresco bajo puede causar un incremento en el uso de CPU del servidor."
 }

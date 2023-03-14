@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+import 'package:my_server_status/services/database/queries.dart';
 import 'package:my_server_status/models/app_log.dart';
 import 'package:my_server_status/functions/conversions.dart';
 
@@ -25,7 +26,7 @@ class AppConfigProvider with ChangeNotifier {
 
   int _overrideSslCheck = 0;
 
-  String? _doNotRememberVersion;
+  int _autoRefreshTime = 0;
 
   final List<AppLog> _logs = [];
 
@@ -83,12 +84,12 @@ class AppConfigProvider with ChangeNotifier {
     return _staticColor;
   }
 
-  String? get doNotRememberVersion {
-    return _doNotRememberVersion;
-  }
-
   List<AppLog> get logs {
     return _logs;
+  }
+
+  int get autoRefreshTime {
+    return _autoRefreshTime;
   }
 
   void setDbInstance(Database db) {
@@ -123,7 +124,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setOverrideSslCheck(bool status) async {
-    final updated = await _updateOverrideSslCheck(status == true ? 1 : 0);
+    final updated = await updateOverrideSslCheckQuery(_dbInstance!, status == true ? 1 : 0);
     if (updated == true) {
       _overrideSslCheck = status == true ? 1 : 0;
       notifyListeners();
@@ -135,7 +136,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setSelectedTheme(int value) async {
-    final updated = await _updateThemeDb(value);
+    final updated = await updateThemeQuery(_dbInstance!, value);
     if (updated == true) {
       _selectedTheme = value;
       notifyListeners();
@@ -147,7 +148,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setUseDynamicColor(bool value) async {
-    final updated = await _updateDynamicColorDb(value == true ? 1 : 0);
+    final updated = await updateDynamicColorQuery(_dbInstance!, value == true ? 1 : 0);
     if (updated == true) {
       _useDynamicColor = value;
       notifyListeners();
@@ -159,7 +160,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setStaticColor(int value) async {
-    final updated = await _updateStaticColorDb(value);
+    final updated = await updateStaticColorQuery(_dbInstance!, value);
     if (updated == true) {
       _staticColor = value;
       notifyListeners();
@@ -170,108 +171,14 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> setDoNotRememberVersion(String value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET doNotRememberVersion = "$value"',
-        );
-        _doNotRememberVersion = value;
-        notifyListeners();
-        return true;
-      });
-    } catch (e) {
-      return false;
+  Future<bool> setAutoRefreshTime(int value) async {
+    final updated = await updateAutoRefreshQuery(_dbInstance!, value);
+    if (updated == true) {
+      _autoRefreshTime = value;
+      notifyListeners();
+      return true;
     }
-  }
-
-  Future<bool> _updateThemeDb(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET theme = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateDynamicColorDb(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET useDynamicColor = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateUseThemeColorForStatusDb(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET useThemeColorForStatus = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateStaticColorDb(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET staticColor = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateOverrideSslCheck(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET overrideSslCheck = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateSetHideZeroValues(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET hideZeroValues = $value',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> _updateShowNameTimeLogsDb(int value) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE appConfig SET showNameTimeLogs = $value',
-        );
-        return true;
-      });
-    } catch (e) {
+    else {
       return false;
     }
   }
@@ -281,7 +188,7 @@ class AppConfigProvider with ChangeNotifier {
     _overrideSslCheck = dbData['overrideSslCheck'];
     _useDynamicColor = convertFromIntToBool(dbData['useDynamicColor'])!;
     _staticColor = dbData['staticColor'];
-    _doNotRememberVersion = dbData['doNotRememberVersion'];
+    _autoRefreshTime = dbData['autoRefreshTime'];
 
     _dbInstance = dbInstance;
     notifyListeners();
