@@ -62,8 +62,25 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: "^0.12.0"
   flutter_native_splash: ^2.2.10+1
+
+flutter_icons:
+  ios: true
+  android: true
+  remove_alpha_ios: true
+  image_path_ios: "assets/icons/icon.png"
+  image_path_android: "assets/icons/icon-android.png"
+  adaptive_icon_foreground: "assets/icons/icon-foreground.png"
+  adaptive_icon_background: "#263238"
+
+
+flutter_native_splash:
+  android12: true
+  image: assets/icons/icon-splash.png
+  color: "#ffffff"
+  color_dark: "#212121"
+  image_dark: assets/icons/icon-splash.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -83,6 +100,10 @@ flutter:
     - assets/resources/github.svg
     - assets/resources/google-play.svg
     - assets/resources/memory.svg
+    - assets/icons/icon-circle.png
+    - assets/icons/icon-foreground.png
+    - assets/icons/icon-android.png
+    - assets/icons/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

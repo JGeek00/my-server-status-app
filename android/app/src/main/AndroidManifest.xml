@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_server_status">
+    package="com.jgeek00.my_server_status">
+   <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="my_server_status"
+        android:label="My Server Status"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
