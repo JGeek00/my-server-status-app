@@ -95,21 +95,24 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
         case 0:
           return SizedBox(
             width: double.maxFinite,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 30),
-                Text(
-                  AppLocalizations.of(context)!.loadingHardwareInfo,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                )
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 30),
+                  Text(
+                    AppLocalizations.of(context)!.loadingHardwareInfo,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         case 1: 
@@ -513,13 +516,18 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "IPv6",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 16),
+                                  child: Text(
+                                    "IPv6",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500
+                                    ),
                                   ),
                                 ),
-                                Text(item.ip6)
+                                Flexible(
+                                  child: Text(item.ip6)
+                                )
                               ],
                             ),
                             const SizedBox(height: 16),
@@ -535,7 +543,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 Text(item.mac)
                               ],
                             ),
-                            if (currentIndexNetwork < serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').length) const SizedBox(height: 20),
+                            if (currentIndexNetwork < numNetworkInterfaces) const SizedBox(height: 20),
                           ],
                         );
                       }

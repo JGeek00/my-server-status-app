@@ -128,7 +128,7 @@ class _CustomizationWidgetState extends State<CustomizationWidget> {
                   if (index == 0) {
                     return Row(
                       children: [
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 15),
                         ColorItem(
                           color: colors[index], 
                           numericValue: index, 
@@ -138,6 +138,15 @@ class _CustomizationWidgetState extends State<CustomizationWidget> {
                             appConfigProvider.setStaticColor(value);
                           }
                         ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          width: 1,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(1)
+                          ),
+                        )
                       ],
                     );
                   }
@@ -153,7 +162,7 @@ class _CustomizationWidgetState extends State<CustomizationWidget> {
                             appConfigProvider.setStaticColor(value);
                           }
                         ),
-                        const SizedBox(width: 8)
+                        const SizedBox(width: 15)
                       ],
                     );
                   }

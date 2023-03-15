@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 String colorTranslation(BuildContext context, int index) {
   // This indexes has to be in sync with colors array at constants/colors.dart
   List<String> translations = [
+    "My Server Status",
     AppLocalizations.of(context)!.red,
     AppLocalizations.of(context)!.green,
     AppLocalizations.of(context)!.blue,
