@@ -23,10 +23,10 @@ class GeneralSettings extends StatelessWidget {
         context: context,
         isScrollControlled: true,
         builder: (context) => AutoRefreshTimeModal(
-          time: appConfigProvider.autoRefreshTime, 
+          time: appConfigProvider.autoRefreshTimeHome, 
           screenHeight: MediaQuery.of(context).size.height,
           onChange: (value) async {
-            final result = await appConfigProvider.setAutoRefreshTime(value);
+            final result = await appConfigProvider.setAutoRefreshTimeHome(value);
             if (result == true) {
               showSnacbkar(
                 context: context, 
@@ -58,9 +58,9 @@ class GeneralSettings extends StatelessWidget {
           CustomListTile(
             icon: Icons.refresh_rounded,
             title: AppLocalizations.of(context)!.autoRefreshTime,
-            subtitle: appConfigProvider.autoRefreshTime == 0 
+            subtitle: appConfigProvider.autoRefreshTimeHome == 0 
               ? AppLocalizations.of(context)!.disabled
-              : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTime),
+              : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeHome),
             onTap: openAutoRefreshTimeModal,
           )
         ],

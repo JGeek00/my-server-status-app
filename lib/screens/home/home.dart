@@ -65,9 +65,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   void initState() {
     if (widget.serversProvider.selectedServer != null) {
       requestHardwareInfo();
-      if (widget.appConfigProvider.autoRefreshTime > 0) {
+      if (widget.appConfigProvider.autoRefreshTimeHome > 0) {
         refreshTimer = Timer.periodic(
-          Duration(seconds: widget.appConfigProvider.autoRefreshTime), (_) => requestHardwareInfo()
+          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) => requestHardwareInfo()
         );
       }
     }

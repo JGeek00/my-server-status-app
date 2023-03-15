@@ -26,7 +26,7 @@ class AppConfigProvider with ChangeNotifier {
 
   int _overrideSslCheck = 0;
 
-  int _autoRefreshTime = 0;
+  int _autoRefreshTimeHome = 0;
 
   final List<AppLog> _logs = [];
 
@@ -88,8 +88,8 @@ class AppConfigProvider with ChangeNotifier {
     return _logs;
   }
 
-  int get autoRefreshTime {
-    return _autoRefreshTime;
+  int get autoRefreshTimeHome {
+    return _autoRefreshTimeHome;
   }
 
   void setDbInstance(Database db) {
@@ -171,10 +171,10 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> setAutoRefreshTime(int value) async {
+  Future<bool> setAutoRefreshTimeHome(int value) async {
     final updated = await updateAutoRefreshQuery(_dbInstance!, value);
     if (updated == true) {
-      _autoRefreshTime = value;
+      _autoRefreshTimeHome = value;
       notifyListeners();
       return true;
     }
@@ -188,7 +188,7 @@ class AppConfigProvider with ChangeNotifier {
     _overrideSslCheck = dbData['overrideSslCheck'];
     _useDynamicColor = convertFromIntToBool(dbData['useDynamicColor'])!;
     _staticColor = dbData['staticColor'];
-    _autoRefreshTime = dbData['autoRefreshTime'];
+    _autoRefreshTimeHome = dbData['autoRefreshTimeHome'];
 
     _dbInstance = dbInstance;
     notifyListeners();
