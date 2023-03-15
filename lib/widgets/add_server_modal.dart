@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:my_server_status/widgets/api_announcement.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -419,30 +420,41 @@ class _AddServerModalState extends State<AddServerModal> {
       }
     }
 
+    void openApiAnnouncementModal() {
+      showDialog(
+        context: context, 
+        builder: (context) => ApiAnnouncementModal(
+          onConfirm: () => {}   // do nothing
+        )
+      );
+    }
+
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.createConnection),
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: IconButton(
-                  tooltip: widget.server == null 
-                    ? AppLocalizations.of(context)!.connect
-                    : AppLocalizations.of(context)!.save,
-                  onPressed: allDataValid == true 
-                    ? widget.server == null 
-                      ? () => connect()
-                      : () => edit()
-                    : null,
-                  icon: Icon(
-                    widget.server == null
-                      ? Icons.login_rounded
-                      : Icons.save_rounded
-                  )
-                ),
+              IconButton(
+                onPressed: openApiAnnouncementModal, 
+                icon: const Icon(Icons.warning_amber_rounded)
               ),
+              IconButton(
+                tooltip: widget.server == null 
+                  ? AppLocalizations.of(context)!.connect
+                  : AppLocalizations.of(context)!.save,
+                onPressed: allDataValid == true 
+                  ? widget.server == null 
+                    ? () => connect()
+                    : () => edit()
+                  : null,
+                icon: Icon(
+                  widget.server == null
+                    ? Icons.login_rounded
+                    : Icons.save_rounded
+                )
+              ),
+              const SizedBox(width: 10)
             ],
             toolbarHeight: 70,
           ),

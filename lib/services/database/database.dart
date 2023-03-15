@@ -9,8 +9,8 @@ Future<Map<String, dynamic>> loadDb(bool acceptsDynamicTheme) async {
     version: 1,
     onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE servers (id TEXT PRIMARY KEY, name TEXT, connectionMethod TEXT, domain TEXT, path TEXT, port INTEGER, user TEXT, password TEXT, defaultServer INTEGER, authToken TEXT)");
-      await db.execute("CREATE TABLE appConfig (theme NUMERIC, overrideSslCheck NUMERIC, useDynamicColor NUMERIC, staticColor NUMERIC, autoRefreshTimeHome NUMERIC)");
-      await db.execute("INSERT INTO appConfig (theme, overrideSslCheck, useDynamicColor, staticColor, autoRefreshTimeHome) VALUES (0, 0, ${acceptsDynamicTheme == true ? 1 : 0}, 0, 2)");
+      await db.execute("CREATE TABLE appConfig (theme NUMERIC, overrideSslCheck NUMERIC, useDynamicColor NUMERIC, staticColor NUMERIC, autoRefreshTimeHome NUMERIC, apiAnnouncementReaden NUMERIC)");
+      await db.execute("INSERT INTO appConfig (theme, overrideSslCheck, useDynamicColor, staticColor, autoRefreshTimeHome, apiAnnouncementReaden) VALUES (0, 0, ${acceptsDynamicTheme == true ? 1 : 0}, 0, 2, 0)");
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
 

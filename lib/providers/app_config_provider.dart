@@ -28,6 +28,8 @@ class AppConfigProvider with ChangeNotifier {
 
   int _autoRefreshTimeHome = 0;
 
+  bool _apiAnnouncementReaden = false;
+
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
@@ -90,6 +92,10 @@ class AppConfigProvider with ChangeNotifier {
 
   int get autoRefreshTimeHome {
     return _autoRefreshTimeHome;
+  }
+
+  bool get apiAnnouncementReaden {
+    return _apiAnnouncementReaden;
   }
 
   void setDbInstance(Database db) {
@@ -183,12 +189,25 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> setApiAnnouncementReaden(bool value) async {
+    final updated = await updateApiAnnouncementReadenQuery(_dbInstance!, value == true ? 1 : 0);
+    if (updated == true) {
+      _apiAnnouncementReaden = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   void saveFromDb(Database dbInstance, Map<String, dynamic> dbData) {
     _selectedTheme = dbData['theme'];
     _overrideSslCheck = dbData['overrideSslCheck'];
     _useDynamicColor = convertFromIntToBool(dbData['useDynamicColor'])!;
     _staticColor = dbData['staticColor'];
     _autoRefreshTimeHome = dbData['autoRefreshTimeHome'];
+    _apiAnnouncementReaden = convertFromIntToBool(dbData['apiAnnouncementReaden'])!;
 
     _dbInstance = dbInstance;
     notifyListeners();

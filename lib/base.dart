@@ -5,6 +5,7 @@ import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
+import 'package:my_server_status/widgets/api_announcement.dart';
 import 'package:my_server_status/widgets/bottom_nav_bar.dart';
 
 import 'package:my_server_status/providers/servers_provider.dart';
@@ -27,6 +28,25 @@ class Base extends StatefulWidget {
 
 class _BaseState extends State<Base> with WidgetsBindingObserver {
   int selectedScreen = 0;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
+    super.initState();
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.appConfigProvider.apiAnnouncementReaden == false) {
+        showDialog(
+          context: context, 
+          barrierDismissible: false,
+          builder: (context) => ApiAnnouncementModal(
+            onConfirm: () => widget.appConfigProvider.setApiAnnouncementReaden(true)
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

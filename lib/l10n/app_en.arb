@@ -116,5 +116,8 @@
   "up": "Up",
   "down": "Down",
   "apiRepo": "API repository",
-  "apiRepoDescription": "The API provides the information to this application"
+  "apiRepoDescription": "The API provides the information to this application",
+  "importantAnnouncement": "Important announcement",
+  "importantAnnouncementDescription": "This application doesn't work standalone. You must have running on your server the API that provides the information to this application.\n\nMake sure to run it on the host machine. Do not run it on a Docker container or on a virtual machine.\n\nThis API doesn't work on AWS servers or something similar.",
+  "installationInstructions": "Installation instructions"
 }

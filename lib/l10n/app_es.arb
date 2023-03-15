@@ -116,5 +116,8 @@
   "up": "Funcionando",
   "down": "Sin servicio",
   "apiRepo": "Repositorio de la API",
-  "apiRepoDescription": "La API provee la información a esta aplicación"
+  "apiRepoDescription": "La API provee la información a esta aplicación",
+  "importantAnnouncement": "Aviso importante",
+  "importantAnnouncementDescription": "Esta aplicación no funciona de manera independiente. Debes tener corriendo en tu servidor la API que provee información a esta aplicación.\n\nAsegúrate de ejecutar la API en la máquina física. No lo ejecutes en un contenedor Docker o en una máquina virtual.\n\nEsta API no funciona en servidores AWS o similares.",
+  "installationInstructions": "Instrucciones de instalación"
 }

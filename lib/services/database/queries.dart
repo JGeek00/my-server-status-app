@@ -64,3 +64,16 @@ Future<bool> updateAutoRefreshQuery(Database dbInstance, int value) async {
     return false;
   }
 }
+
+Future<bool> updateApiAnnouncementReadenQuery(Database dbInstance, int value) async {
+  try {
+    return await dbInstance.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE appConfig SET apiAnnouncementReaden = $value',
+      );
+      return true;
+    });
+  } catch (e) {
+    return false;
+  }
+}
