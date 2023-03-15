@@ -114,5 +114,7 @@
   "nInterfaces": "{number} network interfaces",
   "oneInterface": "1 network interface",
   "up": "Up",
-  "down": "Down"
+  "down": "Down",
+  "apiRepo": "API repository",
+  "apiRepoDescription": "The API provides the information to this application"
 }

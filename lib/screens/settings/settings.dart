@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,6 +10,7 @@ import 'package:my_server_status/screens/servers/servers.dart';
 import 'package:my_server_status/widgets/custom_list_tile.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 
+import 'package:my_server_status/functions/open_url.dart';
 import 'package:my_server_status/constants/strings.dart';
 import 'package:my_server_status/constants/urls.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -31,22 +31,6 @@ class SettingsScreen extends StatelessWidget {
         );
       }));
     }
-
-    void openWeb(String url) {
-      FlutterWebBrowser.openWebPage(
-        url: url,
-        customTabsOptions: const CustomTabsOptions(
-          instantAppsEnabled: true,
-          showTitle: true,
-          urlBarHidingEnabled: false,
-        ),
-        safariVCOptions: const SafariViewControllerOptions(
-          barCollapsingEnabled: true,
-          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-          modalPresentationCapturesStatusBarAppearance: true,
-        )
-      );
-    }    
 
     return Scaffold(
       appBar: AppBar(
@@ -98,6 +82,15 @@ class SettingsScreen extends StatelessWidget {
           ),
           SectionLabel(label: AppLocalizations.of(context)!.aboutApp),
           CustomListTile(
+            title: AppLocalizations.of(context)!.apiRepo, 
+            subtitle: AppLocalizations.of(context)!.apiRepoDescription, 
+            trailing: Icon(
+              Icons.open_in_new_rounded,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            onTap: () => openUrl(Urls.apiRepo),
+          ),
+          CustomListTile(
             title: AppLocalizations.of(context)!.appVersion, 
             subtitle: appConfigProvider.getAppInfo!.version,
           ),
@@ -111,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 if (Urls.playStore != "") IconButton(
-                  onPressed: () => openWeb(Urls.playStore), 
+                  onPressed: () => openUrl(Urls.playStore), 
                   icon: SvgPicture.asset(
                     'assets/resources/google-play.svg',
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -121,7 +114,7 @@ class SettingsScreen extends StatelessWidget {
                   tooltip: AppLocalizations.of(context)!.visitGooglePlay,
                 ),
                 if (Urls.gitHub !=  "") IconButton(
-                  onPressed: () => openWeb(Urls.gitHub), 
+                  onPressed: () => openUrl(Urls.gitHub), 
                   icon: SvgPicture.asset(
                     'assets/resources/github.svg',
                     color: Theme.of(context).colorScheme.onSurfaceVariant,

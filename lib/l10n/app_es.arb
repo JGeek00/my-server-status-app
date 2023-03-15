@@ -114,5 +114,7 @@
   "nInterfaces": "{number} interfaces de red",
   "oneInterface": "1 interfaz de red",
   "up": "Funcionando",
-  "down": "Sin servicio"
+  "down": "Sin servicio",
+  "apiRepo": "Repositorio de la API",
+  "apiRepoDescription": "La API provee la información a esta aplicación"
 }
