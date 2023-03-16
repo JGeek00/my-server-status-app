@@ -10,7 +10,7 @@
   "connectionNotCreated": "The connection could not be created",
   "invalidUsernamePassword": "Invalid username or password",
   "cantReachServer": "Cannot reach the server",
-  "sslError": "SSL error",
+  "sslError": "SSL error. Go to Settings > Advanced settings and enable \"Don't check SSL certificate\"",
   "serverError": "A server error occured",
   "unknownError": "An unknown error occured",
   "createConnection": "Create connection",
@@ -119,5 +119,13 @@
   "apiRepoDescription": "The API provides the information to this application",
   "importantAnnouncement": "Important announcement",
   "importantAnnouncementDescription": "This application doesn't work standalone. You must have running on your server the API that provides the information to this application.\n\nMake sure to run it on the host machine. Do not run it on a Docker container or on a virtual machine.\n\nThis API doesn't work on AWS servers or something similar.",
-  "installationInstructions": "Installation instructions"
+  "installationInstructions": "Installation instructions",
+  "contact": "Contact",
+  "openIssueGitHub": "Open an issue on the GitHub repo",
+  "writeEmail": "Write me by email.",
+  "writeEmailDetails": "Include on the body of the email all the possible details: how to reproduce the issue, screenshots...\n\nAll provided information will be very welcome.",
+  "contactEmail": "Contact by email",
+  "close": "Close",
+  "contactDeveloper": "Contact the developer",
+  "issuesSuggestions": "If you are experiencing issues or you have suggestions"
 }

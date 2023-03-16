@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/settings/advanced_setings.dart';
 import 'package:my_server_status/screens/settings/general_settings.dart';
+import 'package:my_server_status/screens/settings/contact_me_modal.dart';
 import 'package:my_server_status/screens/settings/customization/customization.dart';
 import 'package:my_server_status/screens/servers/servers.dart';
 import 'package:my_server_status/widgets/custom_list_tile.dart';
@@ -30,6 +31,13 @@ class SettingsScreen extends StatelessWidget {
           MaterialPageRoute(builder: (context) => const Servers())
         );
       }));
+    }
+
+    void openContactModal() {
+      showDialog(
+        context: context, 
+        builder: (context) => const ContactMeModal()
+      );
     }
 
     return Scaffold(
@@ -89,6 +97,11 @@ class SettingsScreen extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface,
             ),
             onTap: () => openUrl(Urls.apiRepo),
+          ),
+          CustomListTile(
+            title: AppLocalizations.of(context)!.contactDeveloper, 
+            subtitle: AppLocalizations.of(context)!.issuesSuggestions, 
+            onTap: openContactModal,
           ),
           CustomListTile(
             title: AppLocalizations.of(context)!.appVersion, 

@@ -10,7 +10,7 @@
   "connectionNotCreated": "La conexión no se pudo crear",
   "invalidUsernamePassword": "Usuario o contraseña no válida",
   "cantReachServer": "No se puede alcanzar el servidor",
-  "sslError": "Error de SSL",
+  "sslError": "Error de SSL. Ve a Ajustes > Ajustes avanzados y activa \"No comprobar el certificado SSL\"",
   "serverError": "Ocurrió un error en el servidor",
   "unknownError": "Ocurrió un error desconocido",
   "createConnection": "Crear conexión",
@@ -119,5 +119,13 @@
   "apiRepoDescription": "La API provee la información a esta aplicación",
   "importantAnnouncement": "Aviso importante",
   "importantAnnouncementDescription": "Esta aplicación no funciona de manera independiente. Debes tener corriendo en tu servidor la API que provee información a esta aplicación.\n\nAsegúrate de ejecutar la API en la máquina física. No lo ejecutes en un contenedor Docker o en una máquina virtual.\n\nEsta API no funciona en servidores AWS o similares.",
-  "installationInstructions": "Instrucciones de instalación"
+  "installationInstructions": "Instrucciones de instalación",
+  "contact": "Contactar",
+  "openIssueGitHub": "Abrir un issue en el repo de GitHub",
+  "writeEmail": "Escríbeme por correo electrónico.",
+  "writeEmailDetails": "Incluye en el cuerpo del correo todos los detalles posibles: cómo reproducir el problema, capturas de pantalla...\n\nToda la información proporcionada será muy bienvenida.",
+  "contactEmail": "Contactar por email",
+  "close": "Cerrar",
+  "contactDeveloper": "Contacta con el desarrollador",
+  "issuesSuggestions": "Si estás experimentando problemas o tienes sugerencias"
 }
