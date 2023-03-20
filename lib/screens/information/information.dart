@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_server_status/screens/information/cpu.dart';
 import 'package:my_server_status/screens/information/memory.dart';
 import 'package:my_server_status/screens/information/system.dart';
+import 'package:my_server_status/screens/information/storage.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -70,6 +71,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
       length: 6,
       vsync: this,
     );
+    tabController.addListener(() => setState(() => selectedTab = tabController.index));
   }
 
   @override
@@ -94,7 +96,6 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                     controller: tabController,
                     unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                     isScrollable: true,
-                    onTap: (value) => setState(() => selectedTab = value),
                     tabs: [
                       Tab(
                         icon: const Icon(Icons.desktop_windows_rounded),
@@ -172,7 +173,11 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                 onRefresh: requestHardwareInfo,
                 child: const MemoryTab(), 
               ),
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestHardwareInfo,
+                child: const StorageTab(), 
+              ),
+              
               Container(),
               Container()
             ]

@@ -161,5 +161,10 @@
   "formFactor": "Form factor",
   "yes": "Yes",
   "no": "No",
-  "voltage": "Voltage"
+  "voltage": "Voltage",
+  "storageDevices": "Storage devices",
+  "storageDevice": "Storage device",
+  "volumes": "Volumes",
+  "mountPoint": "Mount point",
+  "filesSystem": "Files system"
 }

@@ -1,19 +1,23 @@
 class StorageInfo {
   final List<DiskLayout> diskLayout;
+  final List<BlockDevices> blockDevices;
   final List<FsSize> fsSize;
 
   StorageInfo({
     required this.diskLayout,
+    required this.blockDevices,
     required this.fsSize,
   });
 
   factory StorageInfo.fromJson(Map<String, dynamic> json) => StorageInfo(
     diskLayout: List<DiskLayout>.from(json["diskLayout"].map((x) => DiskLayout.fromJson(x))),
+    blockDevices: List<BlockDevices>.from(json["blockDevices"].map((x) => BlockDevices.fromJson(x))),
     fsSize: List<FsSize>.from(json["fsSize"].map((x) => FsSize.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "diskLayout": List<dynamic>.from(diskLayout.map((x) => x.toJson())),
+    "blockDevices": List<dynamic>.from(blockDevices.map((x) => x.toJson())),
     "fsSize": List<dynamic>.from(fsSize.map((x) => x.toJson())),
   };
 }
@@ -63,6 +67,66 @@ class DiskLayout {
     "temperature": temperature,
     "serialNum": serialNum,
     "firmwareRevision": firmwareRevision,
+  };
+}
+
+class BlockDevices {
+  final String name;
+  final String type;
+  final String fsType;
+  final String mount;
+  final int size;
+  final String physical;
+  final String label;
+  final String? model;
+  final bool removable;
+  final String protocol;
+  final String? group;
+  final String? device;
+  
+  BlockDevices({
+    required this.name,
+    required this.type,
+    required this.fsType,
+    required this.mount,
+    required this.size,
+    required this.physical,
+    required this.label,
+    this.model,
+    required this.removable,
+    required this.protocol,
+    this.group,
+    this.device,
+  });
+
+  factory BlockDevices.fromJson(Map<String, dynamic> json) => BlockDevices(
+    name: json["name"],
+    type: json["type"],
+    fsType: json["fsType"],
+    mount: json["mount"],
+    size: json["size"],
+    physical: json["physical"]!,
+    label: json["label"],
+    model: json["model"],
+    removable: json["removable"],
+    protocol: json["protocol"],
+    group: json["group"],
+    device: json["device"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "type": type,
+    "fsType": fsType,
+    "mount": mount,
+    "size": size,
+    "physical": physical,
+    "label": label,
+    "model": model,
+    "removable": removable,
+    "protocol": protocol,
+    "group": group,
+    "device": device,
   };
 }
 
