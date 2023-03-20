@@ -45,10 +45,8 @@ class _AddServerModalState extends State<AddServerModal> {
   String? portError;
 
   final TextEditingController userController = TextEditingController();
-  String? userError;
 
   final TextEditingController passwordController = TextEditingController();
-  String? passwordError;
 
   bool defaultServer = false;
 
@@ -116,8 +114,11 @@ class _AddServerModalState extends State<AddServerModal> {
       ipDomainError == null &&
       pathError == null && 
       portError == null && 
-      userController.text != '' && 
-      passwordController.text != ''
+      (
+        userController.text == "" && passwordController.text == "" ||
+        userController.text != "" && passwordController.text == "" ||
+        userController.text != "" && passwordController.text != ""
+      )
     ) {
       setState(() {
         allDataValid = true;
@@ -197,34 +198,6 @@ class _AddServerModalState extends State<AddServerModal> {
     checkDataValid();
   }
 
-  void validateUser(String? value) {
-    if (value != null && value != '') {
-      setState(() {
-        userError = null;
-      });
-    }
-    else {
-      setState(() {
-        userError = AppLocalizations.of(context)!.userNotEmpty;
-      });
-    }
-    checkDataValid();
-  }
-
-  void validatePassword(String? value) {
-    if (value != null && value != '') {
-      setState(() {
-        passwordError = null;
-      });
-    }
-    else {
-      setState(() {
-        passwordError = AppLocalizations.of(context)!.passwordNotEmpty;
-      });
-    }
-    checkDataValid();
-  }
-
   @override
   void initState() {
     if (widget.server != null) {
@@ -233,8 +206,8 @@ class _AddServerModalState extends State<AddServerModal> {
       ipDomainController.text = widget.server!.domain;
       pathController.text = widget.server!.path ?? '';
       portController.text = widget.server!.port != null ? widget.server!.port.toString() : "";
-      userController.text = widget.server!.user;
-      passwordController.text = widget.server!.password;
+      userController.text = widget.server!.user ?? "";
+      passwordController.text = widget.server!.password ?? "";
       defaultServer = widget.server!.defaultServer;
     }
     checkDataValid();
@@ -258,7 +231,9 @@ class _AddServerModalState extends State<AddServerModal> {
         user: userController.text, 
         password: passwordController.text, 
         defaultServer: defaultServer,
-        authToken: encodeBase64UserPass(userController.text, passwordController.text),
+        authToken: userController.text != "" && passwordController.text != ""
+          ? encodeBase64UserPass(userController.text, passwordController.text)
+          : null,
       );
       setState(() => isConnecting = true);
 
@@ -267,7 +242,9 @@ class _AddServerModalState extends State<AddServerModal> {
       setState(() => isConnecting = false);
 
       if (result['result'] == 'success') {
-        serverObj.authToken = encodeBase64UserPass(serverObj.user, serverObj.password);
+        if (serverObj.user != null && serverObj.password != null) {
+          serverObj.authToken = encodeBase64UserPass(serverObj.user!, serverObj.password!);
+        }
         final serverCreated = await serversProvider.createServer(serverObj);
         if (serverCreated == null) {
           
@@ -346,13 +323,17 @@ class _AddServerModalState extends State<AddServerModal> {
         user: userController.text, 
         password: passwordController.text, 
         defaultServer: defaultServer,
-        authToken: encodeBase64UserPass(userController.text, passwordController.text),
+        authToken: userController.text != "" && passwordController.text != ""
+          ? encodeBase64UserPass(userController.text, passwordController.text)
+          : null,
       );
       
       final result = await login(serverObj);
 
       if (result['result'] == 'success') {
-        serverObj.authToken = encodeBase64UserPass(serverObj.user, serverObj.password);
+        if (serverObj.user != null && serverObj.password != null) {
+          serverObj.authToken = encodeBase64UserPass(serverObj.user!, serverObj.password!);
+        }
         final serverSaved = await serversProvider.editServer(serverObj);
         if (serverSaved == null) {
           Navigator.pop(context);
@@ -550,8 +531,6 @@ class _AddServerModalState extends State<AddServerModal> {
                 label: AppLocalizations.of(context)!.username, 
                 controller: userController, 
                 icon: Icons.person_rounded,
-                onChanged: validateUser,
-                error: userError
               ),
               const SizedBox(height: 20),
               textField(
@@ -559,8 +538,6 @@ class _AddServerModalState extends State<AddServerModal> {
                 controller: passwordController, 
                 icon: Icons.lock_rounded,
                 keyboardType: TextInputType.visiblePassword,
-                onChanged: validatePassword,
-                error: passwordError,
                 obscureText: true
               ),
               sectionLabel(AppLocalizations.of(context)!.other),

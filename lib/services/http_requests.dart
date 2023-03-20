@@ -21,7 +21,9 @@ Future<Map<String, dynamic>> apiRequest({
     HttpClient httpClient = HttpClient();
     if (method == 'get') {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(connectionString));
-      request.headers.set('Authorization', server.authToken);
+      if (server.authToken != null) {
+        request.headers.set('Authorization', server.authToken!);
+      }
       HttpClientResponse response = overrideTimeout == true 
         ? await request.close()
         : await request.close().timeout(const Duration(seconds: 10));
@@ -46,7 +48,9 @@ Future<Map<String, dynamic>> apiRequest({
     }
     else if (method == 'post') {
       HttpClientRequest request = await httpClient.postUrl(Uri.parse(connectionString));
-      request.headers.set('Authorization', server.authToken);
+      if (server.authToken != null) {
+        request.headers.set('Authorization', server.authToken!);
+      }
       request.headers.set('content-type', 'application/json');
       request.add(utf8.encode(json.encode(body)));
       HttpClientResponse response = overrideTimeout == true 
@@ -120,7 +124,7 @@ Future<Map<String, dynamic>> apiRequest({
 Future<http.Response> getRequest(Server server, String urlPath) {
   final String connectionString = "${server.connectionMethod}://${server.domain}${server.port != null ? ':${server.port}' : ""}${server.path ?? ""}$urlPath";
   return http.get(Uri.parse(connectionString), headers: {
-    'Authorization': server.authToken
+    if (server.authToken != null) 'Authorization': server.authToken!
   });
 }
 
