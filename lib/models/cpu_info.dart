@@ -38,6 +38,7 @@ class CpuDetails {
   final int efficiencyCores;
   final int processors;
   final String socket;
+  final CpuCache cache;
 
   CpuDetails({
     required this.manufacturer,
@@ -51,6 +52,7 @@ class CpuDetails {
     required this.efficiencyCores,
     required this.processors,
     required this.socket,
+    required this.cache
   });
 
   factory CpuDetails.fromJson(Map<String, dynamic> json) => CpuDetails(
@@ -65,6 +67,7 @@ class CpuDetails {
     efficiencyCores: json["efficiencyCores"],
     processors: json["processors"],
     socket: json["socket"],
+    cache: CpuCache.fromJson(json['cache'])
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +82,35 @@ class CpuDetails {
     "efficiencyCores": efficiencyCores,
     "processors": processors,
     "socket": socket,
+    "cache": cache.toJson()
+  };
+}
+
+class CpuCache {
+  final int? l1d;
+  final int? l1i;
+  final int? l2;
+  final int? l3;
+
+  CpuCache({
+    this.l1d,
+    this.l1i,
+    this.l2, 
+    this.l3
+  });
+
+  factory CpuCache.fromJson(Map<String, dynamic> json) => CpuCache(
+    l1d: json["l1d"] != null && json["l1d"] != "" ? json["l1d"] : null,
+    l1i: json["l1i"] != null && json["l1i"] != "" ? json["l1i"] : null,
+    l2: json["l2"] != null && json["l2"] != "" ? json["l2"] : null,
+    l3: json["l3"] != null && json["l3"] != "" ? json["l3"] : null,
+  );
+
+  Map<String, dynamic> toJson() => {
+    "l1d": l1d,
+    "l1i": l1i,
+    "l2": l2,
+    "l3": l3
   };
 }
 

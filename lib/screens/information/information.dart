@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_server_status/screens/information/cpu.dart';
 import 'package:my_server_status/screens/information/system.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -58,7 +59,9 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
 
   @override
   void initState() {
-    requestHardwareInfo();
+    if (widget.serversProvider.systemSpecsInfo.loadStatus != 1) {
+      requestHardwareInfo();
+    }
     super.initState();
     tabController = TabController(
       initialIndex: 0,
@@ -155,8 +158,14 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
           child: TabBarView(
             controller: tabController,
             children: [
-              SystemTab(),
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestHardwareInfo,
+                child: const SystemTab(), 
+              ),
+              RefreshIndicator(
+                onRefresh: requestHardwareInfo,
+                child: const CpuTab(), 
+              ),
               Container(),
               Container(),
               Container(),

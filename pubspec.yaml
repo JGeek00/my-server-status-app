@@ -96,18 +96,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/other/get_google_play.png
     - assets/resources/github.svg
     - assets/resources/google-play.svg
     - assets/resources/memory.svg
     - assets/resources/storage.svg
     - assets/resources/software.svg
+    - assets/resources/intel.png
+    - assets/resources/amd.png
+    - assets/resources/apple-silicon.png
     - assets/icons/icon-circle.png
     - assets/icons/icon-foreground.png
     - assets/icons/icon-android.png
     - assets/icons/icon.png
     - assets/icons/splash-icon-lightmode.png
     - assets/icons/splash-icon-darkmode.png
+    - assets/other/get_google_play.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -142,5 +142,16 @@
   "baseboard": "Baseboard",
   "maxAllowedMemory": "Maximum allowed memory",
   "memorySlots": "Memory slots",
-  "chassis": "Chassis"
+  "chassis": "Chassis",
+  "cores": "Cores",
+  "speed": "Speed",
+  "physicalCores": "Physical cores",
+  "threads": "Threads",
+  "performanceCores": "Performance cores",
+  "efficiencyCores": "Efficiency cores",
+  "baseFrequency": "Base frequency",
+  "minFrequency": "Minimum frequency",
+  "maxFrequency": "Maximum frequency",
+  "socket": "Socket",
+  "cache": "Cache"
 }

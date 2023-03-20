@@ -142,5 +142,16 @@
   "baseboard": "Placa base",
   "maxAllowedMemory": "Memoria máxima admitida",
   "memorySlots": "Slots de memoria",
-  "chassis": "Chasis"
+  "chassis": "Chasis",
+  "cores": "Núcleos",
+  "speed": "Velocidad",
+  "physicalCores": "Núcleos físicos",
+  "threads": "Hilos",
+  "performanceCores": "Núcleos de alto rendimiento",
+  "efficiencyCores": "Nucleos de alta eficiencia",
+  "baseFrequency": "Frecuencia base",
+  "minFrequency": "Frecuencia mínima",
+  "maxFrequency": "Frecuencia máxima",
+  "socket": "Zócalo",
+  "cache": "Caché"
 }
