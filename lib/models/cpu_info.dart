@@ -166,7 +166,7 @@ class CpuCurrentLoad {
   });
 
   factory CpuCurrentLoad.fromJson(Map<String, dynamic> json) => CpuCurrentLoad(
-    currentLoad: json["currentLoad"],
+    currentLoad: json["currentLoad"].toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
