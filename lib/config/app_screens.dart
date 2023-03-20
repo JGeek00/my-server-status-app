@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_server_status/screens/home/home.dart';
+import 'package:my_server_status/screens/information/information.dart';
 import 'package:my_server_status/screens/settings/settings.dart';
 import 'package:my_server_status/screens/connect/connect.dart';
 
@@ -24,6 +25,11 @@ List<AppScreen> screensServerConnected = [
     name: "home", 
     icon: Icons.home_rounded, 
     body: HomeScreen(),
+  ),
+  const AppScreen(
+    name: "information", 
+    icon: Icons.list_alt_rounded, 
+    body: InformationScreen(),
   ),
   const AppScreen(
     name: "settings", 

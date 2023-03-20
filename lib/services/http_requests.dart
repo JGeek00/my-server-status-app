@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:my_server_status/models/app_log.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server.dart';
+import 'package:my_server_status/models/system_specs_info.dart';
 
 Future<Map<String, dynamic>> apiRequest({
   required Server server, 
@@ -231,5 +232,67 @@ Future getHardwareInfo(Server server) async {
   }
   else {
     return result;
+  }
+}
+
+Future getSystemInformation(Server server) async {
+  final result = await Future.wait([
+    apiRequest(server: server, method: 'get', urlPath: '/v1/system', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/cpu', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information'),
+  ]);
+
+  if (
+    result[0]['hasResponse'] == true &&
+    result[1]['hasResponse'] == true &&
+    result[2]['hasResponse'] == true &&
+    result[3]['hasResponse'] == true &&
+    result[4]['hasResponse'] == true
+  ) {
+    if (
+      result[0]['statusCode'] == 200 &&
+      result[1]['statusCode'] == 200 &&
+      result[2]['statusCode'] == 200 &&
+      result[3]['statusCode'] == 200 &&
+      result[4]['statusCode'] == 200
+    ) {
+      final Map<String, dynamic> mappedData = {
+        'systemInfo': jsonDecode(result[0]['body']),
+        'cpuInfo': jsonDecode(result[1]['body']),
+        'memoryInfo': jsonDecode(result[2]['body']),
+        'storageInfo': jsonDecode(result[3]['body']),
+        'networkInfo': jsonDecode(result[4]['body']),
+      };
+      return {
+        'result': 'success',
+        'data': SystemSpecsInformationData.fromJson(mappedData)
+      };
+    }
+    else {
+      return {
+        'result': 'error',
+        'log': AppLog(
+          type: 'get_system_information', 
+          dateTime: DateTime.now(), 
+          message: 'error_code_not_expected',
+          statusCode: result.map((res) => res['statusCode']).toString(),
+          resBody: result.map((res) => res['body']).toString()
+        )
+      };
+    }
+  }
+  else {
+    return {
+      'result': 'error',
+      'log': AppLog(
+        type: 'get_system_information', 
+        dateTime: DateTime.now(), 
+        message: 'no_response',
+        statusCode: result.map((res) => res['statusCode'] ?? 'null').toString(),
+        resBody: result.map((res) => res['body'] ?? 'null').toString()
+      )
+    };
   }
 }

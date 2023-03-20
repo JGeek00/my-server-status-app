@@ -127,5 +127,20 @@
   "contactEmail": "Contactar por email",
   "close": "Cerrar",
   "contactDeveloper": "Contacta con el desarrollador",
-  "issuesSuggestions": "Si estás experimentando problemas o tienes sugerencias"
+  "issuesSuggestions": "Si estás experimentando problemas o tienes sugerencias",
+  "information": "Información",
+  "system": "Sistema",
+  "software": "Software",
+  "specifications": "Especificaciones",
+  "manufacturer": "Fabricante",
+  "model": "Modelo",
+  "version": "Versión",
+  "serial": "Número de serie",
+  "vendor": "Proveedor",
+  "releaseDate": "Fecha de lanzamiento",
+  "revision": "Revisión",
+  "baseboard": "Placa base",
+  "maxAllowedMemory": "Memoria máxima admitida",
+  "memorySlots": "Slots de memoria",
+  "chassis": "Chasis"
 }

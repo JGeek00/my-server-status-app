@@ -127,5 +127,20 @@
   "contactEmail": "Contact by email",
   "close": "Close",
   "contactDeveloper": "Contact the developer",
-  "issuesSuggestions": "If you are experiencing issues or you have suggestions"
+  "issuesSuggestions": "If you are experiencing issues or you have suggestions",
+  "information": "Information",
+  "system": "System",
+  "software": "Software",
+  "specifications": "Specifications",
+  "manufacturer": "Manufacturer",
+  "model": "Model",
+  "version": "Version",
+  "serial": "Serial number",
+  "vendor": "Vendor",
+  "releaseDate": "Release date",
+  "revision": "Revision",
+  "baseboard": "Baseboard",
+  "maxAllowedMemory": "Maximum allowed memory",
+  "memorySlots": "Memory slots",
+  "chassis": "Chassis"
 }

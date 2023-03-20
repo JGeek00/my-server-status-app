@@ -1,6 +1,7 @@
 import 'package:my_server_status/functions/conversions.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server_info.dart';
+import 'package:my_server_status/models/system_specs_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,11 @@ class ServersProvider with ChangeNotifier {
     data: null
   );
 
+  final SystemSpecsInformation _systemSpecsInfo = SystemSpecsInformation(
+    loadStatus: 0,
+    data: null
+  );
+
   Server? get selectedServer {
     return _selectedServer;
   }
@@ -33,6 +39,10 @@ class ServersProvider with ChangeNotifier {
 
   ServerInfo get serverInfo {
     return _serverInfo;
+  }
+
+  SystemSpecsInformation get systemSpecsInfo {
+    return _systemSpecsInfo;
   }
  
   void setDbInstance(Database db) {
@@ -61,6 +71,16 @@ class ServersProvider with ChangeNotifier {
 
   void setServerInfoData(GeneralInfo data) {
     _serverInfo.data = data;
+    notifyListeners();
+  }
+
+  void setSystemSpecsInfoLoadStatus(int status) {
+    _systemSpecsInfo.loadStatus = status;
+    notifyListeners();
+  }
+
+  void setSystemSpecsInfoData(SystemSpecsInformationData data) {
+    _systemSpecsInfo.data = data;
     notifyListeners();
   }
  

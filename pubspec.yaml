@@ -100,6 +100,8 @@ flutter:
     - assets/resources/github.svg
     - assets/resources/google-play.svg
     - assets/resources/memory.svg
+    - assets/resources/storage.svg
+    - assets/resources/software.svg
     - assets/icons/icon-circle.png
     - assets/icons/icon-foreground.png
     - assets/icons/icon-android.png
