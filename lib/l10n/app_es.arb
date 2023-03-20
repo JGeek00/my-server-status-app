@@ -153,5 +153,13 @@
   "minFrequency": "Frecuencia mínima",
   "maxFrequency": "Frecuencia máxima",
   "socket": "Zócalo",
-  "cache": "Caché"
+  "cache": "Caché",
+  "systemMemory": "Memoria del sistema",
+  "filledBanks": "Ranuras en uso",
+  "size": "Tamaño",
+  "type": "Tipo",
+  "formFactor": "Factor de forma",
+  "yes": "Sí",
+  "no": "No",
+  "voltage": "Voltaje"
 }

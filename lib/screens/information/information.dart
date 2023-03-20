@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:my_server_status/screens/information/cpu.dart';
-import 'package:my_server_status/screens/information/system.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:my_server_status/screens/information/cpu.dart';
+import 'package:my_server_status/screens/information/memory.dart';
+import 'package:my_server_status/screens/information/system.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -166,7 +168,10 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                 onRefresh: requestHardwareInfo,
                 child: const CpuTab(), 
               ),
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestHardwareInfo,
+                child: const MemoryTab(), 
+              ),
               Container(),
               Container(),
               Container()

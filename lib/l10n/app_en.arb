@@ -153,5 +153,13 @@
   "minFrequency": "Minimum frequency",
   "maxFrequency": "Maximum frequency",
   "socket": "Socket",
-  "cache": "Cache"
+  "cache": "Cache",
+  "systemMemory": "System memory",
+  "filledBanks": "Filled banks",
+  "size": "Size",
+  "type": "Type",
+  "formFactor": "Form factor",
+  "yes": "Yes",
+  "no": "No",
+  "voltage": "Voltage"
 }
