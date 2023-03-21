@@ -166,5 +166,9 @@
   "storageDevice": "Storage device",
   "volumes": "Volumes",
   "mountPoint": "Mount point",
-  "filesSystem": "Files system"
+  "filesSystem": "Files system",
+  "operatingSystem": "Operating system",
+  "platform": "Platform",
+  "architecture": "Architecture",
+  "hostName": "Host name"
 }

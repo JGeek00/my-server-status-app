@@ -246,6 +246,7 @@ Future getSystemInformation(Server server) async {
     apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information'),
     apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information'),
     apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/os', type: 'get_system_information'),
   ]);
 
   if (
@@ -253,14 +254,16 @@ Future getSystemInformation(Server server) async {
     result[1]['hasResponse'] == true &&
     result[2]['hasResponse'] == true &&
     result[3]['hasResponse'] == true &&
-    result[4]['hasResponse'] == true
+    result[4]['hasResponse'] == true &&
+    result[5]['hasResponse'] == true 
   ) {
     if (
       result[0]['statusCode'] == 200 &&
       result[1]['statusCode'] == 200 &&
       result[2]['statusCode'] == 200 &&
       result[3]['statusCode'] == 200 &&
-      result[4]['statusCode'] == 200
+      result[4]['statusCode'] == 200 &&
+      result[5]['statusCode'] == 200
     ) {
       final Map<String, dynamic> mappedData = {
         'systemInfo': jsonDecode(result[0]['body']),
@@ -268,6 +271,7 @@ Future getSystemInformation(Server server) async {
         'memoryInfo': jsonDecode(result[2]['body']),
         'storageInfo': jsonDecode(result[3]['body']),
         'networkInfo': jsonDecode(result[4]['body']),
+        'osInfo': jsonDecode(result[5]['body']),
       };
       return {
         'result': 'success',

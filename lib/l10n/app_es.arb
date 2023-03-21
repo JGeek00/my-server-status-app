@@ -166,5 +166,9 @@
   "storageDevice": "Dispositivo de almacenamiento",
   "volumes": "Volúmenes",
   "mountPoint": "Punto de montaje",
-  "filesSystem": "Sistema de ficheros"
+  "filesSystem": "Sistema de ficheros",
+  "operatingSystem": "Sistema operativo",
+  "platform": "Plataforma",
+  "architecture": "Arquitectura",
+  "hostName": "Nombre del sistema"
 }

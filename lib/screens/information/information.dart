@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/information/cpu.dart';
 import 'package:my_server_status/screens/information/memory.dart';
+import 'package:my_server_status/screens/information/os.dart';
 import 'package:my_server_status/screens/information/system.dart';
 import 'package:my_server_status/screens/information/storage.dart';
 
@@ -140,7 +141,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
-                        text: AppLocalizations.of(context)!.software,
+                        text: AppLocalizations.of(context)!.operatingSystem,
                       ),
                     ]
                   )
@@ -177,9 +178,11 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                 onRefresh: requestHardwareInfo,
                 child: const StorageTab(), 
               ),
-              
               Container(),
-              Container()
+              RefreshIndicator(
+                onRefresh: requestHardwareInfo,
+                child: const OsTab(), 
+              ),
             ]
           )
         ),
