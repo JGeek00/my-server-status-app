@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/widgets/custom_list_tile.dart';
-import 'package:my_server_status/widgets/section_label.dart';
 
-import 'package:my_server_status/functions/memory_conversion.dart';
+import 'package:my_server_status/extensions/capitalize.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class OsTab extends StatelessWidget {
@@ -57,7 +56,7 @@ class OsTab extends StatelessWidget {
             ),
             CustomListTile(
               title: AppLocalizations.of(context)!.platform,
-              subtitle: os.platform,
+              subtitle: os.platform.capitalize(),
             ),
             CustomListTile(
               title: AppLocalizations.of(context)!.version,
