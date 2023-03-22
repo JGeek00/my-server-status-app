@@ -170,5 +170,19 @@
   "operatingSystem": "Sistema operativo",
   "platform": "Plataforma",
   "architecture": "Arquitectura",
-  "hostName": "Nombre del sistema"
+  "hostName": "Nombre del sistema",
+  "ipv4address": "Dirección IPv4",
+  "ipv4subnet": "Subred IPv4",
+  "ipv6address": "Dirección IPv6",
+  "ipv6subnet": "Subred IPv6",
+  "macAddress": "Dirección MAC",
+  "internalInterface": "Interfaz interna",
+  "virtualInterface": "Interfaz virtual",
+  "wired": "Cableada",
+  "wireless": "Inalámbrica",
+  "virtual": "Virtual",
+  "interfaceType": "Tipo de interfaz",
+  "duplex": "Duplex",
+  "state": "Estado",
+  "isDefault": "Por defecto"
 }

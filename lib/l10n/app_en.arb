@@ -170,5 +170,19 @@
   "operatingSystem": "Operating system",
   "platform": "Platform",
   "architecture": "Architecture",
-  "hostName": "Host name"
+  "hostName": "Host name",
+  "ipv4address": "IPv4 address",
+  "ipv4subnet": "IPv4 subnet",
+  "ipv6address": "IPv6 address",
+  "ipv6subnet": "IPv6 subnet",
+  "macAddress": "MAC address",
+  "internalInterface": "Internal interface",
+  "virtualInterface": "Virtual interface",
+  "wired": "Wired",
+  "wireless": "Wireless",
+  "virtual": "Virtual",
+  "interfaceType": "Interface type",
+  "duplex": "Duplex",
+  "state": "State",
+  "isDefault": "Default"
 }
