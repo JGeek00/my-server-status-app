@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_server_status/constants/app_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -108,25 +109,11 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                         text: "CPU",
                       ),
                       Tab(
-                        icon: SvgPicture.asset(
-                          'assets/resources/memory.svg',
-                          height: 24,
-                          width: 24,
-                          color: selectedTab == 2
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                        icon: const Icon(MyServerStatusIcons.memory),
                         text: AppLocalizations.of(context)!.memory,
                       ),
                       Tab(
-                        icon: SvgPicture.asset(
-                          'assets/resources/storage.svg',
-                          height: 24,
-                          width: 24,
-                          color: selectedTab == 3
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                        icon: const Icon(MyServerStatusIcons.storage),
                         text: AppLocalizations.of(context)!.storage,
                       ),
                       Tab(
@@ -134,14 +121,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                         text: AppLocalizations.of(context)!.network,
                       ),
                       Tab(
-                        icon: SvgPicture.asset(
-                          'assets/resources/software.svg',
-                          height: 24,
-                          width: 24,
-                          color: selectedTab == 5
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                        icon: const Icon(MyServerStatusIcons.software),
                         text: AppLocalizations.of(context)!.operatingSystem,
                       ),
                     ]

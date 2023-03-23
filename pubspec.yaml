@@ -96,11 +96,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/resources/github.svg
-    - assets/resources/google-play.svg
-    - assets/resources/memory.svg
-    - assets/resources/storage.svg
-    - assets/resources/software.svg
     - assets/resources/intel.png
     - assets/resources/amd.png
     - assets/resources/apple-silicon.png
@@ -123,7 +118,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: MyServerStatusIcons
+      fonts:
+        - asset: assets/resources/app_icons.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
