@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -14,6 +13,7 @@ import 'package:my_server_status/widgets/section_label.dart';
 import 'package:my_server_status/functions/open_url.dart';
 import 'package:my_server_status/constants/strings.dart';
 import 'package:my_server_status/constants/urls.dart';
+import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
@@ -118,21 +118,17 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 if (Urls.playStore != "") IconButton(
                   onPressed: () => openUrl(Urls.playStore), 
-                  icon: SvgPicture.asset(
-                    'assets/resources/google-play.svg',
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    width: 30,
-                    height: 30,
+                  icon: const Icon(
+                    MyServerStatusIcons.googlePlay,
+                    size: 30,
                   ),
                   tooltip: AppLocalizations.of(context)!.visitGooglePlay,
                 ),
                 if (Urls.gitHub !=  "") IconButton(
                   onPressed: () => openUrl(Urls.gitHub), 
-                  icon: SvgPicture.asset(
-                    'assets/resources/github.svg',
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    width: 30,
-                    height: 30,
+                  icon: const Icon(
+                    MyServerStatusIcons.github,
+                    size: 30,
                   ),
                   tooltip: AppLocalizations.of(context)!.gitHub,
                 ),

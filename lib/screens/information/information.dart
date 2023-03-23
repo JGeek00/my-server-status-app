@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:my_server_status/constants/app_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,6 +11,7 @@ import 'package:my_server_status/screens/information/storage.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class InformationScreen extends StatelessWidget {
