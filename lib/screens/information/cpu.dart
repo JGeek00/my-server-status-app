@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_server_status/functions/memory_conversion.dart';
-import 'package:my_server_status/widgets/custom_list_tile.dart';
-import 'package:my_server_status/widgets/section_label.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:my_server_status/widgets/custom_list_tile.dart';
+import 'package:my_server_status/widgets/section_label.dart';
+
+import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class CpuTab extends StatelessWidget {
@@ -30,7 +31,9 @@ class CpuTab extends StatelessWidget {
           
         case 'AMD':
           return Image.asset(
-            'assets/resources/amd.png',
+            Theme.of(context).brightness == Brightness.dark
+              ? 'assets/resources/amd_white.png'
+              : 'assets/resources/amd.png',
             height: 90,
           );
 

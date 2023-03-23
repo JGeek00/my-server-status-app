@@ -98,6 +98,7 @@ flutter:
   assets:
     - assets/resources/intel.png
     - assets/resources/amd.png
+    - assets/resources/amd_white.png
     - assets/resources/apple-silicon.png
     - assets/icons/icon-circle.png
     - assets/icons/icon-foreground.png
