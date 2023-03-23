@@ -19,6 +19,9 @@ This application is intended to monitor your own machine. Don not try to use it 
 <br>
 
 <p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.jgeek00.my_server_status" target="_blank" rel="noopener noreferrer">
+    <img src="/assets/other/get_google_play.png" width="300px">
+  </a>
   <a href="https://github.com/JGeek00/my-server-status-app/releases" target="_blank" rel="noopener noreferrer">
     <img src="/assets/other/get-github.png" width="300px">
   </a>
