@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_server_status/constants/app_icons.dart';
 
 import 'package:my_server_status/screens/home/arc_chart.dart';
 
@@ -70,11 +71,10 @@ class MemorySectionHome extends StatelessWidget {
                               ),
                               size: 100
                             ),
-                            SvgPicture.asset(
-                              'assets/resources/memory.svg',
-                              height: 40,
-                              width: 40,
+                            Icon(
+                              MyServerStatusIcons.memory,
                               color: Theme.of(context).colorScheme.onSurface,
+                              size: 40,
                             )
                           ],
                         ),
