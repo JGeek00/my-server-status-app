@@ -98,10 +98,6 @@ class NetworkTab extends StatelessWidget {
                   title: AppLocalizations.of(context)!.macAddress,
                   subtitle: generateValue(i.mac),
                 ),
-                CustomListTile(
-                  title: AppLocalizations.of(context)!.macAddress,
-                  subtitle: generateValue(i.mac),
-                ),
                 if (i.speed != null) CustomListTile(
                   title: AppLocalizations.of(context)!.speed,
                   subtitle: "${i.speed.toString()} Mbps",
