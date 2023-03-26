@@ -158,12 +158,14 @@ class Core {
 }
 
 class Memory {
+  final MemorySpecs specs;
   final int total;
   final int used;
   final int free;
   final int active;
 
   Memory({
+    required this.specs,
     required this.total,
     required this.used,
     required this.free,
@@ -171,6 +173,7 @@ class Memory {
   });
 
   factory Memory.fromJson(Map<String, dynamic> json) => Memory(
+    specs: MemorySpecs.fromJson(json["specs"]),
     total: json["total"],
     used: json["used"],
     free: json["free"],
@@ -178,6 +181,7 @@ class Memory {
   );
 
   Map<String, dynamic> toJson() => {
+    "specs": specs.toJson(),
     "total": total,
     "used": used,
     "free": free,
@@ -195,8 +199,8 @@ class MemorySpecs {
   });
 
   factory MemorySpecs.fromJson(Map<String, dynamic> json) => MemorySpecs(
-    capacity: json["tx"].toInt(),
-    type: json["rx"],
+    capacity: json["capacity"].toInt(),
+    type: json["type"],
   );
 
   Map<String, dynamic> toJson() => {

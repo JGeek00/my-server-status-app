@@ -193,5 +193,6 @@
   "core": "Núcleo {nCore}",
   "load": "Carga",
   "temperature": "Temperatura",
-  "temp": "Temp."
+  "temp": "Temp.",
+  "usage": "Utilización"
 }

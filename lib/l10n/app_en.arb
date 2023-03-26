@@ -193,5 +193,6 @@
   "core": "Core {nCore}",
   "load": "Load",
   "temperature": "Temperature",
-  "temp": "Temp."
+  "temp": "Temp.",
+  "usage": "Usage"
 }

@@ -61,6 +61,19 @@ class MemoryTab extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.only(top: 8),
           children: [
+            Card(
+              margin: const EdgeInsets.all(16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "${convertMemoryToGb(data[0].specs.capacity)} GB ${data[0].specs.type}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500
+                  ),
+                )
+              ),
+            ),
             SectionLabel(
               label: AppLocalizations.of(context)!.memoryUsage,
             ),
@@ -69,9 +82,9 @@ class MemoryTab extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Gigabyte (GB)",
-                    style: TextStyle(
+                  Text(
+                    "${AppLocalizations.of(context)!.usage} (GB)",
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500
                     ),
                   ),
