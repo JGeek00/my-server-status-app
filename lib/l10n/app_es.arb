@@ -189,7 +189,7 @@
   "loadingCurrentStatus": "Cargando información de estado actual...",
   "currentStatusNotLoaded": "No se ha podido cargar la información de estado actual.",
   "memoryUsage": "Uso de memoria",
-  "noDatDisplayHere": "No hay datos para mostrar aquí.",
+  "noDataDisplayHere": "No hay datos para mostrar aquí.",
   "core": "Núcleo {nCore}",
   "load": "Carga",
   "temperature": "Temperatura",
