@@ -197,5 +197,7 @@
   "usage": "Usage",
   "read": "Read",
   "write": "Write",
-  "storageUsage": "Storage usage"
+  "storageUsage": "Storage usage",
+  "transmission": "Transmission",
+  "reception": "Reception"
 }

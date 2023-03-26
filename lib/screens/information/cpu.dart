@@ -149,7 +149,7 @@ class CpuTab extends StatelessWidget {
             CustomListTile(
               title: "L1",
               subtitle: cpu.cpu.cache.l1d != null || cpu.cpu.cache.l1i != null
-                ? "${convertMemoryToKb((cpu.cpu.cache.l1d ?? 0) + (cpu.cpu.cache.l1i ?? 0))} KB"
+                ? "${convertMemoryToKb((cpu.cpu.cache.l1d != null ? cpu.cpu.cache.l1d!.toDouble() : 0) + (cpu.cpu.cache.l1i != null ? cpu.cpu.cache.l1i!.toDouble() : 0))} KB"
                 : "N/A",
             ),
             CustomListTile(

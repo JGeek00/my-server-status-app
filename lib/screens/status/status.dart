@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:my_server_status/screens/status/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/status/cpu.dart';
 import 'package:my_server_status/screens/status/memory.dart';
+import 'package:my_server_status/screens/status/network.dart';
+import 'package:my_server_status/screens/status/storage.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/models/current_status.dart';
@@ -115,6 +116,15 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
       }
     }
 
+    List<List<Network>>? getNetwork() {
+      if (loadStatus == 1 && currentStatus[0].storage != null) {
+        return currentStatus.map((e) => e.network!).toList();
+      }
+      else {
+        return null;
+      }
+    }
+
     return DefaultTabController(
       length: 4,
       child: NestedScrollView(
@@ -192,7 +202,13 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
                   data: getStorage()
                 ), 
               ),
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestCurrentStatus,
+                child: NetworkTab(
+                  loadStatus: loadStatus,
+                  data: getNetwork()
+                ), 
+              ),
             ]
           )
         ),

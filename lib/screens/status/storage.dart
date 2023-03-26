@@ -101,7 +101,7 @@ class _StorageTabState extends State<StorageTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
                   width: double.maxFinite,
-                  height: 300,
+                  height: 400,
                   child: CustomLinearChart(
                     data: [
                       ChartData(data: formattedData["rx"]!, color: Colors.green), 
@@ -119,6 +119,12 @@ class _StorageTabState extends State<StorageTab> {
                     },
                     tooltipTextFormatter: (v) => "${convertMemoryToMb(v)} MB/s",
                     reservedSizeYLabels: 50,
+                    linesInterval: formattedData["topPoint"]/10 > 4
+                      ? formattedData["topPoint"]/10
+                      : 4,
+                    labelsInterval: formattedData["topPoint"]/10 > 4 
+                      ? formattedData["topPoint"]/10
+                      : 4,
                   )
                 ),
               ),

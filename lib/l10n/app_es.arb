@@ -197,5 +197,7 @@
   "usage": "Utilización",
   "read": "Lectura",
   "write": "Escritura",
-  "storageUsage": "Uso del almacenamiento"
+  "storageUsage": "Uso del almacenamiento",
+  "transmission": "Transmisión",
+  "reception": "Recepción"
 }
