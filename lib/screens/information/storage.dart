@@ -81,7 +81,7 @@ class StorageTab extends StatelessWidget {
                     subtitle: disk.size != null 
                       ? disk.size! > 104857600 
                         ? "${convertMemoryToGb(disk.size!)} GB" 
-                        : "${convertMemoryToMb(disk.size!)} MB" 
+                        : "${convertMemoryToMb(disk.size!.toDouble())} MB" 
                       : "N/A",
                   ),
                   CustomListTile(
@@ -128,7 +128,7 @@ class StorageTab extends StatelessWidget {
                   title: AppLocalizations.of(context)!.size,
                   subtitle: device.size > 104857600 
                     ? "${convertMemoryToGb(device.size)} GB" 
-                    : "${convertMemoryToMb(device.size)} MB" 
+                    : "${convertMemoryToMb(device.size.toDouble())} MB" 
                 ),
                 if (device.mount != "") CustomListTile(
                   title: AppLocalizations.of(context)!.mountPoint,
@@ -169,7 +169,7 @@ class StorageTab extends StatelessWidget {
                   title: AppLocalizations.of(context)!.size,
                   subtitle: fs.size > 104857600 
                     ? "${convertMemoryToGb(fs.size)} GB" 
-                    : "${convertMemoryToMb(fs.size)} MB" 
+                    : "${convertMemoryToMb(fs.size.toDouble())} MB" 
                 ),
                 CustomListTile(
                   title: "RW",

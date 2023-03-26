@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/screens/status/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -105,6 +106,15 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
       return currentStatus.map((e) => e.memory).toList();
     }
 
+    List<Storage>? getStorage() {
+      if (loadStatus == 1 && currentStatus[0].storage != null) {
+        return currentStatus.map((e) => e.storage!).toList();
+      }
+      else {
+        return null;
+      }
+    }
+
     return DefaultTabController(
       length: 4,
       child: NestedScrollView(
@@ -175,7 +185,13 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
                   data: getMemory(),
                 ), 
               ),
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestCurrentStatus,
+                child: StorageTab(
+                  loadStatus: loadStatus,
+                  data: getStorage()
+                ), 
+              ),
               Container(),
             ]
           )

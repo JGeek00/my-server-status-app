@@ -105,11 +105,10 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: List<double>.from(value['load'].map((e) => e.toDouble())),
+              data: [ChartData(data: List<double>.from(value['load'].map((e) => e.toDouble())), color: Colors.green)],
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)}%",
-              color: Colors.green,
               linesInterval: 25.0,
               labelsInterval: 50,
             ),
@@ -135,11 +134,10 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: value['speed'],
+              data: [ChartData(data: List<double>.from(value['speed'].map((e) => e.toDouble())), color: Colors.green)],
               scale: Scale(min: 0, max: widget.data[0].specs.maxSpeed),
               yScaleTextFormatter: (v) => v.toStringAsFixed(2),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
-              color: Colors.green,
               linesInterval: widget.data[0].specs.maxSpeed/4,
               labelsInterval: widget.data[0].specs.maxSpeed/4,
             ),
@@ -165,11 +163,10 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: value['temperature'],
+              data: [ChartData(data: List<double>.from(value['temperature'].map((e) => e.toDouble())), color: Colors.green)],
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
-              color: Colors.green,
               linesInterval: 25.0,
               labelsInterval: 50,
             ),
@@ -209,8 +206,8 @@ class _CpuTabState extends State<CpuTab> {
         );
         
       case 1:
-        final formattedData = chartData();
         if (widget.data.isNotEmpty) {
+          final formattedData = chartData();
           return ListView(
             padding: const EdgeInsets.only(top: 0),
             children: [

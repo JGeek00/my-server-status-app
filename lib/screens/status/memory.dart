@@ -104,11 +104,10 @@ class MemoryTab extends StatelessWidget {
                 width: double.maxFinite,
                 height: 300,
                 child: CustomLinearChart(
-                  data: chartData(),
+                  data: [ChartData(data: chartData(), color: Colors.green)],
                   scale: Scale(min: 0.0, max: data[0].total.toDouble()),
                   yScaleTextFormatter: (v) => convertMemoryToGb(v.toInt()),
                   tooltipTextFormatter: (v) => "${convertMemoryToGb(v.toInt())} GB",
-                  color: Colors.green,
                 )
               ),
             ),

@@ -154,11 +154,11 @@ class CpuTab extends StatelessWidget {
             ),
             CustomListTile(
               title: "L2",
-              subtitle: cpu.cpu.cache.l2 != null ? "${convertMemoryToMb(cpu.cpu.cache.l2!)} MB" : 'N/A',
+              subtitle: cpu.cpu.cache.l2 != null ? "${convertMemoryToMb(cpu.cpu.cache.l2!.toDouble())} MB" : 'N/A',
             ),
             CustomListTile(
               title: "L3",
-              subtitle: cpu.cpu.cache.l3 != null ? "${convertMemoryToMb(cpu.cpu.cache.l3!)} MB" : 'N/A',
+              subtitle: cpu.cpu.cache.l3 != null ? "${convertMemoryToMb(cpu.cpu.cache.l3!.toDouble())} MB" : 'N/A',
             ),
             SectionLabel(label: AppLocalizations.of(context)!.other),
             CustomListTile(

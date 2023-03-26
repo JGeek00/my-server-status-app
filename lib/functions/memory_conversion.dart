@@ -4,7 +4,7 @@ String convertMemoryToGb(int value) {
   return (value/pow(1024, 3)).toStringAsFixed(2);
 }
 
-String convertMemoryToMb(int value) {
+String convertMemoryToMb(double value) {
   return (value/pow(1024, 2)).toStringAsFixed(2);
 }
 

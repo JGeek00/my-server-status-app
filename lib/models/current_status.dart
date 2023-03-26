@@ -3,16 +3,16 @@ class CurrentStatus {
   final List<double>? socketTemperature;
   final int? chipsetTemperature;
   final Memory memory;
-  final Storage storage;
-  final Network network;
+  final Storage? storage;
+  final List<Network>? network;
 
   CurrentStatus({
     required this.cpu,
     this.socketTemperature,
     this.chipsetTemperature,
     required this.memory,
-    required this.storage,
-    required this.network,
+    this.storage,
+    this.network,
   });
 
   factory CurrentStatus.fromJson(Map<String, dynamic> json) => CurrentStatus(
@@ -21,7 +21,7 @@ class CurrentStatus {
     chipsetTemperature: json["chipsetTemperature"],
     memory: Memory.fromJson(json["memory"]),
     storage: Storage.fromJson(json["storage"]),
-    network: Network.fromJson(json["network"]),
+    network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +29,8 @@ class CurrentStatus {
     "socketTemperature": socketTemperature != null ? List<double>.from(socketTemperature!.map((x) => x)) : null,
     "chipsetTemperature": chipsetTemperature,
     "memory": memory.toJson(),
-    "storage": storage.toJson(),
-    "network": network.toJson(),
+    "storage": storage != null ? storage!.toJson() : null,
+    "network": network != null ? List<Network>.from(network!.map((x) => x.toJson())) : null,
   };
 }
 
@@ -208,22 +208,25 @@ class MemorySpecs {
     "type": type,
   };
 }
-
 class Network {
+  final String iface;
   final double tx;
   final double rx;
 
   Network({
+    required this.iface,
     required this.tx,
     required this.rx,
   });
 
   factory Network.fromJson(Map<String, dynamic> json) => Network(
-    tx: json["tx"].toDouble(),
-    rx: json["rx"].toDouble(),
+    iface: json["iface"],
+    tx: json["tx"]?.toDouble(),
+    rx: json["rx"]?.toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
+    "iface": iface,
     "tx": tx,
     "rx": rx,
   };

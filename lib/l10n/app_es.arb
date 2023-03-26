@@ -194,5 +194,8 @@
   "load": "Carga",
   "temperature": "Temperatura",
   "temp": "Temp.",
-  "usage": "Utilización"
+  "usage": "Utilización",
+  "read": "Lectura",
+  "write": "Escritura",
+  "storageUsage": "Uso del almacenamiento"
 }

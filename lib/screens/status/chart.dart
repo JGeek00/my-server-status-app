@@ -14,14 +14,24 @@ class Scale {
   });
 }
 
-class CustomLinearChart extends StatelessWidget {
+class ChartData {
   final List<double> data;
+  final Color color;
+
+  ChartData({
+    required this.data,
+    required this.color
+  });
+}
+
+class CustomLinearChart extends StatelessWidget {
+  final List<ChartData> data;
   final Scale? scale;
   final Function(double)? yScaleTextFormatter;
   final Function(double)? tooltipTextFormatter;
-  final Color color;
   final double? linesInterval;
   final double? labelsInterval;
+  final double? reservedSizeYLabels;
 
   const CustomLinearChart({
     Key? key,
@@ -29,12 +39,12 @@ class CustomLinearChart extends StatelessWidget {
     this.scale,
     this.yScaleTextFormatter,
     this.tooltipTextFormatter,
-    required this.color,
     this.linesInterval,
     this.labelsInterval,
+    this.reservedSizeYLabels,
   }) : super(key: key);
 
-  LineChartData mainData(Map<String, dynamic> data, ThemeMode selectedTheme) {
+  LineChartData mainData(Map<String, dynamic> chartData, ThemeMode selectedTheme) {
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -63,7 +73,7 @@ class CustomLinearChart extends StatelessWidget {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 35,
+            reservedSize: reservedSizeYLabels ?? 35,
             interval: labelsInterval,
             getTitlesWidget: (value, widget) => Text(
               yScaleTextFormatter != null
@@ -95,7 +105,7 @@ class CustomLinearChart extends StatelessWidget {
       ),
       minY: scale != null ? scale!.min : null,
       maxY: scale != null ? scale!.max : null,
-      lineBarsData: data['data'],
+      lineBarsData: chartData['data'],
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
@@ -103,14 +113,14 @@ class CustomLinearChart extends StatelessWidget {
             ? const Color.fromRGBO(220, 220, 220, 1)
             : const Color.fromRGBO(35, 35, 35, 1),
           maxContentWidth: 150,
-          getTooltipItems: (items) => items.map((e) => LineTooltipItem(
+          getTooltipItems: (items) => items.asMap().entries.map((e) => LineTooltipItem(
             tooltipTextFormatter != null
-              ? tooltipTextFormatter!(e.y)
-              : e.y.toString(), 
+              ? tooltipTextFormatter!(e.value.y)
+              : e.value.y.toString(), 
             TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: color
+              color: data[e.key].color
             )
           )).toList()
         ),
@@ -122,32 +132,38 @@ class CustomLinearChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
-    final List<FlSpot> spots = [];
+    final List<LineChartBarData> lines = [];
 
     double topPoint = 0;
 
-    for (var i = 0; i < data.length; i++) {
-      if (data[i] > topPoint) topPoint = data[i];
-      spots.add(
-        FlSpot(i.toDouble(), data[i].toDouble())
+    for (var dataSet in data) {
+      final List<FlSpot> spots = [];
+
+      for (var i = 0; i < dataSet.data.length; i++) {
+        if (dataSet.data[i] > topPoint) topPoint = dataSet.data[i];
+        spots.add(
+          FlSpot(i.toDouble(), dataSet.data[i].toDouble())
+        );
+      }
+
+      lines.add(
+        LineChartBarData(
+          spots: spots,
+          color: dataSet.color,
+          isCurved: true,
+          barWidth: 2,
+          preventCurveOverShooting: true,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            color: dataSet.color.withOpacity(0.2)
+          ),
+        )
       );
     }
-
-    final LineChartBarData line = LineChartBarData(
-      spots: spots,
-      color:  color,
-      isCurved: true,
-      barWidth: 2,
-      preventCurveOverShooting: true,
-      isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: false,
-      ),
-      belowBarData: BarAreaData(
-        show: true,
-        color: color.withOpacity(0.2)
-      ),
-    );
     
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -155,7 +171,7 @@ class CustomLinearChart extends StatelessWidget {
         swapAnimationDuration: const Duration(milliseconds: 0),
         mainData(
           {
-            'data': [line],
+            'data': lines,
             'topPoint': topPoint,
           }, 
           appConfigProvider.selectedTheme
