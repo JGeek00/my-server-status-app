@@ -15,7 +15,7 @@ class Scale {
 }
 
 class CustomLinearChart extends StatelessWidget {
-  final List<int> data;
+  final List<double> data;
   final Scale? scale;
   final Function(double)? yScaleTextFormatter;
   final Function(double)? tooltipTextFormatter;
@@ -124,7 +124,7 @@ class CustomLinearChart extends StatelessWidget {
 
     final List<FlSpot> spots = [];
 
-    int topPoint = 0;
+    double topPoint = 0;
 
     for (var i = 0; i < data.length; i++) {
       if (data[i] > topPoint) topPoint = data[i];

@@ -19,16 +19,16 @@ class MemoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<int> chartData() {
+    List<double> chartData() {
       if (data.length < 20) {
-        List<int> v = List.filled(20, 0);
+        List<double> v = List.filled(20, 0);
         for (var i = 0; i < data.length; i++) {
-          v[i] = data[i].active;
+          v[i] = data[i].active.toDouble();
         }
         return v;
       }
       else {
-        return data.map((e) => e.active).toList();
+        return data.map((e) => e.active.toDouble()).toList();
       }
     }
 

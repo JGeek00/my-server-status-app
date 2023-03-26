@@ -38,12 +38,12 @@ class _CpuTabState extends State<CpuTab> {
         List<Map<String, dynamic>> cores = List.filled(widget.data[0].cores.length, {});
 
         for (var i = 0; i < cores.length; i++) {
-          List<int> temp = List.filled(20, 0);
+          List<double> temp = List.filled(20, 0);
           List<double> speed = List.filled(20, 0.0);
           List<double> load = List.filled(20, 0.0);
 
           for (var j = 0; j < widget.data.length; j++) {
-            temp[j] = widget.data[j].cores[i].temperature;
+            temp[j] = widget.data[j].cores[i].temperature.toDouble();
             speed[j] = widget.data[j].cores[i].speed;
             load[j] = widget.data[j].cores[i].load["load"] ?? 0.0;
           }
@@ -62,12 +62,12 @@ class _CpuTabState extends State<CpuTab> {
         List<Map<String, dynamic>> cores = List.filled(widget.data[0].cores.length, {});
 
         for (var i = 0; i < cores.length; i++) {
-          List<int> temp = [];
+          List<double> temp = [];
           List<double> speed = [];
           List<double> load = [];
 
           for (var d in widget.data) {
-            temp.add(d.cores[i].temperature);
+            temp.add(d.cores[i].temperature.toDouble());
             speed.add(d.cores[i].speed);
             load.add(d.cores[i].load["load"] ?? 0.0);
           }
@@ -105,7 +105,7 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: List<int>.from(value['load'].map((e) => e.toInt())),
+              data: List<double>.from(value['load'].map((e) => e.toDouble())),
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)}%",
@@ -135,7 +135,7 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: List<int>.from(value['speed'].map((e) => e.toInt())),
+              data: value['speed'],
               scale: Scale(min: 0, max: widget.data[0].specs.maxSpeed),
               yScaleTextFormatter: (v) => v.toStringAsFixed(2),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
@@ -165,10 +165,10 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: List<int>.from(value['temperature'].map((e) => e.toInt())),
+              data: value['temperature'],
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
-              tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)}ºC",
+              tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
               color: Colors.green,
               linesInterval: 25.0,
               labelsInterval: 50,
