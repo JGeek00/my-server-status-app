@@ -35,15 +35,18 @@ class CurrentStatus {
 }
 
 class Cpu {
+  final CpuSpecs specs;
   final List<Core> cores;
   final Average average;
 
   Cpu({
+    required this.specs,
     required this.cores,
     required this.average,
   });
 
   factory Cpu.fromJson(Map<String, dynamic> json) => Cpu(
+    specs: CpuSpecs.fromJson(json["specs"]),
     cores: List<Core>.from(json["cores"].map((x) => Core.fromJson(x))),
     average: Average.fromJson(json["average"]),
   );
@@ -51,6 +54,34 @@ class Cpu {
   Map<String, dynamic> toJson() => {
     "cores": List<dynamic>.from(cores.map((x) => x.toJson())),
     "average": average.toJson(),
+  };
+}
+
+class CpuSpecs {
+  final String name;
+  final double minSpeed;
+  final double speed;
+  final double maxSpeed;
+
+  CpuSpecs({
+    required this.name,
+    required this.minSpeed,
+    required this.speed,
+    required this.maxSpeed
+  });
+
+  factory CpuSpecs.fromJson(Map<String, dynamic> json) => CpuSpecs(
+    name: json["name"],
+    minSpeed: json["minSpeed"]?.toDouble(),
+    speed: json["speed"]?.toDouble(),
+    maxSpeed: json["maxSpeed"]?.toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "minSpeed": minSpeed,
+    "speed": speed,
+    "maxSpeed": maxSpeed,
   };
 }
 
@@ -151,6 +182,26 @@ class Memory {
     "used": used,
     "free": free,
     "active": active,
+  };
+}
+
+class MemorySpecs {
+  final int capacity;
+  final String type;
+
+  MemorySpecs({
+    required this.capacity,
+    required this.type
+  });
+
+  factory MemorySpecs.fromJson(Map<String, dynamic> json) => MemorySpecs(
+    capacity: json["tx"].toInt(),
+    type: json["rx"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "capacity": capacity,
+    "type": type,
   };
 }
 

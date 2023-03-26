@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_server_status/functions/memory_conversion.dart';
+
+import 'package:my_server_status/screens/status/chart.dart';
 
 import 'package:my_server_status/models/current_status.dart';
-import 'package:my_server_status/screens/status/chart.dart';
+import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 
 class MemoryTab extends StatelessWidget {

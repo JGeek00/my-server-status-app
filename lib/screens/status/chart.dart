@@ -20,6 +20,8 @@ class CustomLinearChart extends StatelessWidget {
   final Function(double)? yScaleTextFormatter;
   final Function(double)? tooltipTextFormatter;
   final Color color;
+  final double? linesInterval;
+  final double? labelsInterval;
 
   const CustomLinearChart({
     Key? key,
@@ -27,7 +29,9 @@ class CustomLinearChart extends StatelessWidget {
     this.scale,
     this.yScaleTextFormatter,
     this.tooltipTextFormatter,
-    required this.color
+    required this.color,
+    this.linesInterval,
+    this.labelsInterval,
   }) : super(key: key);
 
   LineChartData mainData(Map<String, dynamic> data, ThemeMode selectedTheme) {
@@ -35,6 +39,7 @@ class CustomLinearChart extends StatelessWidget {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: false,
+        horizontalInterval: linesInterval,
         getDrawingHorizontalLine: (value) => FlLine(
           color: selectedTheme == ThemeMode.light
             ? Colors.black12
@@ -59,6 +64,7 @@ class CustomLinearChart extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 35,
+            interval: labelsInterval,
             getTitlesWidget: (value, widget) => Text(
               yScaleTextFormatter != null
                 ? yScaleTextFormatter!(value)

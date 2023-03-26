@@ -188,5 +188,10 @@
   "status": "Status",
   "loadingCurrentStatus": "Loading current status info...",
   "currentStatusNotLoaded": "The current status info could not be loaded.",
-  "memoryUsage": "Memory usage"
+  "memoryUsage": "Memory usage",
+  "noDataDisplayHere": "No data to display here.",
+  "core": "Core {nCore}",
+  "load": "Load",
+  "temperature": "Temperature",
+  "temp": "Temp."
 }

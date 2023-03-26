@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:my_server_status/screens/status/cpu.dart';
 import 'package:my_server_status/screens/status/memory.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
@@ -96,6 +97,10 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
   @override
   Widget build(BuildContext context) {
 
+    List<Cpu> getCpu() {
+      return currentStatus.map((e) => e.cpu).toList();
+    }
+
     List<Memory> getMemory() {
       return currentStatus.map((e) => e.memory).toList();
     }
@@ -156,7 +161,13 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
           child: TabBarView(
             controller: tabController,
             children: [
-              Container(),
+              RefreshIndicator(
+                onRefresh: requestCurrentStatus,
+                child: CpuTab(
+                  loadStatus: loadStatus,
+                  data: getCpu(),
+                ), 
+              ),
               RefreshIndicator(
                 onRefresh: requestCurrentStatus,
                 child: MemoryTab(
