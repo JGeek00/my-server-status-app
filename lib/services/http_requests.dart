@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:my_server_status/models/app_log.dart';
+import 'package:my_server_status/models/current_status.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server.dart';
 import 'package:my_server_status/models/system_specs_info.dart';
@@ -302,5 +303,62 @@ Future getSystemInformation(Server server) async {
         resBody: result.map((res) => res['body'] ?? 'null').toString()
       )
     };
+  }
+}
+
+Future getCurrentStatus(Server server) async {
+  final result = await apiRequest(
+    server: server,
+    method: 'get',
+    urlPath: '/v1/status', 
+    type: 'status'
+  );
+
+  if (result['hasResponse'] == true) {
+    if (result['statusCode'] == 200) {
+      return {
+        'result': 'success',
+        'data': CurrentStatus.fromJson(jsonDecode(result['body']))
+      };
+    }
+    else if (result['statusCode'] == 401) {
+      return {
+        'result': 'invalid_username_password',
+        'log': AppLog(
+          type: 'status', 
+          dateTime: DateTime.now(), 
+          message: 'invalid_username_password',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+    else if (result['statusCode'] == 500) {
+      return {
+        'result': 'server_error',
+        'log': AppLog(
+          type: 'stauts', 
+          dateTime: DateTime.now(), 
+          message: 'server_error',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+    else {
+      return {
+        'result': 'error',
+        'log': AppLog(
+          type: 'status', 
+          dateTime: DateTime.now(), 
+          message: 'error_code_not_expected',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+  }
+  else {
+    return result;
   }
 }

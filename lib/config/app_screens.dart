@@ -4,6 +4,7 @@ import 'package:my_server_status/screens/home/home.dart';
 import 'package:my_server_status/screens/information/information.dart';
 import 'package:my_server_status/screens/settings/settings.dart';
 import 'package:my_server_status/screens/connect/connect.dart';
+import 'package:my_server_status/screens/status/status.dart';
 
 import 'package:my_server_status/models/app_screen.dart';
 
@@ -30,6 +31,11 @@ List<AppScreen> screensServerConnected = [
     name: "information", 
     icon: Icons.list_alt_rounded, 
     body: InformationScreen(),
+  ),
+  const AppScreen(
+    name: "status", 
+    icon: Icons.analytics_rounded, 
+    body: StatusScreen(),
   ),
   const AppScreen(
     name: "settings", 

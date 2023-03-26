@@ -184,5 +184,9 @@
   "interfaceType": "Tipo de interfaz",
   "duplex": "Duplex",
   "state": "Estado",
-  "isDefault": "Por defecto"
+  "isDefault": "Por defecto",
+  "status": "Estado",
+  "loadingCurrentStatus": "Cargando información de estado actual...",
+  "currentStatusNotLoaded": "No se ha podido cargar la información de estado actual.",
+  "memoryUsage": "Uso de memoria"
 }
