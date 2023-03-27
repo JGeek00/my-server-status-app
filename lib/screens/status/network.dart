@@ -115,6 +115,21 @@ class _NetworkTabState extends State<NetworkTab> {
                   SectionLabel(label: intfz.value["iface"]),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${AppLocalizations.of(context)!.dataTransfer} (${intfz.value["topPoint"] > 1048576 ? 'MB/s' : 'KB/s'})",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SizedBox(
                       width: double.maxFinite,
                       height: 400,
@@ -125,7 +140,9 @@ class _NetworkTabState extends State<NetworkTab> {
                         ],
                         scale: Scale(min: 0.0, max: intfz.value["topPoint"]),
                         yScaleTextFormatter: (v) {
-                          final parsed = double.parse(convertMemoryToMb(v));
+                          final parsed = intfz.value["topPoint"] > 1048576
+                            ? double.parse(convertMemoryToMb(v))
+                            : double.parse(convertMemoryToKb(v));
                           if (parsed > 100) {
                             return parsed.toInt().toString();
                           }

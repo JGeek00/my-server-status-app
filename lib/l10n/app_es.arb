@@ -199,5 +199,6 @@
   "write": "Escritura",
   "storageUsage": "Uso del almacenamiento",
   "transmission": "Transmisión",
-  "reception": "Recepción"
+  "reception": "Recepción",
+  "dataTransfer": "Transferencia de datos"
 }
