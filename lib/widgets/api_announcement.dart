@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_server_status/constants/app_icons.dart';
 
 import 'package:my_server_status/constants/urls.dart';
 import 'package:my_server_status/functions/open_url.dart';
@@ -40,12 +41,7 @@ class ApiAnnouncementModal extends StatelessWidget {
           Text(AppLocalizations.of(context)!.importantAnnouncementDescription),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            icon: SvgPicture.asset(
-              'assets/resources/github.svg',
-              color: Theme.of(context).colorScheme.primary,
-              width: 20,
-              height: 20,
-            ),
+            icon: const Icon(MyServerStatusIcons.github),
             label: Text(AppLocalizations.of(context)!.installationInstructions),
             onPressed: () => openUrl(Urls.apiInstallationInstructions),
           )
