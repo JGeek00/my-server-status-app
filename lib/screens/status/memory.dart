@@ -108,6 +108,8 @@ class MemoryTab extends StatelessWidget {
                   scale: Scale(min: 0.0, max: data[0].total.toDouble()),
                   yScaleTextFormatter: (v) => convertMemoryToGb(v.toInt()),
                   tooltipTextFormatter: (v) => "${convertMemoryToGb(v.toInt())} GB",
+                  labelsInterval: data[0].total/6,
+                  linesInterval: data[0].total/6,
                 )
               ),
             ),

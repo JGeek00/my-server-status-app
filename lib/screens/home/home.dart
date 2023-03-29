@@ -46,17 +46,23 @@ class HomeScreenWidget extends StatefulWidget {
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   Timer? refreshTimer;
 
-  Future requestHardwareInfo() async {
+  bool requestInProgress = false;
+
+  Future<bool> requestHardwareInfo() async {
+    requestInProgress = true;
     final result = await getHardwareInfo(widget.serversProvider.selectedServer!);
+    requestInProgress = false;
     if (result['result'] == 'success') {
       widget.serversProvider.setServerInfoData(result['data']);
       widget.serversProvider.setServerInfoLoadStatus(1);
       widget.serversProvider.setServerConnected(true);
+      return true;
     }
     else {
       widget.serversProvider.setServerConnected(false);
       widget.serversProvider.setServerInfoLoadStatus(2);
       widget.appConfigProvider.addLog(result['log']);
+      return false;
     }
   }
 
@@ -66,7 +72,14 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
       requestHardwareInfo();
       if (widget.appConfigProvider.autoRefreshTimeHome > 0) {
         refreshTimer = Timer.periodic(
-          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) => requestHardwareInfo()
+          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) async {
+            if (requestInProgress == false) {
+              final result = await requestHardwareInfo();
+              if (result == false) {
+                refreshTimer!.cancel();
+              }
+            }
+          }
         );
       }
     }

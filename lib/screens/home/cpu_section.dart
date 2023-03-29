@@ -15,9 +15,11 @@ class CpuSectionHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cpuTemp = cpuInfo.temp.main <= 100 
-      ? cpuInfo.temp.main
-      : 100;
+    final cpuTemp = cpuInfo.temp.main != null
+      ? cpuInfo.temp.main! <= 100 
+        ? cpuInfo.temp.main
+        : 100
+      : null;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -93,7 +95,7 @@ class CpuSectionHome extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
+                if (cpuTemp != null) Expanded(
                   flex: 5,
                   child: Column(
                     children: [
@@ -118,7 +120,7 @@ class CpuSectionHome extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${cpuInfo.temp.main.toString()}ºC",
+                        "${cpuInfo.temp!.main.toString()}ºC",
                         style: const TextStyle(
                           fontWeight: FontWeight.w500
                         ),

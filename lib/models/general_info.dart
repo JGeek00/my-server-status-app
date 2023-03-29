@@ -107,10 +107,10 @@ class Speed {
 }
 
 class Temp {
-  final int main;
+  final int? main;
 
   Temp({
-    required this.main,
+    this.main,
   });
 
   factory Temp.fromJson(Map<String, dynamic> json) => Temp(

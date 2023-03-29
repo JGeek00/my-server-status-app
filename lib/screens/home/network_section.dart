@@ -13,8 +13,6 @@ class NetworkSectionHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int currentIndexNetwork = 0;   // To know current index on network map
-
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -47,99 +45,97 @@ class NetworkSectionHome extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          ...networkInfo.where((i) => i.operstate != 'unknown').map(
-            (item) {
-              currentIndexNetwork++;
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            item.type == 'wired' 
-                              ? Icons.settings_ethernet_rounded 
-                              : Icons.wifi_rounded,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            item.iface,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            item.operstate == 'up' 
-                              ? Icons.check_rounded
-                              : Icons.cancel_rounded,
-                            size: 18,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            item.operstate == 'up' 
-                              ? AppLocalizations.of(context)!.up
-                              : AppLocalizations.of(context)!.down,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "IPv4",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500
+          ...networkInfo.asMap().entries.where(
+            (i) => i.value.operstate != 'unknown' && i.value.type != '' && !i.value.iface.toLowerCase().contains("bluetooth")
+            ).map((item) => Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          item.value.type == 'wired' 
+                            ? Icons.settings_ethernet_rounded 
+                            : Icons.wifi_rounded,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                      ),
-                      Text(item.ip4)
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 16),
-                        child: Text(
-                          "IPv6",
-                          style: TextStyle(
+                        const SizedBox(width: 16),
+                        Text(
+                          item.value.iface,
+                          style: const TextStyle(
+                            fontSize: 16,
                             fontWeight: FontWeight.w500
                           ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          item.value.operstate == 'up' 
+                            ? Icons.check_rounded
+                            : Icons.cancel_rounded,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
+                        const SizedBox(width: 8),
+                        Text(
+                          item.value.operstate == 'up' 
+                            ? AppLocalizations.of(context)!.up
+                            : AppLocalizations.of(context)!.down,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "IPv4",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500
                       ),
-                      Flexible(
-                        child: Text(item.ip6)
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "MAC",
+                    ),
+                    Text(item.value.ip4)
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 16),
+                      child: Text(
+                        "IPv6",
                         style: TextStyle(
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      Text(item.mac)
-                    ],
-                  ),
-                  if (currentIndexNetwork < networkInfo.length) const SizedBox(height: 20),
-                ],
-              );
-            }
+                    ),
+                    Flexible(
+                      child: Text(item.value.ip6)
+                    )
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "MAC",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    Text(item.value.mac)
+                  ],
+                ),
+                if (item.key < networkInfo.length-1) const SizedBox(height: 20),
+              ],
+            ),
           ).toList()
         ],
       ),

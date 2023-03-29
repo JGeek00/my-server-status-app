@@ -53,8 +53,12 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
   Timer? refreshTimer;
 
-  Future requestCurrentStatus() async {
+  bool isRefreshing = false;
+
+  Future<bool> requestCurrentStatus() async {
+    isRefreshing = true;
     final result = await getCurrentStatus(widget.serversProvider.selectedServer!);
+    isRefreshing = false;
     if (result['result'] == 'success') {
       currentStatus.add(result['data']);
       if (currentStatus.length > 20) {
@@ -62,11 +66,13 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
       }
       loadStatus = 1;
       widget.serversProvider.setServerConnected(true);
+      return true;
     }
     else {
       widget.serversProvider.setServerConnected(false);
       loadStatus = 2;
       widget.appConfigProvider.addLog(result['log']);
+      return false;
     }
   }
 
@@ -74,9 +80,17 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
   void initState() {
     if (widget.serversProvider.selectedServer != null) {
       requestCurrentStatus();
+      isRefreshing = false;
       if (widget.appConfigProvider.autoRefreshTimeHome > 0) {
         refreshTimer = Timer.periodic(
-          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) => requestCurrentStatus()
+          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) async {
+            if (isRefreshing == false) {
+              final result = await requestCurrentStatus();
+              if (result == false) {
+                refreshTimer!.cancel();
+              }
+            }
+          }
         );
       }
     }

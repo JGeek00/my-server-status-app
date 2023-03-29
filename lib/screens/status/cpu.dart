@@ -43,7 +43,7 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = List.filled(20, 0.0);
 
           for (var j = 0; j < widget.data.length; j++) {
-            temp[j] = widget.data[j].cores[i].temperature.toDouble();
+            if (widget.data[j].cores[i].temperature != null) temp[j] = widget.data[j].cores[i].temperature!.toDouble();
             speed[j] = widget.data[j].cores[i].speed;
             load[j] = widget.data[j].cores[i].load["load"] ?? 0.0;
           }
@@ -67,7 +67,7 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = [];
 
           for (var d in widget.data) {
-            temp.add(d.cores[i].temperature.toDouble());
+            if (d.cores[i].temperature != null) temp.add(d.cores[i].temperature!.toDouble());
             speed.add(d.cores[i].speed);
             load.add(d.cores[i].load["load"] ?? 0.0);
           }
@@ -236,7 +236,9 @@ class _CpuTabState extends State<CpuTab> {
                             ),
                           ),
                           Text(
-                            "${widget.data[0].specs.minSpeed} GHz - ${widget.data[0].specs.maxSpeed} GHz",
+                            widget.data[0].specs.minSpeed == widget.data[0].specs.maxSpeed
+                              ? "${widget.data[0].specs.maxSpeed} GHz"
+                              : "${widget.data[0].specs.minSpeed} GHz - ${widget.data[0].specs.maxSpeed} GHz",
                             style: const TextStyle(
                               fontWeight: FontWeight.w500
                             ),
@@ -281,7 +283,8 @@ class _CpuTabState extends State<CpuTab> {
                           ),
                           ButtonSegment(
                             value: CoreChartConfig.temperature,
-                            label: Text(AppLocalizations.of(context)!.temp)
+                            label: Text(AppLocalizations.of(context)!.temp),
+                            enabled: core.value["temperature"].where((t) => t == 0).length == core.value["temperature"].length
                           ),
                         ], 
                         selected: <CoreChartConfig>{coreChartConfig[core.key]},

@@ -134,7 +134,8 @@ Future login(Server server) async {
     server: server,
     method: 'get',
     urlPath: '/v1/check-credentials', 
-    type: 'login'
+    type: 'login',
+    overrideTimeout: true
   );
 
   if (result['hasResponse'] == true) {
@@ -188,7 +189,8 @@ Future getHardwareInfo(Server server) async {
     server: server,
     method: 'get',
     urlPath: '/v1/general-info', 
-    type: 'general_info'
+    type: 'general_info',
+    overrideTimeout: true
   );
 
   if (result['hasResponse'] == true) {
@@ -242,12 +244,12 @@ Future getHardwareInfo(Server server) async {
 
 Future getSystemInformation(Server server) async {
   final result = await Future.wait([
-    apiRequest(server: server, method: 'get', urlPath: '/v1/system', type: 'get_system_information'),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/cpu', type: 'get_system_information'),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information'),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information'),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information'),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/os', type: 'get_system_information'),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/system', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/cpu', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/os', type: 'get_system_information', overrideTimeout: true),
   ]);
 
   if (
@@ -311,7 +313,8 @@ Future getCurrentStatus(Server server) async {
     server: server,
     method: 'get',
     urlPath: '/v1/status', 
-    type: 'status'
+    type: 'status',
+    overrideTimeout: true
   );
 
   if (result['hasResponse'] == true) {

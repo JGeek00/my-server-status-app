@@ -20,7 +20,7 @@ class CurrentStatus {
     socketTemperature: List<double>.from(json["socketTemperature"].map((x) => x)),
     chipsetTemperature: json["chipsetTemperature"],
     memory: Memory.fromJson(json["memory"]),
-    storage: Storage.fromJson(json["storage"]),
+    storage: json["storage"] != null ? Storage.fromJson(json["storage"]) : null,
     network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),
   );
 
@@ -86,11 +86,11 @@ class CpuSpecs {
 }
 
 class Average {
-  final int temperature;
+  final int? temperature;
   final Load load;
 
   Average({
-    required this.temperature,
+    this.temperature,
     required this.load,
   });
 
@@ -135,11 +135,11 @@ class Load {
 
 class Core {
   final double speed;
-  final int temperature;
+  final int? temperature;
   final Map<String, double> load;
 
   Core({
-    required this.temperature,
+    this.temperature,
     required this.speed,
     required this.load,
   });

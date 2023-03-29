@@ -23,13 +23,13 @@ class NetworkInterface {
   final String ip6;
   final String ip6Subnet;
   final String mac;
-  final bool internal;
+  final bool? internal;
   final bool virtual;
   final String? operstate;
   final String? type;
   final String? duplex;
   final int? mtu;
-  final int? speed;
+  final double? speed;
   final bool? dhcp;
 
   NetworkInterface({
@@ -41,7 +41,7 @@ class NetworkInterface {
     required this.ip6,
     required this.ip6Subnet,
     required this.mac,
-    required this.internal,
+    this.internal,
     required this.virtual,
     this.operstate,
     this.type,
@@ -66,7 +66,9 @@ class NetworkInterface {
     type: json["type"],
     duplex: json["duplex"],
     mtu: json["mtu"],
-    speed: json["speed"],
+    speed: json["speed"] != null 
+      ? json["speed"].runtimeType == int ? json["speed"]!.toDouble() : json["speed"] 
+      : null,
     dhcp: json["dhcp"],
   );
 

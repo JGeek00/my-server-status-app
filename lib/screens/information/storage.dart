@@ -48,6 +48,7 @@ class StorageTab extends StatelessWidget {
         
       case 1:
         final storage = serversProvider.systemSpecsInfo.data!.storageInfo;
+        final blockDevices = storage.blockDevices.where((d) => d.mount != "");
         int drivesIndex = 0;
         return ListView(
           padding: const EdgeInsets.only(top: 16),
@@ -95,7 +96,7 @@ class StorageTab extends StatelessWidget {
                 ],
               );
             }),
-            Padding(
+            if (blockDevices.isNotEmpty) Padding(
               padding: const EdgeInsets.only(
                 top: 24,
                 bottom: 8
@@ -113,7 +114,7 @@ class StorageTab extends StatelessWidget {
                 ],
               ),
             ),
-            ...storage.blockDevices.where((d) => d.type == "part" || d.type == "lvm").map((device) => Column(
+            ...blockDevices.map((device) => Column(
               children: [
                 SectionLabel(label: device.name),
                 if (device.device != null) CustomListTile(

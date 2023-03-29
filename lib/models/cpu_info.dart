@@ -139,12 +139,12 @@ class CpuCurrentSpeed {
 }
 
 class CpuTemperature {
-  final int main;
-  final int max;
+  final int? main;
+  final int? max;
 
   CpuTemperature({
-    required this.main,
-    required this.max,
+    this.main,
+    this.max,
   });
 
   factory CpuTemperature.fromJson(Map<String, dynamic> json) => CpuTemperature(
