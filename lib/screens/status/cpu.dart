@@ -43,7 +43,15 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = List.filled(20, 0.0);
 
           for (var j = 0; j < widget.data.length; j++) {
-            if (widget.data[j].cores[i].temperature != null) temp[j] = widget.data[j].cores[i].temperature!.toDouble();
+            if (widget.data[j].cores[i].temperature != null) {
+              temp[j] = widget.data[j].cores[i].temperature!.toDouble();
+            }
+            else if (widget.data[j].average.temperature != null) {
+              temp[j] = widget.data[j].average.temperature!.toDouble();
+            }
+            else {
+              temp[j] = 0.0;
+            }
             speed[j] = widget.data[j].cores[i].speed;
             load[j] = widget.data[j].cores[i].load["load"] ?? 0.0;
           }
@@ -67,7 +75,15 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = [];
 
           for (var d in widget.data) {
-            if (d.cores[i].temperature != null) temp.add(d.cores[i].temperature!.toDouble());
+            if (d.cores[i].temperature != null) {
+              temp.add(d.cores[i].temperature!.toDouble());
+            }
+            else if (d.average.temperature != null) {
+              temp.add(d.average.temperature!.toDouble());
+            }
+            else {
+              temp.add(0.0);
+            }
             speed.add(d.cores[i].speed);
             load.add(d.cores[i].load["load"] ?? 0.0);
           }
@@ -283,8 +299,7 @@ class _CpuTabState extends State<CpuTab> {
                           ),
                           ButtonSegment(
                             value: CoreChartConfig.temperature,
-                            label: Text(AppLocalizations.of(context)!.temp),
-                            enabled: core.value["temperature"].where((t) => t == 0).length == core.value["temperature"].length
+                            label: Text(AppLocalizations.of(context)!.temp)
                           ),
                         ], 
                         selected: <CoreChartConfig>{coreChartConfig[core.key]},

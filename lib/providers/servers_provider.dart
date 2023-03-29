@@ -155,6 +155,12 @@ class ServersProvider with ChangeNotifier {
     final result = await removeFromDb(server.id);
     if (result == true) {
       _selectedServer = null;
+      _serverConnected = null;
+      _serverInfo.loadStatus = 0;
+      _serverInfo.data = null;
+      _systemSpecsInfo.loadStatus = 0;
+      _systemSpecsInfo.data = null;
+
       List<Server> newServers = _serversList.where((s) => s.id != server.id).toList();
       _serversList = newServers;
       notifyListeners();
