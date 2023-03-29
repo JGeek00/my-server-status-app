@@ -204,5 +204,7 @@
   "storageUsage": "Storage usage",
   "transmission": "Transmission",
   "reception": "Reception",
-  "dataTransfer": "Data transfer"
+  "dataTransfer": "Data transfer",
+  "enableTimeoutOnRequests": "Enable timeout on requests",
+  "enableTimeoutOnRequestsDescription": "Requests will be cancelled after 10 seconds without response"
 }

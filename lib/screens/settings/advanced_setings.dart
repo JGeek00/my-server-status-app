@@ -37,6 +37,26 @@ class AdvancedSettings extends StatelessWidget {
       }
     }
 
+    Future updateTimeoutRequests(bool newStatus) async {
+      final result = await appConfigProvider.setTimeoutRequests(newStatus);
+      if (result == true) {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
+          color: Colors.green
+        );
+      }
+      else {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.cannotUpdateSettings, 
+          color: Colors.red
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.advancedSettings),
@@ -53,12 +73,17 @@ class AdvancedSettings extends StatelessWidget {
               activeColor: Theme.of(context).colorScheme.primary,
             ),
             onTap: () => updateSslCheck(!appConfigProvider.overrideSslCheck),
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 10,
-              left: 20,
-              right: 10
-            )
+          ),
+          CustomListTile(
+            icon: Icons.timer_rounded,
+            title: AppLocalizations.of(context)!.enableTimeoutOnRequests,
+            subtitle: AppLocalizations.of(context)!.enableTimeoutOnRequestsDescription,
+            trailing: Switch(
+              value: appConfigProvider.timeoutRequests, 
+              onChanged: updateTimeoutRequests,
+              activeColor: Theme.of(context).colorScheme.primary,
+            ),
+            onTap: () => updateTimeoutRequests(!appConfigProvider.timeoutRequests),
           ),
           CustomListTile(
             icon: Icons.list_rounded,

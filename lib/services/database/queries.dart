@@ -90,3 +90,16 @@ Future<bool> updateApiAnnouncementReadenQuery(Database dbInstance, int value) as
     return false;
   }
 }
+
+Future<bool> updateTimeoutRequestsQuery(Database dbInstance, int value) async {
+  try {
+    return await dbInstance.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE appConfig SET timeoutRequests = $value',
+      );
+      return true;
+    });
+  } catch (e) {
+    return false;
+  }
+}

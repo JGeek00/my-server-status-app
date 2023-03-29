@@ -57,7 +57,10 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
   Future<bool> requestCurrentStatus() async {
     isRefreshing = true;
-    final result = await getCurrentStatus(widget.serversProvider.selectedServer!);
+    final result = await getCurrentStatus(
+      server: widget.serversProvider.selectedServer!,
+      overrideTimeout: !widget.appConfigProvider.timeoutRequests
+    );
     isRefreshing = false;
     if (result['result'] == 'success') {
       currentStatus.add(result['data']);

@@ -31,6 +31,8 @@ class AppConfigProvider with ChangeNotifier {
 
   bool _apiAnnouncementReaden = false;
 
+  bool _timeoutRequests = true;
+
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
@@ -101,6 +103,10 @@ class AppConfigProvider with ChangeNotifier {
 
   bool get apiAnnouncementReaden {
     return _apiAnnouncementReaden;
+  }
+
+  bool get timeoutRequests {
+    return _timeoutRequests;
   }
 
   void setDbInstance(Database db) {
@@ -218,6 +224,18 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> setTimeoutRequests(bool value) async {
+    final updated = await updateTimeoutRequestsQuery(_dbInstance!, value == true ? 1 : 0);
+    if (updated == true) {
+      _timeoutRequests = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   void saveFromDb(Database dbInstance, Map<String, dynamic> dbData) {
     _selectedTheme = dbData['theme'];
     _overrideSslCheck = dbData['overrideSslCheck'];
@@ -226,6 +244,7 @@ class AppConfigProvider with ChangeNotifier {
     _autoRefreshTimeHome = dbData['autoRefreshTimeHome'];
     _autoRefreshTimeStatus = dbData['autoRefreshTimeStatus'];
     _apiAnnouncementReaden = convertFromIntToBool(dbData['apiAnnouncementReaden'])!;
+    _timeoutRequests = convertFromIntToBool(dbData['timeoutRequests'])!;
 
     _dbInstance = dbInstance;
     notifyListeners();

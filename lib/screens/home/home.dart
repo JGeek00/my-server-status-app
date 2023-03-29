@@ -50,7 +50,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
   Future<bool> requestHardwareInfo() async {
     requestInProgress = true;
-    final result = await getHardwareInfo(widget.serversProvider.selectedServer!);
+    final result = await getHardwareInfo(
+      server: widget.serversProvider.selectedServer!,
+      overrideTimeout: !widget.appConfigProvider.timeoutRequests
+    );
     requestInProgress = false;
     if (result['result'] == 'success') {
       widget.serversProvider.setServerInfoData(result['data']);

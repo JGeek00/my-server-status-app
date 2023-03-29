@@ -134,8 +134,7 @@ Future login(Server server) async {
     server: server,
     method: 'get',
     urlPath: '/v1/check-credentials', 
-    type: 'login',
-    overrideTimeout: true
+    type: 'login'
   );
 
   if (result['hasResponse'] == true) {
@@ -184,13 +183,13 @@ Future login(Server server) async {
   }
 }
 
-Future getHardwareInfo(Server server) async {
+Future getHardwareInfo({required Server server, required bool overrideTimeout}) async {
   final result = await apiRequest(
     server: server,
     method: 'get',
     urlPath: '/v1/general-info', 
     type: 'general_info',
-    overrideTimeout: true
+    overrideTimeout: overrideTimeout
   );
 
   if (result['hasResponse'] == true) {
@@ -242,14 +241,14 @@ Future getHardwareInfo(Server server) async {
   }
 }
 
-Future getSystemInformation(Server server) async {
+Future getSystemInformation({required Server server, required bool overrideTimeout}) async {
   final result = await Future.wait([
-    apiRequest(server: server, method: 'get', urlPath: '/v1/system', type: 'get_system_information', overrideTimeout: true),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/cpu', type: 'get_system_information', overrideTimeout: true),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information', overrideTimeout: true),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information', overrideTimeout: true),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information', overrideTimeout: true),
-    apiRequest(server: server, method: 'get', urlPath: '/v1/os', type: 'get_system_information', overrideTimeout: true),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/system', type: 'get_system_information', overrideTimeout: overrideTimeout),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/cpu', type: 'get_system_information', overrideTimeout: overrideTimeout),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/memory', type: 'get_system_information', overrideTimeout: overrideTimeout),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/storage', type: 'get_system_information', overrideTimeout: overrideTimeout),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/network', type: 'get_system_information', overrideTimeout: overrideTimeout),
+    apiRequest(server: server, method: 'get', urlPath: '/v1/os', type: 'get_system_information', overrideTimeout: overrideTimeout),
   ]);
 
   if (
@@ -308,13 +307,13 @@ Future getSystemInformation(Server server) async {
   }
 }
 
-Future getCurrentStatus(Server server) async {
+Future getCurrentStatus({required Server server, required bool overrideTimeout}) async {
   final result = await apiRequest(
     server: server,
     method: 'get',
     urlPath: '/v1/status', 
     type: 'status',
-    overrideTimeout: true
+    overrideTimeout: overrideTimeout
   );
 
   if (result['hasResponse'] == true) {

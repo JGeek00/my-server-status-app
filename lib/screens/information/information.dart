@@ -49,7 +49,10 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
   int selectedTab = 0;
 
   Future requestHardwareInfo() async {
-    final result = await getSystemInformation(widget.serversProvider.selectedServer!);
+    final result = await getSystemInformation(
+      server: widget.serversProvider.selectedServer!,
+      overrideTimeout: !widget.appConfigProvider.timeoutRequests
+    );
     if (result['result'] == 'success') {
       widget.serversProvider.setSystemSpecsInfoData(result['data']);
       widget.serversProvider.setSystemSpecsInfoLoadStatus(1);

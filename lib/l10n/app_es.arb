@@ -204,5 +204,7 @@
   "storageUsage": "Uso del almacenamiento",
   "transmission": "Transmisión",
   "reception": "Recepción",
-  "dataTransfer": "Transferencia de datos"
+  "dataTransfer": "Transferencia de datos",
+  "enableTimeoutOnRequests": "Activar timeout en peticiones",
+  "enableTimeoutOnRequestsDescription": "Las peticiones se cancelarán a los 10 segundos sin respuesta"
 }
