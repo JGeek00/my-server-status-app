@@ -81,9 +81,9 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
     if (widget.serversProvider.selectedServer != null) {
       requestCurrentStatus();
       isRefreshing = false;
-      if (widget.appConfigProvider.autoRefreshTimeHome > 0) {
+      if (widget.appConfigProvider.autoRefreshTimeStatus > 0) {
         refreshTimer = Timer.periodic(
-          Duration(seconds: widget.appConfigProvider.autoRefreshTimeHome), (_) async {
+          Duration(seconds: widget.appConfigProvider.autoRefreshTimeStatus), (_) async {
             if (isRefreshing == false) {
               final result = await requestCurrentStatus();
               if (result == false) {
