@@ -114,7 +114,9 @@ class Temp {
   });
 
   factory Temp.fromJson(Map<String, dynamic> json) => Temp(
-    main: json["main"],
+    main: json["main"] != null 
+      ? json["main"].runtimeType == double ? json["main"].toInt() : json["main"]
+      : null,
   );
 
   Map<String, dynamic> toJson() => {

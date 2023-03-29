@@ -148,8 +148,12 @@ class CpuTemperature {
   });
 
   factory CpuTemperature.fromJson(Map<String, dynamic> json) => CpuTemperature(
-    main: json["main"],
-    max: json["max"],
+    main: json["main"] != null 
+      ? json["main"].runtimeType == double ? json["main"].toInt() : json["main"]
+      : null,
+    max: json["max"] != null 
+      ? json["max"].runtimeType == double ? json["max"].toInt() : json["max"]
+      : null,
   );
 
   Map<String, dynamic> toJson() => {

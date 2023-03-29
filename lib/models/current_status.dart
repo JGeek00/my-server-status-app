@@ -95,7 +95,9 @@ class Average {
   });
 
   factory Average.fromJson(Map<String, dynamic> json) => Average(
-    temperature: json["temperature"],
+    temperature: json["temperature"] != null 
+      ? json["temperature"].runtimeType == double ? json["temperature"].toInt() : json["temperature"]
+      : null,
     load: Load.fromJson(json["load"]),
   );
 
@@ -146,7 +148,9 @@ class Core {
 
   factory Core.fromJson(Map<String, dynamic> json) => Core(
     speed: json["speed"]?.toDouble(),
-    temperature: json["temperature"],
+    temperature: json["temperature"] != null 
+      ? json["temperature"].runtimeType == double ? json["temperature"].toInt() : json["temperature"]
+      : null,
     load: Map.from(json["load"]).map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
   );
 
