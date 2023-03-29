@@ -120,7 +120,7 @@ class CpuSectionHome extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${cpuInfo.temp!.main.toString()}ºC",
+                        "${cpuInfo.temp.main.toString()}ºC",
                         style: const TextStyle(
                           fontWeight: FontWeight.w500
                         ),

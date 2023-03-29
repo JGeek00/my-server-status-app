@@ -27,6 +27,7 @@ class AppConfigProvider with ChangeNotifier {
   int _overrideSslCheck = 0;
 
   int _autoRefreshTimeHome = 0;
+  int _autoRefreshTimeStatus = 0;
 
   bool _apiAnnouncementReaden = false;
 
@@ -92,6 +93,10 @@ class AppConfigProvider with ChangeNotifier {
 
   int get autoRefreshTimeHome {
     return _autoRefreshTimeHome;
+  }
+
+  int get autoRefreshTimeStatus {
+    return _autoRefreshTimeStatus;
   }
 
   bool get apiAnnouncementReaden {
@@ -178,9 +183,21 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setAutoRefreshTimeHome(int value) async {
-    final updated = await updateAutoRefreshQuery(_dbInstance!, value);
+    final updated = await updateAutoRefreshHomeQuery(_dbInstance!, value);
     if (updated == true) {
       _autoRefreshTimeHome = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  Future<bool> setAutoRefreshTimeStatus(int value) async {
+    final updated = await updateAutoRefreshStatusQuery(_dbInstance!, value);
+    if (updated == true) {
+      _autoRefreshTimeStatus = value;
       notifyListeners();
       return true;
     }
@@ -207,6 +224,7 @@ class AppConfigProvider with ChangeNotifier {
     _useDynamicColor = convertFromIntToBool(dbData['useDynamicColor'])!;
     _staticColor = dbData['staticColor'];
     _autoRefreshTimeHome = dbData['autoRefreshTimeHome'];
+    _autoRefreshTimeStatus = dbData['autoRefreshTimeStatus'];
     _apiAnnouncementReaden = convertFromIntToBool(dbData['apiAnnouncementReaden'])!;
 
     _dbInstance = dbInstance;

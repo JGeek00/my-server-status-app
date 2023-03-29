@@ -52,11 +52,24 @@ Future<bool> updateOverrideSslCheckQuery(Database dbInstance, int value) async {
   }
 }
 
-Future<bool> updateAutoRefreshQuery(Database dbInstance, int value) async {
+Future<bool> updateAutoRefreshHomeQuery(Database dbInstance, int value) async {
   try {
     return await dbInstance.transaction((txn) async {
       await txn.rawUpdate(
-        'UPDATE appConfig SET autoRefreshTime = $value',
+        'UPDATE appConfig SET autoRefreshTimeHome = $value',
+      );
+      return true;
+    });
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> updateAutoRefreshStatusQuery(Database dbInstance, int value) async {
+  try {
+    return await dbInstance.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE appConfig SET autoRefreshTimeStatus = $value',
       );
       return true;
     });

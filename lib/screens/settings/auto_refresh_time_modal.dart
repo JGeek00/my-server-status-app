@@ -6,12 +6,14 @@ class AutoRefreshTimeModal extends StatefulWidget {
   final int time;
   final void Function(int) onChange;
   final double screenHeight;
+  final String screen;
 
   const AutoRefreshTimeModal({
     Key? key,
     required this.time,
     required this.onChange,
     required this.screenHeight,
+    required this.screen,
   }) : super(key: key);
 
   @override
@@ -40,8 +42,8 @@ class _AutoRefreshTimeModalState extends State<AutoRefreshTimeModal> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      height: widget.screenHeight > 520
-        ? 520
+      height: widget.screenHeight > 556
+        ? 556
         : widget.screenHeight,
       decoration: BoxDecoration(
         color: Theme.of(context).dialogBackgroundColor,
@@ -73,6 +75,56 @@ class _AutoRefreshTimeModalState extends State<AutoRefreshTimeModal> {
               style: const TextStyle(
                 fontSize: 24,
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (widget.screen == "Home") ...[
+                  Text(
+                    AppLocalizations.of(context)!.appliedTo,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Icon(
+                    Icons.home_rounded,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    AppLocalizations.of(context)!.home,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  )
+                ],
+                if (widget.screen == "Status") ...[
+                  Text(
+                    AppLocalizations.of(context)!.appliedTo,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Icon(
+                    Icons.analytics_rounded,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    AppLocalizations.of(context)!.status,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  )
+                ],
+              ],
             ),
           ),
           Card(

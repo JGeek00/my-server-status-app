@@ -18,15 +18,18 @@ class GeneralSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
-    void openAutoRefreshTimeModal() {
+    void openAutoRefreshTimeModal(int time, String screen) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (context) => AutoRefreshTimeModal(
-          time: appConfigProvider.autoRefreshTimeHome, 
+          time: time, 
           screenHeight: MediaQuery.of(context).size.height,
+          screen: screen,
           onChange: (value) async {
-            final result = await appConfigProvider.setAutoRefreshTimeHome(value);
+            final result = screen == "Status"
+              ? await appConfigProvider.setAutoRefreshTimeStatus(value)
+              : await appConfigProvider.setAutoRefreshTimeHome(value);
             if (result == true) {
               showSnacbkar(
                 context: context, 
@@ -57,12 +60,21 @@ class GeneralSettings extends StatelessWidget {
           SectionLabel(label: AppLocalizations.of(context)!.home),
           CustomListTile(
             icon: Icons.refresh_rounded,
-            title: AppLocalizations.of(context)!.autoRefreshTime,
+            title: AppLocalizations.of(context)!.autoRefreshTimeHome,
             subtitle: appConfigProvider.autoRefreshTimeHome == 0 
               ? AppLocalizations.of(context)!.disabled
               : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeHome),
-            onTap: openAutoRefreshTimeModal,
-          )
+            onTap: () => openAutoRefreshTimeModal(appConfigProvider.autoRefreshTimeHome, "Home"),
+          ),
+          SectionLabel(label: AppLocalizations.of(context)!.status),
+          CustomListTile(
+            icon: Icons.refresh_rounded,
+            title: AppLocalizations.of(context)!.autoRefreshTimeStatus,
+            subtitle: appConfigProvider.autoRefreshTimeStatus == 0 
+              ? AppLocalizations.of(context)!.disabled
+              : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeStatus),
+            onTap: () => openAutoRefreshTimeModal(appConfigProvider.autoRefreshTimeStatus,"Status"),
+          ),
         ],
       ),
     );  
