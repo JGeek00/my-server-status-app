@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:my_server_status/constants/enums.dart';
 
-class CustomTab extends StatelessWidget {
+class CustomTabContent extends StatelessWidget {
   final Widget Function() loadingGenerator;
   final List<Widget> Function() contentGenerator;
   final Widget Function() errorGenerator;
   final LoadStatus loadStatus;
   final Future<void> Function() onRefresh;
 
-  const CustomTab({
+  const CustomTabContent({
     Key? key,
     required this.loadingGenerator,
     required this.contentGenerator,

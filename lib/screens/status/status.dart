@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/constants/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -49,7 +50,7 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
   final ScrollController scrollController = ScrollController();
 
   List<CurrentStatus> currentStatus = [];
-  int loadStatus = 0;
+  LoadStatus loadStatus = LoadStatus.loading;
 
   Timer? refreshTimer;
 
@@ -67,13 +68,13 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
       if (currentStatus.length > 20) {
         currentStatus.removeAt(0);
       }
-      loadStatus = 1;
+      loadStatus = LoadStatus.loaded;
       widget.serversProvider.setServerConnected(true);
       return true;
     }
     else {
       widget.serversProvider.setServerConnected(false);
-      loadStatus = 2;
+      loadStatus = LoadStatus.error;
       widget.appConfigProvider.addLog(result['log']);
       return false;
     }
@@ -125,7 +126,7 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
     }
 
     List<Storage>? getStorage() {
-      if (loadStatus == 1 && currentStatus[0].storage != null) {
+      if (loadStatus == LoadStatus.loaded && currentStatus[0].storage != null) {
         return currentStatus.map((e) => e.storage!).toList();
       }
       else {
@@ -134,7 +135,7 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
     }
 
     List<List<Network>>? getNetwork() {
-      if (loadStatus == 1 && currentStatus[0].storage != null) {
+      if (loadStatus == LoadStatus.loaded && currentStatus[0].storage != null) {
         return currentStatus.map((e) => e.network!).toList();
       }
       else {
@@ -150,84 +151,64 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
           return [
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverSafeArea(
-                top: false,
-                sliver: SliverAppBar(
-                  title: Text(AppLocalizations.of(context)!.status),
-                  pinned: true,
-                  floating: true,
-                  centerTitle: false,
-                  forceElevated: innerBoxIsScrolled,
-                  bottom: TabBar(
-                    controller: tabController,
-                    unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                    isScrollable: false,
-                    tabs: [
-                      const Tab(
-                        icon: Icon(Icons.memory_rounded),
-                        text: "CPU",
-                      ),
-                      Tab(
-                        icon: const Icon(MyServerStatusIcons.memory),
-                        text: AppLocalizations.of(context)!.memory,
-                      ),
-                      Tab(
-                        icon: const Icon(MyServerStatusIcons.storage),
-                        text: AppLocalizations.of(context)!.storage,
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.settings_ethernet_rounded),
-                        text: AppLocalizations.of(context)!.network,
-                      ),
-                    ]
-                  )
-                ),
+              sliver: SliverAppBar(
+                title: Text(AppLocalizations.of(context)!.status),
+                pinned: true,
+                floating: true,
+                centerTitle: false,
+                forceElevated: innerBoxIsScrolled,
+                bottom: TabBar(
+                  controller: tabController,
+                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  isScrollable: MediaQuery.of(context).size.width < 380
+                    ? true : false,
+                  tabs: [
+                    const Tab(
+                      icon: Icon(Icons.memory_rounded),
+                      text: "CPU",
+                    ),
+                    Tab(
+                      icon: const Icon(MyServerStatusIcons.memory),
+                      text: AppLocalizations.of(context)!.memory,
+                    ),
+                    Tab(
+                      icon: const Icon(MyServerStatusIcons.storage),
+                      text: AppLocalizations.of(context)!.storage,
+                    ),
+                    Tab(
+                      icon: const Icon(Icons.settings_ethernet_rounded),
+                      text: AppLocalizations.of(context)!.network,
+                    ),
+                  ]
+                )
               ),
             )
           ];
         }), 
-        body: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border(
-              top: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1)
-              )
-            )
-          ),
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              RefreshIndicator(
-                onRefresh: requestCurrentStatus,
-                child: CpuTab(
-                  loadStatus: loadStatus,
-                  data: getCpu(),
-                ), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestCurrentStatus,
-                child: MemoryTab(
-                  loadStatus: loadStatus,
-                  data: getMemory(),
-                ), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestCurrentStatus,
-                child: StorageTab(
-                  loadStatus: loadStatus,
-                  data: getStorage()
-                ), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestCurrentStatus,
-                child: NetworkTab(
-                  loadStatus: loadStatus,
-                  data: getNetwork()
-                ), 
-              ),
-            ]
-          )
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            CpuTab(
+              loadStatus: loadStatus,
+              data: getCpu(),
+              onRefresh: requestCurrentStatus,
+            ),
+            MemoryTab(
+              loadStatus: loadStatus,
+              data: getMemory(),
+              onRefresh: requestCurrentStatus,
+            ),
+            StorageTab(
+              loadStatus: loadStatus,
+              data: getStorage(),
+              onRefresh: requestCurrentStatus,
+            ),
+            NetworkTab(
+              loadStatus: loadStatus,
+              data: getNetwork(),
+              onRefresh: requestCurrentStatus,
+            ),
+          ]
         ),
       )
     );

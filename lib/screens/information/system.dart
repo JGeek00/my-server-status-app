@@ -27,7 +27,7 @@ class SystemTab extends StatelessWidget {
         : 'N/A';
     }
 
-    return CustomTab(
+    return CustomTabContent(
       loadingGenerator: () => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

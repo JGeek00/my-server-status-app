@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_server_status/functions/memory_conversion.dart';
 
-import 'package:my_server_status/models/current_status.dart';
 import 'package:my_server_status/screens/status/chart.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 
+import 'package:my_server_status/functions/memory_conversion.dart';
+import 'package:my_server_status/constants/enums.dart';
+import 'package:my_server_status/models/current_status.dart';
+import 'package:my_server_status/widgets/tab_content.dart';
+
 class StorageTab extends StatefulWidget {
-  final int loadStatus;
+  final LoadStatus loadStatus;
   final List<Storage>? data;
+  final Future<void> Function() onRefresh;
 
   const StorageTab({
     Key? key,
     required this.loadStatus,
     required this.data,
+    required this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -65,159 +70,129 @@ class _StorageTabState extends State<StorageTab> {
       }
     }
 
-    switch (widget.loadStatus) {
-      case 0:
-        return SizedBox(
-          width: double.maxFinite,
-          child: Padding(
+    return CustomTabContent(
+      loadingGenerator: () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(height: 30),
+          Text(
+            AppLocalizations.of(context)!.loadingCurrentStatus,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          )
+        ],
+      ),
+      contentGenerator: () {
+        final formattedData = chartData();
+        return [
+          SectionLabel(label: AppLocalizations.of(context)!.storageUsage),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 30),
-                Text(
-                  AppLocalizations.of(context)!.loadingCurrentStatus,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                )
-              ],
+            child: SizedBox(
+              width: double.maxFinite,
+              height: 400,
+              child: CustomLinearChart(
+                data: [
+                  ChartData(data: formattedData["rx"]!, color: Colors.green), 
+                  ChartData(data: formattedData["wx"]!, color: Colors.blue), 
+                ],
+                scale: Scale(min: 0.0, max: formattedData["topPoint"]),
+                yScaleTextFormatter: (v) {
+                  final parsed = double.parse(convertMemoryToMb(v));
+                  if (parsed > 100) {
+                    return parsed.toInt().toString();
+                  }
+                  else {
+                    return parsed.toString();
+                  }
+                },
+                tooltipTextFormatter: (v) => "${convertMemoryToMb(v)} MB/s",
+                reservedSizeYLabels: 50,
+                linesInterval: formattedData["topPoint"]/10 > 4
+                  ? formattedData["topPoint"]/10
+                  : 4,
+                labelsInterval: formattedData["topPoint"]/10 > 4 
+                  ? formattedData["topPoint"]/10
+                  : 4,
+              )
             ),
           ),
-        );
-        
-      case 1:
-        if (widget.data != null && widget.data!.isNotEmpty) {
-          final formattedData = chartData();
-          return ListView(
-            padding: const EdgeInsets.only(top: 8),
-            children: [
-              SectionLabel(label: AppLocalizations.of(context)!.storageUsage),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  width: double.maxFinite,
-                  height: 400,
-                  child: CustomLinearChart(
-                    data: [
-                      ChartData(data: formattedData["rx"]!, color: Colors.green), 
-                      ChartData(data: formattedData["wx"]!, color: Colors.blue), 
-                    ],
-                    scale: Scale(min: 0.0, max: formattedData["topPoint"]),
-                    yScaleTextFormatter: (v) {
-                      final parsed = double.parse(convertMemoryToMb(v));
-                      if (parsed > 100) {
-                        return parsed.toInt().toString();
-                      }
-                      else {
-                        return parsed.toString();
-                      }
-                    },
-                    tooltipTextFormatter: (v) => "${convertMemoryToMb(v)} MB/s",
-                    reservedSizeYLabels: 50,
-                    linesInterval: formattedData["topPoint"]/10 > 4
-                      ? formattedData["topPoint"]/10
-                      : 4,
-                    labelsInterval: formattedData["topPoint"]/10 > 4 
-                      ? formattedData["topPoint"]/10
-                      : 4,
-                  )
-                ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.green
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "${AppLocalizations.of(context)!.read}: ${convertMemoryToMb(widget.data![widget.data!.length-1].rx)} MB/s",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                      ],
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.green
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "${AppLocalizations.of(context)!.write}: ${convertMemoryToMb(widget.data![widget.data!.length-1].wx)} MB/s",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                      ],
+                    const SizedBox(width: 8),
+                    Text(
+                      "${AppLocalizations.of(context)!.read}: ${convertMemoryToMb(widget.data![widget.data!.length-1].rx)} MB/s",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500
+                      ),
                     ),
                   ],
                 ),
-              )
-            ],
-          );
-        }
-        else {
-          return Center(
-            child: Text(
-              AppLocalizations.of(context)!.noDataDisplayHere,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          );
-        }
-
-      case 2: 
-        return SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 50,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                AppLocalizations.of(context)!.currentStatusNotLoaded,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                Row(
+                  children: [
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.blue
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "${AppLocalizations.of(context)!.write}: ${convertMemoryToMb(widget.data![widget.data!.length-1].wx)} MB/s",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
+          )
+        ];
+      },
+      errorGenerator: () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+            size: 50,
           ),
-        );
-       
-      default:
-        return const SizedBox();
-    }
+          const SizedBox(height: 30),
+          Text(
+            AppLocalizations.of(context)!.currentStatusNotLoaded,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+      loadStatus: widget.loadStatus,
+      onRefresh: widget.onRefresh
+    );
   }
 }

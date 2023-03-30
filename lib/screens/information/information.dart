@@ -99,7 +99,8 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
                 bottom: TabBar(
                   controller: tabController,
                   unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  isScrollable: true,
+                  isScrollable: MediaQuery.of(context).size.width < 600
+                    ? true : false,
                   tabs: [
                     Tab(
                       icon: const Icon(Icons.desktop_windows_rounded),

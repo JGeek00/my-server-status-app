@@ -54,7 +54,7 @@ class CpuTab extends StatelessWidget {
       }
     }
 
-    return CustomTab(
+    return CustomTabContent(
       loadingGenerator: () => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(

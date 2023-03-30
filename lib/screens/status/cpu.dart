@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:my_server_status/models/current_status.dart';
 import 'package:my_server_status/screens/status/chart.dart';
 import 'package:my_server_status/widgets/section_label.dart';
+import 'package:my_server_status/widgets/tab_content.dart';
+
+import 'package:my_server_status/models/current_status.dart';
+import 'package:my_server_status/constants/enums.dart';
 
 enum CoreChartConfig  { load, speed, temperature }
 
 class CpuTab extends StatefulWidget {
-  final int loadStatus;
+  final LoadStatus loadStatus;
   final List<Cpu> data;
+  final Future<void> Function() onRefresh;
 
   const CpuTab({
     Key? key,
     required this.loadStatus,
     required this.data,
+    required this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -196,163 +201,133 @@ class _CpuTabState extends State<CpuTab> {
       }
     }
 
-    switch (widget.loadStatus) {
-      case 0:
-        return SizedBox(
-          width: double.maxFinite,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 30),
-                Text(
-                  AppLocalizations.of(context)!.loadingCurrentStatus,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                )
-              ],
+    return CustomTabContent(
+      loadingGenerator: () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          const SizedBox(height: 30),
+          Text(
+            AppLocalizations.of(context)!.loadingCurrentStatus,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-          ),
-        );
-        
-      case 1:
-        if (widget.data.isNotEmpty) {
-          final formattedData = chartData();
-          return ListView(
-            padding: const EdgeInsets.only(top: 0),
-            children: [
-              Card(
-                margin: const EdgeInsets.all(16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          )
+        ],
+      ), 
+      contentGenerator: () {
+        final formattedData = chartData();
+        return [
+          Card(
+            margin: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.data[0].specs.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        widget.data[0].specs.name,
-                        textAlign: TextAlign.center,
+                        "${AppLocalizations.of(context)!.cores}: ${widget.data[0].cores.length}",
                         style: const TextStyle(
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "${AppLocalizations.of(context)!.cores}: ${widget.data[0].cores.length}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500
-                            ),
-                          ),
-                          Text(
-                            widget.data[0].specs.minSpeed == widget.data[0].specs.maxSpeed
-                              ? "${widget.data[0].specs.maxSpeed} GHz"
-                              : "${widget.data[0].specs.minSpeed} GHz - ${widget.data[0].specs.maxSpeed} GHz",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500
-                            ),
-                          ),
-                        ],
-                      )
+                      Text(
+                        widget.data[0].specs.minSpeed == widget.data[0].specs.maxSpeed
+                          ? "${widget.data[0].specs.maxSpeed} GHz"
+                          : "${widget.data[0].specs.minSpeed} GHz - ${widget.data[0].specs.maxSpeed} GHz",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ),
-              ...formattedData.asMap().entries.map((core) {
-                final widgets = generateChart(coreChartConfig[core.key], core.value);
-                final renderWidget = Column(
-                  children: [
-                    SectionLabel(
-                      label: AppLocalizations.of(context)!.core(core.key),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: widgets["header"]
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        width: double.maxFinite,
-                        height: 100,
-                        child: widgets["chart"]
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SegmentedButton<CoreChartConfig>(
-                        segments: [
-                          ButtonSegment(
-                            value: CoreChartConfig.load,
-                            label: Text(AppLocalizations.of(context)!.load)
-                          ),
-                          ButtonSegment(
-                            value: CoreChartConfig.speed,
-                            label: Text(AppLocalizations.of(context)!.speed)
-                          ),
-                          ButtonSegment(
-                            value: CoreChartConfig.temperature,
-                            label: Text(AppLocalizations.of(context)!.temp)
-                          ),
-                        ], 
-                        selected: <CoreChartConfig>{coreChartConfig[core.key]},
-                        onSelectionChanged: (value) => setState(() => coreChartConfig[core.key] = value.first),
-                      ),
-                    )
-                  ],
-                );
-                return renderWidget;
-              }).toList()
-            ],
-          );
-        }
-        else {
-          return Center(
-            child: Text(
-              AppLocalizations.of(context)!.noDataDisplayHere,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 22,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  )
+                ],
               ),
             ),
-          );
-        }
-
-      case 2: 
-        return SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-                size: 50,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                AppLocalizations.of(context)!.currentStatusNotLoaded,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
           ),
-        );
-       
-      default:
-        return const SizedBox();
-    }
+          ...formattedData.asMap().entries.map((core) {
+            final widgets = generateChart(coreChartConfig[core.key], core.value);
+            final renderWidget = Column(
+              children: [
+                SectionLabel(
+                  label: AppLocalizations.of(context)!.core(core.key),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: widgets["header"]
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    width: double.maxFinite,
+                    height: 100,
+                    child: widgets["chart"]
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SegmentedButton<CoreChartConfig>(
+                    segments: [
+                      ButtonSegment(
+                        value: CoreChartConfig.load,
+                        label: Text(AppLocalizations.of(context)!.load)
+                      ),
+                      ButtonSegment(
+                        value: CoreChartConfig.speed,
+                        label: Text(AppLocalizations.of(context)!.speed)
+                      ),
+                      ButtonSegment(
+                        value: CoreChartConfig.temperature,
+                        label: Text(AppLocalizations.of(context)!.temp)
+                      ),
+                    ], 
+                    selected: <CoreChartConfig>{coreChartConfig[core.key]},
+                    onSelectionChanged: (value) => setState(() => coreChartConfig[core.key] = value.first),
+                  ),
+                )
+              ],
+            );
+            return renderWidget;
+          }).toList()
+        ];
+      }, 
+      errorGenerator: () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+            size: 50,
+          ),
+          const SizedBox(height: 30),
+          Text(
+            AppLocalizations.of(context)!.currentStatusNotLoaded,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ), 
+      loadStatus: widget.loadStatus, 
+      onRefresh: widget.onRefresh
+    );
   }
 }
