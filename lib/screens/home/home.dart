@@ -12,6 +12,7 @@ import 'package:my_server_status/screens/home/storage_section.dart';
 
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/services/http_requests.dart';
+import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -57,13 +58,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     requestInProgress = false;
     if (result['result'] == 'success') {
       widget.serversProvider.setServerInfoData(result['data']);
-      widget.serversProvider.setServerInfoLoadStatus(1);
+      widget.serversProvider.setServerInfoLoadStatus(LoadStatus.loaded);
       widget.serversProvider.setServerConnected(true);
       return true;
     }
     else {
       widget.serversProvider.setServerConnected(false);
-      widget.serversProvider.setServerInfoLoadStatus(2);
+      widget.serversProvider.setServerInfoLoadStatus(LoadStatus.error);
       widget.appConfigProvider.addLog(result['log']);
       return false;
     }
@@ -107,7 +108,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
     Widget body() {
       switch (serversProvider.serverInfo.loadStatus) {
-        case 0:
+        case LoadStatus.loading:
           return SizedBox(
             width: double.maxFinite,
             child: Padding(
@@ -130,7 +131,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
               ),
             ),
           );
-        case 1: 
+        case LoadStatus.loaded: 
           return ListView(
             children: [
               CpuSectionHome(
@@ -148,7 +149,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             ],
           );
 
-        case 2:
+        case LoadStatus.error:
           return SizedBox(
             width: double.maxFinite,
             child: Column(

@@ -4,9 +4,10 @@ import 'package:my_server_status/models/os_info.dart';
 import 'package:my_server_status/models/storage_info.dart';
 import 'package:my_server_status/models/memory_info.dart';
 import 'package:my_server_status/models/system_info.dart';
+import 'package:my_server_status/constants/enums.dart';
 
 class SystemSpecsInformation {
-  int loadStatus = 0;
+  LoadStatus loadStatus = LoadStatus.loading;
   SystemSpecsInformationData? data;
 
   SystemSpecsInformation({

@@ -12,6 +12,7 @@ import 'package:my_server_status/screens/information/storage.dart';
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/constants/app_icons.dart';
+import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class InformationScreen extends StatelessWidget {
@@ -47,7 +48,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
   late TabController tabController;
   final ScrollController scrollController = ScrollController();
   int selectedTab = 0;
-
+  
   Future requestHardwareInfo() async {
     final result = await getSystemInformation(
       server: widget.serversProvider.selectedServer!,
@@ -55,19 +56,19 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
     );
     if (result['result'] == 'success') {
       widget.serversProvider.setSystemSpecsInfoData(result['data']);
-      widget.serversProvider.setSystemSpecsInfoLoadStatus(1);
+      widget.serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loaded);
       widget.serversProvider.setServerConnected(true);
     }
     else {
       widget.serversProvider.setServerConnected(false);
-      widget.serversProvider.setSystemSpecsInfoLoadStatus(2);
+      widget.serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.error);
       widget.appConfigProvider.addLog(result['log']);
     }
   }
 
   @override
   void initState() {
-    if (widget.serversProvider.systemSpecsInfo.loadStatus != 1) {
+    if (widget.serversProvider.systemSpecsInfo.loadStatus != LoadStatus.loaded) {
       requestHardwareInfo();
     }
     super.initState();
@@ -89,88 +90,69 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
           return [
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverSafeArea(
-                top: false,
-                sliver: SliverAppBar(
-                  title: Text(AppLocalizations.of(context)!.information),
-                  pinned: true,
-                  floating: true,
-                  centerTitle: false,
-                  forceElevated: innerBoxIsScrolled,
-                  bottom: TabBar(
-                    controller: tabController,
-                    unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                    isScrollable: true,
-                    tabs: [
-                      Tab(
-                        icon: const Icon(Icons.desktop_windows_rounded),
-                        text: AppLocalizations.of(context)!.system,
-                      ),
-                      const Tab(
-                        icon: Icon(Icons.memory_rounded),
-                        text: "CPU",
-                      ),
-                      Tab(
-                        icon: const Icon(MyServerStatusIcons.memory),
-                        text: AppLocalizations.of(context)!.memory,
-                      ),
-                      Tab(
-                        icon: const Icon(MyServerStatusIcons.storage),
-                        text: AppLocalizations.of(context)!.storage,
-                      ),
-                      Tab(
-                        icon: const Icon(Icons.settings_ethernet_rounded),
-                        text: AppLocalizations.of(context)!.network,
-                      ),
-                      Tab(
-                        icon: const Icon(MyServerStatusIcons.software),
-                        text: AppLocalizations.of(context)!.operatingSystem,
-                      ),
-                    ]
-                  )
-                ),
+              sliver: SliverAppBar(
+                title: Text(AppLocalizations.of(context)!.information),
+                pinned: true,
+                floating: true,
+                centerTitle: false,
+                forceElevated: innerBoxIsScrolled,
+                bottom: TabBar(
+                  controller: tabController,
+                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  isScrollable: true,
+                  tabs: [
+                    Tab(
+                      icon: const Icon(Icons.desktop_windows_rounded),
+                      text: AppLocalizations.of(context)!.system,
+                    ),
+                    const Tab(
+                      icon: Icon(Icons.memory_rounded),
+                      text: "CPU",
+                    ),
+                    Tab(
+                      icon: const Icon(MyServerStatusIcons.memory),
+                      text: AppLocalizations.of(context)!.memory,
+                    ),
+                    Tab(
+                      icon: const Icon(MyServerStatusIcons.storage),
+                      text: AppLocalizations.of(context)!.storage,
+                    ),
+                    Tab(
+                      icon: const Icon(Icons.settings_ethernet_rounded),
+                      text: AppLocalizations.of(context)!.network,
+                    ),
+                    Tab(
+                      icon: const Icon(MyServerStatusIcons.software),
+                      text: AppLocalizations.of(context)!.operatingSystem,
+                    ),
+                  ]
+                )
               ),
             )
           ];
         }), 
-        body: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border(
-              top: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1)
-              )
+        body: TabBarView(
+          controller: tabController,
+          children: [
+            SystemTab(
+              onRefresh: requestHardwareInfo,
+            ),
+            CpuTab(
+              onRefresh: requestHardwareInfo,
+            ),
+            MemoryTab(
+              onRefresh: requestHardwareInfo,
+            ),
+            StorageTab(
+              onRefresh: requestHardwareInfo,
+            ),
+            NetworkTab(
+              onRefresh: requestHardwareInfo,
+            ),
+            OsTab(
+              onRefresh: requestHardwareInfo,
             )
-          ),
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const SystemTab(), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const CpuTab(), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const MemoryTab(), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const StorageTab(), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const NetworkTab(), 
-              ),
-              RefreshIndicator(
-                onRefresh: requestHardwareInfo,
-                child: const OsTab(), 
-              ),
-            ]
-          )
+          ]
         ),
       )
     );

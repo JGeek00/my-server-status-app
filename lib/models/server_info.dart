@@ -1,7 +1,8 @@
 import 'package:my_server_status/models/general_info.dart';
+import 'package:my_server_status/constants/enums.dart';
 
 class ServerInfo {
-  int loadStatus = 0; 
+  LoadStatus loadStatus = LoadStatus.loading; 
   GeneralInfo? data;
 
   ServerInfo({

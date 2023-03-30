@@ -1,3 +1,4 @@
+import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/functions/conversions.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server_info.dart';
@@ -20,12 +21,12 @@ class ServersProvider with ChangeNotifier {
   bool? _serverConnected;
 
   final ServerInfo _serverInfo = ServerInfo(
-    loadStatus: 0, // 0 = loading, 1 = loaded, 2 = error
+    loadStatus: LoadStatus.loading,
     data: null
   );
 
   final SystemSpecsInformation _systemSpecsInfo = SystemSpecsInformation(
-    loadStatus: 0,
+    loadStatus: LoadStatus.loading,
     data: null
   );
 
@@ -64,7 +65,7 @@ class ServersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setServerInfoLoadStatus(int status) {
+  void setServerInfoLoadStatus(LoadStatus status) {
     _serverInfo.loadStatus = status;
     notifyListeners();
   }
@@ -74,7 +75,7 @@ class ServersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSystemSpecsInfoLoadStatus(int status) {
+  void setSystemSpecsInfoLoadStatus(LoadStatus status) {
     _systemSpecsInfo.loadStatus = status;
     notifyListeners();
   }
@@ -156,9 +157,9 @@ class ServersProvider with ChangeNotifier {
     if (result == true) {
       _selectedServer = null;
       _serverConnected = null;
-      _serverInfo.loadStatus = 0;
+      _serverInfo.loadStatus = LoadStatus.loading;
       _serverInfo.data = null;
-      _systemSpecsInfo.loadStatus = 0;
+      _systemSpecsInfo.loadStatus = LoadStatus.loading;
       _systemSpecsInfo.data = null;
 
       List<Server> newServers = _serversList.where((s) => s.id != server.id).toList();
