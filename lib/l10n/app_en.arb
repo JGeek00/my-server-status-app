@@ -206,5 +206,11 @@
   "reception": "Reception",
   "dataTransfer": "Data transfer",
   "enableTimeoutOnRequests": "Enable timeout on requests",
-  "enableTimeoutOnRequestsDescription": "Requests will be cancelled after 10 seconds without response"
+  "enableTimeoutOnRequestsDescription": "Requests will be cancelled after 10 seconds without response",
+  "statusColorsCharts": "Use status colors on charts",
+  "statusColorsChartsDescription": "Charts will be displayed with the status color (green, yellow, red...) instead of the default color",
+  "hideVolumesNoMountPoint": "Hide volumes with no mount point",
+  "hideVolumesNoMountPointDescription": "Volumes with no mounting point won't be displayed",
+  "available": "available",
+  "installed": "installed"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/status/chart.dart';
@@ -6,6 +7,8 @@ import 'package:my_server_status/widgets/section_label.dart';
 import 'package:my_server_status/widgets/tab_content.dart';
 
 import 'package:my_server_status/models/current_status.dart';
+import 'package:my_server_status/functions/intermediate_color_generator.dart';
+import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/constants/enums.dart';
 
@@ -23,6 +26,8 @@ class MemoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appConfigProvider = Provider.of<AppConfigProvider>(context);
+
     List<double> chartData() {
       if (data.length < 20) {
         List<double> v = List.filled(20, 0);
@@ -33,6 +38,15 @@ class MemoryTab extends StatelessWidget {
       }
       else {
         return data.map((e) => e.active.toDouble()).toList();
+      }
+    }
+
+    String memorySize() {
+      if (data[0].specs.capacity != data[0].total) {
+        return "${convertMemoryToGb(data[0].specs.capacity)} GB ${AppLocalizations.of(context)!.installed}, ${convertMemoryToGb(data[0].total)} GB ${AppLocalizations.of(context)!.available}";
+      }
+      else {
+        return "${convertMemoryToGb(data[0].specs.capacity)} GB";
       }
     }
 
@@ -60,7 +74,7 @@ class MemoryTab extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                "${convertMemoryToGb(data[0].specs.capacity)} GB ${data[0].specs.type}",
+                "${memorySize()} ${data[0].specs.type}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500
@@ -98,7 +112,14 @@ class MemoryTab extends StatelessWidget {
               width: double.maxFinite,
               height: 300,
               child: CustomLinearChart(
-                data: [ChartData(data: chartData(), color: Colors.green)],
+                data: [
+                  ChartData(
+                    data: chartData(), 
+                    color: appConfigProvider.statusColorsCharts
+                      ? generateIntermediateColor((data[data.length-1].active/data[data.length-1].total)*100)
+                      : Theme.of(context).colorScheme.primary
+                  )
+                ],
                 scale: Scale(min: 0.0, max: data[0].total.toDouble()),
                 yScaleTextFormatter: (v) => convertMemoryToGb(v.toInt()),
                 tooltipTextFormatter: (v) => "${convertMemoryToGb(v.toInt())} GB",

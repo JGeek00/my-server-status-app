@@ -1,13 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:my_server_status/functions/snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/settings/app_logs/app_logs.dart';
 import 'package:my_server_status/widgets/custom_list_tile.dart';
+import 'package:my_server_status/widgets/custom_switch_list_tile.dart';
 
+import 'package:my_server_status/functions/snackbar.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 
 class AdvancedSettings extends StatelessWidget {
@@ -16,34 +17,19 @@ class AdvancedSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
-    
-    Future updateSslCheck(bool newStatus) async {
-      final result = await appConfigProvider.setOverrideSslCheck(newStatus);
-      if (result == true) {
-        showSnacbkar(
-          context: context, 
-          appConfigProvider: appConfigProvider, 
-          label: AppLocalizations.of(context)!.restartAppTakeEffect, 
-          color: Colors.green
-        );
-      }
-      else {
-        showSnacbkar(
-          context: context, 
-          appConfigProvider: appConfigProvider, 
-          label: AppLocalizations.of(context)!.cannotUpdateSettings, 
-          color: Colors.red
-        );
-      }
-    }
 
-    Future updateTimeoutRequests(bool newStatus) async {
-      final result = await appConfigProvider.setTimeoutRequests(newStatus);
+    Future changeSetting({
+      required Function fn, 
+      required bool value,
+      String? customSuccessMessage,
+      String? customErrorMessage
+    }) async {
+      final result = await fn(value);
       if (result == true) {
         showSnacbkar(
           context: context, 
           appConfigProvider: appConfigProvider, 
-          label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
+          label: customSuccessMessage ?? AppLocalizations.of(context)!.settingsUpdatedSuccessfully, 
           color: Colors.green
         );
       }
@@ -51,7 +37,7 @@ class AdvancedSettings extends StatelessWidget {
         showSnacbkar(
           context: context, 
           appConfigProvider: appConfigProvider, 
-          label: AppLocalizations.of(context)!.cannotUpdateSettings, 
+          label: customErrorMessage ?? AppLocalizations.of(context)!.cannotUpdateSettings, 
           color: Colors.red
         );
       }
@@ -63,27 +49,26 @@ class AdvancedSettings extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          CustomListTile(
+          CustomSwitchListTile(
             icon: Icons.lock,
             title: AppLocalizations.of(context)!.dontCheckCertificate,
             subtitle: AppLocalizations.of(context)!.dontCheckCertificateDescription,
-            trailing: Switch(
-              value: appConfigProvider.overrideSslCheck, 
-              onChanged: updateSslCheck,
-              activeColor: Theme.of(context).colorScheme.primary,
+            value: appConfigProvider.overrideSslCheck,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setOverrideSslCheck, 
+              value: v,
+              customSuccessMessage: AppLocalizations.of(context)!.restartAppTakeEffect,
             ),
-            onTap: () => updateSslCheck(!appConfigProvider.overrideSslCheck),
           ),
-          CustomListTile(
+          CustomSwitchListTile(
             icon: Icons.timer_rounded,
             title: AppLocalizations.of(context)!.enableTimeoutOnRequests,
             subtitle: AppLocalizations.of(context)!.enableTimeoutOnRequestsDescription,
-            trailing: Switch(
-              value: appConfigProvider.timeoutRequests, 
-              onChanged: updateTimeoutRequests,
-              activeColor: Theme.of(context).colorScheme.primary,
+            value: appConfigProvider.timeoutRequests,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setTimeoutRequests, 
+              value: v
             ),
-            onTap: () => updateTimeoutRequests(!appConfigProvider.timeoutRequests),
           ),
           CustomListTile(
             icon: Icons.list_rounded,

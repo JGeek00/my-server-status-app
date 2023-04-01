@@ -103,3 +103,29 @@ Future<bool> updateTimeoutRequestsQuery(Database dbInstance, int value) async {
     return false;
   }
 }
+
+Future<bool> updateStatusColorsChartsQuery(Database dbInstance, int value) async {
+  try {
+    return await dbInstance.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE appConfig SET statusColorsCharts = $value',
+      );
+      return true;
+    });
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> updateHideVolumesNoMountPointQuery(Database dbInstance, int value) async {
+  try {
+    return await dbInstance.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE appConfig SET statusColorsCharts = $value',
+      );
+      return true;
+    });
+  } catch (e) {
+    return false;
+  }
+}

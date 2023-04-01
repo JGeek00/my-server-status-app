@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/status/chart.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 import 'package:my_server_status/widgets/tab_content.dart';
 
+import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/functions/intermediate_color_generator.dart';
 import 'package:my_server_status/models/current_status.dart';
 import 'package:my_server_status/constants/enums.dart';
 
@@ -31,6 +34,7 @@ class _CpuTabState extends State<CpuTab> {
 
   @override
   Widget build(BuildContext context) {
+    final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
     List<Map<String, dynamic>> chartData() {
       if (coreChartConfig.length != widget.data[0].cores.length) {
@@ -104,7 +108,7 @@ class _CpuTabState extends State<CpuTab> {
       }
     }
 
-    Map<String, Widget> generateChart(CoreChartConfig config, Map<String, dynamic> value) {
+    Map<String, Widget> generateChart(CoreChartConfig config, Map<String, dynamic> value, int nCore) {
       switch (config) {
         case CoreChartConfig.load:
           return {
@@ -126,7 +130,14 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: [ChartData(data: List<double>.from(value['load'].map((e) => e.toDouble())), color: Colors.green)],
+              data: [
+                ChartData(
+                  data: List<double>.from(value['load'].map((e) => e.toDouble())), 
+                  color: appConfigProvider.statusColorsCharts
+                    ? generateIntermediateColor(widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)
+                    : Theme.of(context).colorScheme.primary
+                )
+              ],
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)}%",
@@ -155,7 +166,14 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: [ChartData(data: List<double>.from(value['speed'].map((e) => e.toDouble())), color: Colors.green)],
+              data: [
+                ChartData(
+                  data: List<double>.from(value['speed'].map((e) => e.toDouble())), 
+                  color: appConfigProvider.statusColorsCharts 
+                    ? generateIntermediateColor((widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100)
+                    : Theme.of(context).colorScheme.primary
+                )
+              ],
               scale: Scale(min: 0, max: widget.data[0].specs.maxSpeed),
               yScaleTextFormatter: (v) => v.toStringAsFixed(2),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
@@ -184,7 +202,18 @@ class _CpuTabState extends State<CpuTab> {
               ],
             ),
             "chart": CustomLinearChart(
-              data: [ChartData(data: List<double>.from(value['temperature'].map((e) => e.toDouble())), color: Colors.green)],
+              data: [
+                ChartData(
+                  data: List<double>.from(value['temperature'].map((e) => e.toDouble())), 
+                  color: appConfigProvider.statusColorsCharts && widget.data[widget.data.length-1].cores[nCore].temperature != null
+                    ? generateIntermediateColor(
+                        widget.data[widget.data.length-1].cores[nCore].temperature! < 100 
+                          ? widget.data[widget.data.length-1].cores[nCore].temperature!.toDouble()
+                          : 100.00
+                      )
+                    : Theme.of(context).colorScheme.primary
+                )
+              ],
               scale: const Scale(min: 0.0, max: 100.0),
               yScaleTextFormatter: (v) => v.toStringAsFixed(0),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
@@ -260,7 +289,7 @@ class _CpuTabState extends State<CpuTab> {
             ),
           ),
           ...formattedData.asMap().entries.map((core) {
-            final widgets = generateChart(coreChartConfig[core.key], core.value);
+            final widgets = generateChart(coreChartConfig[core.key], core.value, core.key);
             final renderWidget = Column(
               children: [
                 SectionLabel(

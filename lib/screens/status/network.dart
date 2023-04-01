@@ -129,8 +129,14 @@ class _NetworkTabState extends State<NetworkTab> {
                   height: 400,
                   child: CustomLinearChart(
                     data: [
-                      ChartData(data: intfz.value["tx"]!, color: Colors.green), 
-                      ChartData(data: intfz.value["rx"]!, color: Colors.blue), 
+                      ChartData(
+                        data: intfz.value["tx"]!, 
+                        color: Theme.of(context).colorScheme.primary
+                      ), 
+                      ChartData(
+                        data: intfz.value["rx"]!, 
+                        color: Theme.of(context).colorScheme.inversePrimary
+                      ), 
                     ],
                     scale: Scale(min: 0.0, max: intfz.value["topPoint"]),
                     yScaleTextFormatter: (v) {
@@ -170,7 +176,7 @@ class _NetworkTabState extends State<NetworkTab> {
                           height: 12,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.green
+                            color: Theme.of(context).colorScheme.primary
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -191,7 +197,7 @@ class _NetworkTabState extends State<NetworkTab> {
                           height: 12,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue
+                            color: Theme.of(context).colorScheme.inversePrimary
                           ),
                         ),
                         const SizedBox(width: 8),

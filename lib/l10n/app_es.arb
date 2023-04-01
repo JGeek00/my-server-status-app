@@ -206,5 +206,11 @@
   "reception": "Recepción",
   "dataTransfer": "Transferencia de datos",
   "enableTimeoutOnRequests": "Activar timeout en peticiones",
-  "enableTimeoutOnRequestsDescription": "Las peticiones se cancelarán a los 10 segundos sin respuesta"
+  "enableTimeoutOnRequestsDescription": "Las peticiones se cancelarán a los 10 segundos sin respuesta",
+  "statusColorsCharts": "Usar colores de estado en gráficos",
+  "statusColorsChartsDescription": "Los gráficos se mostrarán con el color de estado (verde, amarillo, rojo...) en vez de con el color por defecto",
+  "hideVolumesNoMountPoint": "Ocultar volúmenes sin punto de montaje",
+  "hideVolumesNoMountPointDescription": "Los volúmenes sin punto de montaje no se mostrarán",
+  "available": "disponible",
+  "installed": "instalada"
 }

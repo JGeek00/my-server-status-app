@@ -98,8 +98,14 @@ class _StorageTabState extends State<StorageTab> {
               height: 400,
               child: CustomLinearChart(
                 data: [
-                  ChartData(data: formattedData["rx"]!, color: Colors.green), 
-                  ChartData(data: formattedData["wx"]!, color: Colors.blue), 
+                  ChartData(
+                    data: formattedData["rx"]!, 
+                    color: Theme.of(context).colorScheme.primary
+                  ), 
+                  ChartData(
+                    data: formattedData["wx"]!, 
+                    color: Theme.of(context).colorScheme.inversePrimary
+                  ), 
                 ],
                 scale: Scale(min: 0.0, max: formattedData["topPoint"]),
                 yScaleTextFormatter: (v) {
@@ -135,7 +141,7 @@ class _StorageTabState extends State<StorageTab> {
                       height: 12,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.green
+                        color: Theme.of(context).colorScheme.primary
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -154,7 +160,7 @@ class _StorageTabState extends State<StorageTab> {
                       height: 12,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue
+                        color: Theme.of(context).colorScheme.inversePrimary
                       ),
                     ),
                     const SizedBox(width: 8),

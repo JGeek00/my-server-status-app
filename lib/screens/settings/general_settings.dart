@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/settings/auto_refresh_time_modal.dart';
+import 'package:my_server_status/widgets/custom_switch_list_tile.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -51,6 +52,31 @@ class GeneralSettings extends StatelessWidget {
       );
     }
 
+    Future changeSetting({
+      required Function fn, 
+      required bool value,
+      String? customSuccessMessage,
+      String? customErrorMessage
+    }) async {
+      final result = await fn(value);
+      if (result == true) {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: customSuccessMessage ?? AppLocalizations.of(context)!.settingsUpdatedSuccessfully, 
+          color: Colors.green
+        );
+      }
+      else {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: customErrorMessage ?? AppLocalizations.of(context)!.cannotUpdateSettings, 
+          color: Colors.red
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.generalSettings) ,
@@ -66,6 +92,17 @@ class GeneralSettings extends StatelessWidget {
               : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeHome),
             onTap: () => openAutoRefreshTimeModal(appConfigProvider.autoRefreshTimeHome, "Home"),
           ),
+          SectionLabel(label: AppLocalizations.of(context)!.information),
+          CustomSwitchListTile(
+            icon: Icons.storage_rounded,
+            title: AppLocalizations.of(context)!.hideVolumesNoMountPoint,
+            subtitle: AppLocalizations.of(context)!.hideVolumesNoMountPointDescription,
+            value: appConfigProvider.hideVolumesNoMountPoint,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setHideVolumesNoMountPoint, 
+              value: v
+            ),
+          ),
           SectionLabel(label: AppLocalizations.of(context)!.status),
           CustomListTile(
             icon: Icons.refresh_rounded,
@@ -74,6 +111,16 @@ class GeneralSettings extends StatelessWidget {
               ? AppLocalizations.of(context)!.disabled
               : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeStatus),
             onTap: () => openAutoRefreshTimeModal(appConfigProvider.autoRefreshTimeStatus,"Status"),
+          ),
+          CustomSwitchListTile(
+            icon: Icons.palette_rounded,
+            title: AppLocalizations.of(context)!.statusColorsCharts,
+            subtitle: AppLocalizations.of(context)!.statusColorsChartsDescription,
+            value: appConfigProvider.statusColorsCharts,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setStatusColorsCharts, 
+              value: v
+            ),
           ),
         ],
       ),

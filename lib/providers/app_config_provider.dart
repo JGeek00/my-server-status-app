@@ -33,6 +33,10 @@ class AppConfigProvider with ChangeNotifier {
 
   bool _timeoutRequests = true;
 
+  bool _statusColorsCharts = false;
+
+  bool _hideVolumesNoMountPoint = true;
+
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
@@ -107,6 +111,14 @@ class AppConfigProvider with ChangeNotifier {
 
   bool get timeoutRequests {
     return _timeoutRequests;
+  }
+
+  bool get statusColorsCharts {
+    return _statusColorsCharts;
+  }
+
+  bool get hideVolumesNoMountPoint {
+    return _hideVolumesNoMountPoint;
   }
 
   void setDbInstance(Database db) {
@@ -236,6 +248,30 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> setStatusColorsCharts(bool value) async {
+    final updated = await updateTimeoutRequestsQuery(_dbInstance!, value == true ? 1 : 0);
+    if (updated == true) {
+      _statusColorsCharts = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  Future<bool> setHideVolumesNoMountPoint(bool value) async {
+    final updated = await updateHideVolumesNoMountPointQuery(_dbInstance!, value == true ? 1 : 0);
+    if (updated == true) {
+      _hideVolumesNoMountPoint = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   void saveFromDb(Database dbInstance, Map<String, dynamic> dbData) {
     _selectedTheme = dbData['theme'];
     _overrideSslCheck = dbData['overrideSslCheck'];
@@ -245,6 +281,8 @@ class AppConfigProvider with ChangeNotifier {
     _autoRefreshTimeStatus = dbData['autoRefreshTimeStatus'];
     _apiAnnouncementReaden = convertFromIntToBool(dbData['apiAnnouncementReaden'])!;
     _timeoutRequests = convertFromIntToBool(dbData['timeoutRequests'])!;
+    _statusColorsCharts = convertFromIntToBool(dbData['statusColorsCharts'])!;
+    _hideVolumesNoMountPoint = convertFromIntToBool(dbData['hideVolumesNoMountPoint'])!;
 
     _dbInstance = dbInstance;
     notifyListeners();
