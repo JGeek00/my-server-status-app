@@ -93,6 +93,21 @@ class _StorageTabState extends State<StorageTab> {
           SectionLabel(label: AppLocalizations.of(context)!.storageUsage),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "${AppLocalizations.of(context)!.dataTransfer} (${formattedData["topPoint"] > 1048576 ? 'MB/s' : 'KB/s'})",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
               width: double.maxFinite,
               height: 400,
@@ -109,7 +124,9 @@ class _StorageTabState extends State<StorageTab> {
                 ],
                 scale: Scale(min: 0.0, max: formattedData["topPoint"]),
                 yScaleTextFormatter: (v) {
-                  final parsed = double.parse(convertMemoryToMb(v));
+                  final parsed = v > 1048576
+                    ? double.parse(convertMemoryToMb(v))
+                    : double.parse(convertMemoryToKb(v));
                   if (parsed > 100) {
                     return parsed.toInt().toString();
                   }
@@ -117,7 +134,9 @@ class _StorageTabState extends State<StorageTab> {
                     return parsed.toString();
                   }
                 },
-                tooltipTextFormatter: (v) => "${convertMemoryToMb(v)} MB/s",
+                tooltipTextFormatter: (v) => v > 1048576
+                  ? "${convertMemoryToMb(v)} MB/s"
+                  : "${convertMemoryToKb(v)} KB/s",
                 reservedSizeYLabels: 50,
                 linesInterval: formattedData["topPoint"]/10 > 4
                   ? formattedData["topPoint"]/10
@@ -146,7 +165,9 @@ class _StorageTabState extends State<StorageTab> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "${AppLocalizations.of(context)!.read}: ${convertMemoryToMb(widget.data![widget.data!.length-1].rx)} MB/s",
+                      widget.data![widget.data!.length-1].rx > 1048576
+                        ? "${AppLocalizations.of(context)!.read}: ${convertMemoryToMb(widget.data![widget.data!.length-1].rx)} MB/s"
+                        : "${AppLocalizations.of(context)!.read}: ${convertMemoryToKb(widget.data![widget.data!.length-1].rx)} KB/s",
                       style: const TextStyle(
                         fontWeight: FontWeight.w500
                       ),
@@ -165,7 +186,9 @@ class _StorageTabState extends State<StorageTab> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "${AppLocalizations.of(context)!.write}: ${convertMemoryToMb(widget.data![widget.data!.length-1].wx)} MB/s",
+                      widget.data![widget.data!.length-1].wx > 1048576
+                        ? "${AppLocalizations.of(context)!.write}: ${convertMemoryToMb(widget.data![widget.data!.length-1].wx)} KB/s"
+                        : "${AppLocalizations.of(context)!.write}: ${convertMemoryToKb(widget.data![widget.data!.length-1].wx)} KB/s",
                       style: const TextStyle(
                         fontWeight: FontWeight.w500
                       ),
