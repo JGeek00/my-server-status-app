@@ -6,6 +6,7 @@ import 'package:my_server_status/widgets/custom_list_tile.dart';
 import 'package:my_server_status/widgets/section_label.dart';
 import 'package:my_server_status/widgets/tab_content.dart';
 
+import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
@@ -20,6 +21,7 @@ class StorageTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
+    final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
     String generateValue(String? value) {
       return value != null && value != '' && value != 'Default string' 
@@ -46,7 +48,9 @@ class StorageTab extends StatelessWidget {
       ), 
       contentGenerator: () {
         final storage = serversProvider.systemSpecsInfo.data!.storageInfo;
-        final blockDevices = storage.blockDevices.where((d) => d.mount != "");
+        final blockDevices = appConfigProvider.hideVolumesNoMountPoint
+          ? storage.blockDevices.where((d) => d.mount != "")
+          : storage.blockDevices;
         return [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
