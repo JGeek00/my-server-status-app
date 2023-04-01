@@ -155,12 +155,14 @@ class ServersProvider with ChangeNotifier {
   Future<bool> removeServer(Server server) async {
     final result = await removeFromDb(server.id);
     if (result == true) {
-      _selectedServer = null;
-      _serverConnected = null;
-      _serverInfo.loadStatus = LoadStatus.loading;
-      _serverInfo.data = null;
-      _systemSpecsInfo.loadStatus = LoadStatus.loading;
-      _systemSpecsInfo.data = null;
+      if (_selectedServer != null && server.id == _selectedServer!.id) {
+        _selectedServer = null;
+        _serverConnected = null;
+        _serverInfo.loadStatus = LoadStatus.loading;
+        _serverInfo.data = null;
+        _systemSpecsInfo.loadStatus = LoadStatus.loading;
+        _systemSpecsInfo.data = null;
+      }
 
       List<Server> newServers = _serversList.where((s) => s.id != server.id).toList();
       _serversList = newServers;
