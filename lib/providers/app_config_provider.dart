@@ -249,7 +249,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setStatusColorsCharts(bool value) async {
-    final updated = await updateTimeoutRequestsQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateStatusColorsChartsQuery(_dbInstance!, value == true ? 1 : 0);
     if (updated == true) {
       _statusColorsCharts = value;
       notifyListeners();
