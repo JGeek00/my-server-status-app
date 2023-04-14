@@ -80,7 +80,7 @@ class ServersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSystemSpecsInfoData(SystemSpecsInformationData data) {
+  void setSystemSpecsInfoData(SystemSpecsInformationData? data) {
     _systemSpecsInfo.data = data;
     notifyListeners();
   }

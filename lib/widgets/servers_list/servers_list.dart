@@ -10,6 +10,7 @@ import 'package:my_server_status/widgets/servers_list/delete_modal.dart';
 
 import 'package:my_server_status/models/app_log.dart';
 import 'package:my_server_status/classes/process_modal.dart';
+import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/functions/snackbar.dart';
 import 'package:my_server_status/models/server.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -111,8 +112,12 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
       final result = await login(server);
 
       if (result['result'] == 'success') {
+        serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
+        serversProvider.setSystemSpecsInfoData(null);
+        
         serversProvider.setSelectedServer(server);
         serversProvider.setServerConnected(true);
+
         process.close();
       }
       else {

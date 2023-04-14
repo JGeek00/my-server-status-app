@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/functions/snackbar.dart';
 import 'package:my_server_status/models/server.dart';
+import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
@@ -25,9 +26,15 @@ class DeleteModal extends StatelessWidget {
 
     void removeServer() async {
       final deleted = await serversProvider.removeServer(serverToDelete);
+
+      serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
+      serversProvider.setSystemSpecsInfoData(null);
+
       serversProvider.setSelectedServer(null);
       serversProvider.setServerConnected(null);
+
       Navigator.pop(context);
+
       if (deleted == true) {
         showSnacbkar(
           context: context, 
