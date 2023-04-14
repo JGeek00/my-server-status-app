@@ -134,7 +134,7 @@ class _CpuTabState extends State<CpuTab> {
                 ChartData(
                   data: List<double>.from(value['load'].map((e) => e.toDouble())), 
                   color: appConfigProvider.statusColorsCharts
-                    ? generateIntermediateColor(value['load'][value['load'].length-1])
+                    ? generateIntermediateColor(widget.data[widget.data.length-1].cores[nCore].load['load'] ?? 0)
                     : Theme.of(context).colorScheme.primary
                 )
               ],
