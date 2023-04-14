@@ -14,7 +14,14 @@ class GeneralInfo {
   factory GeneralInfo.fromJson(Map<String, dynamic> json) => GeneralInfo(
     cpu: Cpu.fromJson(json["cpu"]),
     memory: Memory.fromJson(json["memory"]),
-    storageFs: List<StorageFs>.from(json["storageFs"].map((x) => StorageFs.fromJson(x))),
+    storageFs: List<StorageFs>.from(json["storageFs"].map((x) {
+      if (x["size"] != null && x["used"] != null && x["use"] != null && x["mount"] != null) {
+        return StorageFs.fromJson(x);
+      }
+      else {
+        return null;
+      }
+    }).where((x) => x != null)),
     network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),
   );
 
@@ -135,8 +142,8 @@ class Memory {
 
   factory Memory.fromJson(Map<String, dynamic> json) => Memory(
     info: MemoryInfo.fromJson(json["info"]),
-    layout: List<Layout>.from(json["layout"].map((x) => Layout.fromJson(x))),
-  );
+    layout: List<Layout>.from(json["layout"].map((x) => Layout.fromJson(x)),
+  ));
 
   Map<String, dynamic> toJson() => {
     "info": info.toJson(),

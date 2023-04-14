@@ -1,7 +1,7 @@
 class CurrentStatus {
   final Cpu cpu;
   final List<double>? socketTemperature;
-  final int? chipsetTemperature;
+  final double? chipsetTemperature;
   final Memory memory;
   final Storage? storage;
   final List<Network>? network;
@@ -17,8 +17,8 @@ class CurrentStatus {
 
   factory CurrentStatus.fromJson(Map<String, dynamic> json) => CurrentStatus(
     cpu: Cpu.fromJson(json["cpu"]),
-    socketTemperature: List<double>.from(json["socketTemperature"].map((x) => x)),
-    chipsetTemperature: json["chipsetTemperature"],
+    socketTemperature: List<double>.from(json["socketTemperature"].map((x) => x.toDouble())),
+    chipsetTemperature: json["chipsetTemperature"]?.toDouble(),
     memory: Memory.fromJson(json["memory"]),
     storage: json["storage"] != null ? Storage.fromJson(json["storage"]) : null,
     network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),

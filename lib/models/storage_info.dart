@@ -12,7 +12,14 @@ class StorageInfo {
   factory StorageInfo.fromJson(Map<String, dynamic> json) => StorageInfo(
     diskLayout: List<DiskLayout>.from(json["diskLayout"].map((x) => DiskLayout.fromJson(x))),
     blockDevices: List<BlockDevices>.from(json["blockDevices"].map((x) => BlockDevices.fromJson(x))),
-    fsSize: List<FsSize>.from(json["fsSize"].map((x) => FsSize.fromJson(x))),
+    fsSize: List<FsSize>.from(json["fsSize"].map((x) {
+      if (x["size"] != null && x["used"] != null && x["use"] != null && x["mount"] != null) {
+        return FsSize.fromJson(x);
+      }
+      else {
+        return null;
+      }
+    }).where((x) => x != null)),
   );
 
   Map<String, dynamic> toJson() => {
