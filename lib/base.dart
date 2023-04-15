@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:my_server_status/widgets/navigation_rail.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -53,6 +54,8 @@ class _BaseState extends State<Base> with WidgetsBindingObserver {
     final serversProvider = Provider.of<ServersProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     List<AppScreen> screens = serversProvider.selectedServer != null
       ? screensServerConnected
       : screensSelectServer;
@@ -72,18 +75,28 @@ class _BaseState extends State<Base> with WidgetsBindingObserver {
           : Brightness.light,
       ),
       child: Scaffold(
-        body: PageTransitionSwitcher(
-          duration: const Duration(milliseconds: 200),
-          transitionBuilder: (
-            (child, primaryAnimation, secondaryAnimation) => FadeThroughTransition(
-              animation: primaryAnimation, 
-              secondaryAnimation: secondaryAnimation,
-              child: child,
-            )
-          ),
-          child: screens[appConfigProvider.selectedScreen].body,
+        body: Row(
+          children: [
+            if (width > 900) const SideNavigationRail(),
+            Expanded(
+              child: PageTransitionSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (
+                  (child, primaryAnimation, secondaryAnimation) => FadeThroughTransition(
+                    animation: primaryAnimation, 
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  )
+                ),
+                child: screens[appConfigProvider.selectedScreen].body,
+              ),
+            ),
+          ],
         ),
-        bottomNavigationBar: const BottomNavBar(),
+        
+        bottomNavigationBar: width <= 900 
+          ? const BottomNavBar()
+          : null,
       )
     );
   }

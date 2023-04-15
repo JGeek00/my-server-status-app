@@ -17,10 +17,12 @@ enum ConnectionType { http, https}
 
 class AddServerModal extends StatefulWidget {
   final Server? server;
+  final bool window;
 
   const AddServerModal({
     Key? key,
     this.server,
+    required this.window
   }) : super(key: key);
 
   @override
@@ -410,204 +412,263 @@ class _AddServerModalState extends State<AddServerModal> {
       );
     }
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.createConnection),
-            actions: [
-              IconButton(
-                onPressed: openApiAnnouncementModal, 
-                icon: const Icon(Icons.warning_amber_rounded)
-              ),
-              IconButton(
-                tooltip: widget.server == null 
-                  ? AppLocalizations.of(context)!.connect
-                  : AppLocalizations.of(context)!.save,
-                onPressed: allDataValid == true 
-                  ? widget.server == null 
-                    ? () => connect()
-                    : () => edit()
-                  : null,
-                icon: Icon(
-                  widget.server == null
-                    ? Icons.login_rounded
-                    : Icons.save_rounded
-                )
-              ),
-              const SizedBox(width: 10)
-            ],
-            toolbarHeight: 70,
+    List<Widget> widgetsList() {
+      return [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          margin: const EdgeInsets.only(
+            top: 24,
+            left: 24,
+            right: 24
           ),
-          body: ListView(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: const EdgeInsets.only(
-                  top: 24,
-                  left: 24,
-                  right: 24
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary
-                  )
-                ),
-                child: Text(
-                  "${connectionType.name}://${ipDomainController.text}${portController.text != '' ? ':${portController.text}' : ""}${pathController.text}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
-              sectionLabel(AppLocalizations.of(context)!.general),
-              textField(
-                label: AppLocalizations.of(context)!.name, 
-                controller: nameController, 
-                icon: Icons.badge_rounded,
-                error: nameError,
-                onChanged: (value) {
-                  if (value != '') {
-                    setState(() => nameError = null);
-                  }
-                  else {
-                    setState(() => nameError = AppLocalizations.of(context)!.nameNotEmpty);
-                  } 
-                  checkDataValid();
-                }
-              ),
-              sectionLabel(AppLocalizations.of(context)!.connection),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: SegmentedButton<ConnectionType>(
-                  segments: const [
-                    ButtonSegment(
-                      value: ConnectionType.http,
-                      label: Text("HTTP")
-                    ),
-                    ButtonSegment(
-                      value: ConnectionType.https,
-                      label: Text("HTTPS")
-                    ),
-                  ], 
-                  selected: <ConnectionType>{connectionType},
-                  onSelectionChanged: (value) => setState(() => connectionType = value.first),
-                ),
-              ),
-              const SizedBox(height: 30),
-              textField(
-                label: AppLocalizations.of(context)!.ipDomain, 
-                controller: ipDomainController, 
-                icon: Icons.link_rounded,
-                error: ipDomainError,
-                keyboardType: TextInputType.url,
-                onChanged: validateAddress
-              ),
-              const SizedBox(height: 20),
-              textField(
-                label: AppLocalizations.of(context)!.path, 
-                controller: pathController, 
-                icon: Icons.route_rounded,
-                error: pathError,
-                onChanged: validateSubroute,
-                hintText: AppLocalizations.of(context)!.examplePath,
-                helperText: AppLocalizations.of(context)!.helperPath,
-              ),
-              const SizedBox(height: 20),
-              textField(
-                label: AppLocalizations.of(context)!.port, 
-                controller: portController, 
-                icon: Icons.numbers_rounded,
-                error: portError,
-                keyboardType: TextInputType.number,
-                onChanged: validatePort
-              ),
-              sectionLabel(AppLocalizations.of(context)!.authentication),
-              textField(
-                label: AppLocalizations.of(context)!.username, 
-                controller: userController, 
-                icon: Icons.person_rounded,
-              ),
-              const SizedBox(height: 20),
-              textField(
-                label: AppLocalizations.of(context)!.password, 
-                controller: passwordController, 
-                icon: Icons.lock_rounded,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true
-              ),
-              sectionLabel(AppLocalizations.of(context)!.other),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: widget.server == null
-                    ? () => setState(() => defaultServer = !defaultServer)
-                    : null,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.defaultServer,
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        Switch(
-                          value: defaultServer, 
-                          onChanged: widget.server == null 
-                            ? (value) => setState(() => defaultServer = value)
-                            : null,
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary
+            )
+          ),
+          child: Text(
+            "${connectionType.name}://${ipDomainController.text}${portController.text != '' ? ':${portController.text}' : ""}${pathController.text}",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w500
+            ),
           ),
         ),
-        AnimatedOpacity(
-          opacity: isConnecting == true ? 1 : 0,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          child: IgnorePointer(
-            ignoring: isConnecting == true ? false : true,
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Container(
-                width: mediaQuery.size.width,
-                height: mediaQuery.size.height,
-                color: const Color.fromRGBO(0, 0, 0, 0.7),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      color: Colors.white,
+        sectionLabel(AppLocalizations.of(context)!.general),
+        textField(
+          label: AppLocalizations.of(context)!.name, 
+          controller: nameController, 
+          icon: Icons.badge_rounded,
+          error: nameError,
+          onChanged: (value) {
+            if (value != '') {
+              setState(() => nameError = null);
+            }
+            else {
+              setState(() => nameError = AppLocalizations.of(context)!.nameNotEmpty);
+            } 
+            checkDataValid();
+          }
+        ),
+        sectionLabel(AppLocalizations.of(context)!.connection),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: SegmentedButton<ConnectionType>(
+            segments: const [
+              ButtonSegment(
+                value: ConnectionType.http,
+                label: Text("HTTP")
+              ),
+              ButtonSegment(
+                value: ConnectionType.https,
+                label: Text("HTTPS")
+              ),
+            ], 
+            selected: <ConnectionType>{connectionType},
+            onSelectionChanged: (value) => setState(() => connectionType = value.first),
+          ),
+        ),
+        const SizedBox(height: 30),
+        textField(
+          label: AppLocalizations.of(context)!.ipDomain, 
+          controller: ipDomainController, 
+          icon: Icons.link_rounded,
+          error: ipDomainError,
+          keyboardType: TextInputType.url,
+          onChanged: validateAddress
+        ),
+        const SizedBox(height: 20),
+        textField(
+          label: AppLocalizations.of(context)!.path, 
+          controller: pathController, 
+          icon: Icons.route_rounded,
+          error: pathError,
+          onChanged: validateSubroute,
+          hintText: AppLocalizations.of(context)!.examplePath,
+          helperText: AppLocalizations.of(context)!.helperPath,
+        ),
+        const SizedBox(height: 20),
+        textField(
+          label: AppLocalizations.of(context)!.port, 
+          controller: portController, 
+          icon: Icons.numbers_rounded,
+          error: portError,
+          keyboardType: TextInputType.number,
+          onChanged: validatePort
+        ),
+        sectionLabel(AppLocalizations.of(context)!.authentication),
+        textField(
+          label: AppLocalizations.of(context)!.username, 
+          controller: userController, 
+          icon: Icons.person_rounded,
+        ),
+        const SizedBox(height: 20),
+        textField(
+          label: AppLocalizations.of(context)!.password, 
+          controller: passwordController, 
+          icon: Icons.lock_rounded,
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true
+        ),
+        sectionLabel(AppLocalizations.of(context)!.other),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.server == null
+              ? () => setState(() => defaultServer = !defaultServer)
+              : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.defaultServer,
+                    style: const TextStyle(
+                      fontSize: 15,
                     ),
-                    const SizedBox(height: 30),
-                    Text(
-                      AppLocalizations.of(context)!.connecting,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 26
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Switch(
+                    value: defaultServer, 
+                    onChanged: widget.server == null 
+                      ? (value) => setState(() => defaultServer = value)
+                      : null,
+                  )
+                ],
               ),
             ),
           ),
-        )
-      ],
-    );
+        ),
+        const SizedBox(height: 20),
+      ];
+    }
+
+    if (widget.window == true) {
+      return Dialog(
+        child: SizedBox(
+          width: 400,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context), 
+                          icon: const Icon(Icons.clear_rounded)
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.createConnection,
+                          style: const TextStyle(
+                            fontSize: 20
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      tooltip: widget.server == null 
+                        ? AppLocalizations.of(context)!.connect
+                        : AppLocalizations.of(context)!.save,
+                      onPressed: allDataValid == true 
+                        ? widget.server == null 
+                          ? () => connect()
+                          : () => edit()
+                        : null,
+                      icon: Icon(
+                        widget.server == null
+                          ? Icons.login_rounded
+                          : Icons.save_rounded
+                      )
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: widgetsList()
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+    else {
+      return Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.createConnection),
+              actions: [
+                IconButton(
+                  onPressed: openApiAnnouncementModal, 
+                  icon: const Icon(Icons.warning_amber_rounded)
+                ),
+                IconButton(
+                  tooltip: widget.server == null 
+                    ? AppLocalizations.of(context)!.connect
+                    : AppLocalizations.of(context)!.save,
+                  onPressed: allDataValid == true 
+                    ? widget.server == null 
+                      ? () => connect()
+                      : () => edit()
+                    : null,
+                  icon: Icon(
+                    widget.server == null
+                      ? Icons.login_rounded
+                      : Icons.save_rounded
+                  )
+                ),
+                const SizedBox(width: 10)
+              ],
+              toolbarHeight: 70,
+            ),
+            body: ListView(
+              children: widgetsList(),
+            )
+          ),
+          AnimatedOpacity(
+            opacity: isConnecting == true ? 1 : 0,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            child: IgnorePointer(
+              ignoring: isConnecting == true ? false : true,
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Container(
+                  width: mediaQuery.size.width,
+                  height: mediaQuery.size.height,
+                  color: const Color.fromRGBO(0, 0, 0, 0.7),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 30),
+                      Text(
+                        AppLocalizations.of(context)!.connecting,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 26
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      );
+    }
   }
 }

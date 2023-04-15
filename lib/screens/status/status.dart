@@ -116,6 +116,7 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
 
     List<Cpu> getCpu() {
       return currentStatus.map((e) => e.cpu).toList();
@@ -154,30 +155,53 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
               sliver: SliverAppBar(
                 title: Text(AppLocalizations.of(context)!.status),
                 pinned: true,
-                floating: true,
+                floating: width > 600 ? false : true,
                 centerTitle: false,
                 forceElevated: innerBoxIsScrolled,
                 bottom: TabBar(
                   controller: tabController,
                   unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  isScrollable: MediaQuery.of(context).size.width < 380
-                    ? true : false,
+                  isScrollable: true,
                   tabs: [
-                    const Tab(
-                      icon: Icon(Icons.memory_rounded),
-                      text: "CPU",
+                    Tab(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.memory_rounded),
+                          SizedBox(width: 8),
+                          Text("CPU")
+                        ],
+                      )
                     ),
                     Tab(
-                      icon: const Icon(MyServerStatusIcons.memory),
-                      text: AppLocalizations.of(context)!.memory,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(MyServerStatusIcons.memory),
+                          const SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.memory)
+                        ],
+                      )
                     ),
                     Tab(
-                      icon: const Icon(MyServerStatusIcons.storage),
-                      text: AppLocalizations.of(context)!.storage,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(MyServerStatusIcons.storage),
+                          const SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.storage)
+                        ],
+                      )
                     ),
                     Tab(
-                      icon: const Icon(Icons.settings_ethernet_rounded),
-                      text: AppLocalizations.of(context)!.network,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.settings_ethernet_rounded),
+                          const SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.network)
+                        ],
+                      )
                     ),
                   ]
                 )

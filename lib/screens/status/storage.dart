@@ -28,6 +28,8 @@ class StorageTab extends StatefulWidget {
 class _StorageTabState extends State<StorageTab> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     Map<String, dynamic> chartData() {
       if (widget.data!.length < 20) {
@@ -110,7 +112,9 @@ class _StorageTabState extends State<StorageTab> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
               width: double.maxFinite,
-              height: 400,
+              height: width > 900 
+                ? height-230 
+                : height-310,
               child: CustomLinearChart(
                 data: [
                   ChartData(

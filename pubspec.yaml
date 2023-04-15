@@ -74,6 +74,9 @@ flutter_icons:
   image_path_android: "assets/icons/icon-android.png"
   adaptive_icon_foreground: "assets/icons/icon-foreground.png"
   adaptive_icon_background: "#263238"
+  macos:
+    generate: true
+    image_path: "assets/icons/icon-macos.png"
 
 
 flutter_native_splash:
@@ -103,6 +106,7 @@ flutter:
     - assets/resources/apple-silicon.png
     - assets/icons/icon-circle.png
     - assets/icons/icon-foreground.png
+    - assets/icons/icon-macos.png
     - assets/icons/icon-android.png
     - assets/icons/icon.png
     - assets/icons/splash-icon-lightmode.png

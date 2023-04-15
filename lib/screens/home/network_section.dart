@@ -116,7 +116,10 @@ class NetworkSectionHome extends StatelessWidget {
                       ),
                     ),
                     Flexible(
-                      child: Text(item.value.ip6)
+                      child: Text(
+                        item.value.ip6,
+                        textAlign: TextAlign.end,
+                      )
                     )
                   ],
                 ),
@@ -130,7 +133,10 @@ class NetworkSectionHome extends StatelessWidget {
                         fontWeight: FontWeight.w500
                       ),
                     ),
-                    Text(item.value.mac)
+                    Text(
+                      item.value.mac,
+                      textAlign: TextAlign.end,
+                    )
                   ],
                 ),
                 if (item.key < networkInfo.length-1) const SizedBox(height: 20),

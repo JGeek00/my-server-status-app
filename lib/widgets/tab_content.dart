@@ -51,7 +51,7 @@ class CustomTabContent extends StatelessWidget {
             builder: (BuildContext context) {
               return RefreshIndicator(
                 onRefresh: onRefresh,
-                edgeOffset: 95,
+                edgeOffset: 48,
                 child: CustomScrollView(
                   slivers: <Widget>[
                     SliverOverlapInjector(

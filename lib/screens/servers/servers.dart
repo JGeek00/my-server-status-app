@@ -53,46 +53,73 @@ class _ServersState extends State<Servers> {
     final serversProvider = Provider.of<ServersProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     for (var i = 0; i < serversProvider.serversList.length; i++) {
       expandableControllerList.add(ExpandableController());
     }
 
     void openAddServerModal() async {
       await Future.delayed(const Duration(seconds: 0), (() => {
-        Navigator.push(context, MaterialPageRoute(
-          fullscreenDialog: true,
-          builder: (BuildContext context) => const AddServerModal()
-        ))
+        if (width > 700) {
+          showDialog(
+            context: context, 
+            barrierDismissible: false,
+            builder: (context) => const AddServerModal(
+              window: true,
+            ),
+          )
+        }
+        else {
+          Navigator.push(context, MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: (BuildContext context) => const AddServerModal(window: false)
+          ))
+        }
       }));
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.servers),
+        actions: [
+          if (width > 700) IconButton(
+            onPressed: openAddServerModal, 
+            icon: const Icon(Icons.add_rounded)
+          ),
+          const SizedBox(width: 8)
+        ],
       ),
-      body: Stack(
-        children: [
-          ServersList(
+      body: width > 700
+        ? ServersList(
             context: context, 
             controllers: expandableControllerList, 
             onChange: expandOrContract,
             scrollController: scrollController
-          ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-            bottom: isVisible ?
-              appConfigProvider.showingSnackbar
-                ? 70 : 20
-              : -70,
-            right: 20,
-            child: FloatingActionButton(
-              onPressed: openAddServerModal,
-              child: const Icon(Icons.add),
+          )
+        : Stack(
+          children: [
+            ServersList(
+              context: context, 
+              controllers: expandableControllerList, 
+              onChange: expandOrContract,
+              scrollController: scrollController
             ),
-          ),
-        ],
-      ),
-    );
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.easeInOut,
+              bottom: isVisible ?
+                appConfigProvider.showingSnackbar
+                  ? 70 : 20
+                : -70,
+              right: 20,
+              child: FloatingActionButton(
+                onPressed: openAddServerModal,
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ],
+        ),
+      );
   }
 }
