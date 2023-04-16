@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -116,7 +118,7 @@ class SettingsScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                if (Urls.playStore != "") IconButton(
+                if (Platform.isAndroid && Urls.playStore != "") IconButton(
                   onPressed: () => openUrl(Urls.playStore), 
                   icon: const Icon(
                     MyServerStatusIcons.googlePlay,
