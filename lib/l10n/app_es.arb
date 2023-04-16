@@ -212,5 +212,6 @@
   "hideVolumesNoMountPoint": "Ocultar volúmenes sin punto de montaje",
   "hideVolumesNoMountPointDescription": "Los volúmenes sin punto de montaje no se mostrarán",
   "available": "disponible",
-  "installed": "instalada"
+  "installed": "instalada",
+  "screens": "Pantallas"
 }

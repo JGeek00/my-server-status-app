@@ -212,5 +212,6 @@
   "hideVolumesNoMountPoint": "Hide volumes with no mount point",
   "hideVolumesNoMountPointDescription": "Volumes with no mounting point won't be displayed",
   "available": "available",
-  "installed": "installed"
+  "installed": "installed",
+  "screens": "Screens"
 }
