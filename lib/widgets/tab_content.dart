@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:my_server_status/constants/enums.dart';
@@ -25,21 +27,26 @@ class CustomTabContent extends StatelessWidget {
         return SafeArea(
           top: false,
           bottom: false,
-          child: Builder(
-            builder: (BuildContext context) => CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          child: !(Platform.isAndroid || Platform.isIOS)
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: loadingGenerator()
+              )
+            : Builder(
+                builder: (BuildContext context) => CustomScrollView(
+                  slivers: [
+                    SliverOverlapInjector(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    ),
+                    SliverFillRemaining(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: loadingGenerator()
+                      ),
+                    )
+                  ],
                 ),
-                SliverFillRemaining(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: loadingGenerator()
-                  ),
-                )
-              ],
-            ),
-          )
+              )
         );
         
         
@@ -47,49 +54,62 @@ class CustomTabContent extends StatelessWidget {
         return SafeArea(
           top: false,
           bottom: false,
-          child: Builder(
-            builder: (BuildContext context) {
-              return RefreshIndicator(
-                onRefresh: onRefresh,
-                edgeOffset: 48,
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverOverlapInjector(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          child: !(Platform.isAndroid || Platform.isIOS)
+            ? ListView(
+                children: contentGenerator(),
+              )
+            : Builder(
+                builder: (BuildContext context) {
+                  return RefreshIndicator(
+                    onRefresh: onRefresh,
+                    edgeOffset: 48,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverOverlapInjector(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                        ),
+                        SliverList(
+                          delegate: SliverChildListDelegate(contentGenerator())
+                        )
+                      ],
                     ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(contentGenerator())
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
         );
 
       case LoadStatus.error: 
         return SafeArea(
           top: false,
           bottom: false,
-          child: Builder(
-            builder: (BuildContext context) => CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          child: !(Platform.isAndroid || Platform.isIOS)
+            ? Padding(
+                padding: const EdgeInsets.only(
+                  top: 95,
+                  left: 16,
+                  right: 16
                 ),
-                SliverFillRemaining(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 95,
-                      left: 16,
-                      right: 16
+                child: errorGenerator()
+              )
+            : Builder(
+                builder: (BuildContext context) => CustomScrollView(
+                  slivers: [
+                    SliverOverlapInjector(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                     ),
-                    child: errorGenerator()
-                  ),
-                )
-              ],
-            ),
-          )
+                    SliverFillRemaining(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 95,
+                          left: 16,
+                          right: 16
+                        ),
+                        child: errorGenerator()
+                      ),
+                    )
+                  ],
+                ),
+              )
         );
        
       default:

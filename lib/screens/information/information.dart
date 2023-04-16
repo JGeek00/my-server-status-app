@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -82,80 +84,152 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    PreferredSizeWidget tabBar() {
+      return TabBar(
+        controller: tabController,
+        unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        isScrollable: true,
+        tabs: [
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.desktop_windows_rounded),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.system,)
+              ],
+            )
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.memory_rounded),
+                SizedBox(width: 8),
+                Text("CPU")
+              ],
+            )
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(MyServerStatusIcons.memory),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.memory,)
+              ],
+            )
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(MyServerStatusIcons.storage),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.storage,)
+              ],
+            )
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.settings_ethernet_rounded),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.network,)
+              ],
+            )
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(MyServerStatusIcons.software),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.operatingSystem,)
+              ],
+            )
+          ),
+        ]
+      );
+    }
+
     return DefaultTabController(
       length: 6,
-      child: NestedScrollView(
-        controller: scrollController,
-        headerSliverBuilder: ((context, innerBoxIsScrolled) {
-          return [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                title: Text(AppLocalizations.of(context)!.information),
-                pinned: true,
-                floating: true,
-                centerTitle: false,
-                forceElevated: innerBoxIsScrolled,
-                bottom: TabBar(
-                  controller: tabController,
-                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  isScrollable: MediaQuery.of(context).size.width < 600
-                    ? true : false,
-                  tabs: [
-                    Tab(
-                      icon: const Icon(Icons.desktop_windows_rounded),
-                      text: AppLocalizations.of(context)!.system,
-                    ),
-                    const Tab(
-                      icon: Icon(Icons.memory_rounded),
-                      text: "CPU",
-                    ),
-                    Tab(
-                      icon: const Icon(MyServerStatusIcons.memory),
-                      text: AppLocalizations.of(context)!.memory,
-                    ),
-                    Tab(
-                      icon: const Icon(MyServerStatusIcons.storage),
-                      text: AppLocalizations.of(context)!.storage,
-                    ),
-                    Tab(
-                      icon: const Icon(Icons.settings_ethernet_rounded),
-                      text: AppLocalizations.of(context)!.network,
-                    ),
-                    Tab(
-                      icon: const Icon(MyServerStatusIcons.software),
-                      text: AppLocalizations.of(context)!.operatingSystem,
-                    ),
-                  ]
+      child: !(Platform.isAndroid || Platform.isIOS)
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.information),
+              centerTitle: false,
+              bottom: tabBar()
+            ),
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                SystemTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                CpuTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                MemoryTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                StorageTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                NetworkTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                OsTab(
+                  onRefresh: requestHardwareInfo,
                 )
-              ),
-            )
-          ];
-        }), 
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            SystemTab(
-              onRefresh: requestHardwareInfo,
+              ]
             ),
-            CpuTab(
-              onRefresh: requestHardwareInfo,
+          )
+        : NestedScrollView(
+            controller: scrollController,
+            headerSliverBuilder: ((context, innerBoxIsScrolled) {
+              return [
+                SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverAppBar(
+                    title: Text(AppLocalizations.of(context)!.information),
+                    pinned: true,
+                    floating: true,
+                    centerTitle: false,
+                    forceElevated: innerBoxIsScrolled,
+                    bottom: tabBar()
+                  ),
+                )
+              ];
+            }), 
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                SystemTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                CpuTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                MemoryTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                StorageTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                NetworkTab(
+                  onRefresh: requestHardwareInfo,
+                ),
+                OsTab(
+                  onRefresh: requestHardwareInfo,
+                )
+              ]
             ),
-            MemoryTab(
-              onRefresh: requestHardwareInfo,
-            ),
-            StorageTab(
-              onRefresh: requestHardwareInfo,
-            ),
-            NetworkTab(
-              onRefresh: requestHardwareInfo,
-            ),
-            OsTab(
-              onRefresh: requestHardwareInfo,
-            )
-          ]
-        ),
-      )
+          )
     );
   }
 }

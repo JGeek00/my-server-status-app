@@ -21,10 +21,25 @@ class MemoryTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     String generateValue(String? value) {
       return value != null && value != '' && value != 'Default string' 
         ? value
         : 'N/A';
+    }
+
+    Widget listTile(Widget widget) {
+      return SizedBox(
+         width: width > 700
+          ? width > 900 
+            ? width > 1300 
+              ? (width-91)/3
+              : (width-91)/2 
+            : width/2
+          : width,
+        child: widget,
+      );
     }
 
     return CustomTabContent(
@@ -81,28 +96,42 @@ class MemoryTab extends StatelessWidget {
               SectionLabel(
                 label: m.bank
               ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.size,
-                subtitle: "${convertMemoryToGb(m.size)} GB",
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.type,
-                subtitle: m.type,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.formFactor,
-                subtitle: m.formFactor,
-              ),
-              CustomListTile(
-                title: "ECC",
-                subtitle: m.ecc == true 
-                  ? AppLocalizations.of(context)!.yes
-                  : AppLocalizations.of(context)!.no,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.voltage,
-                subtitle: "${m.voltageConfigured} V",
-              ),
+              Wrap(
+                children: [
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.size,
+                      subtitle: "${convertMemoryToGb(m.size)} GB",
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.type,
+                      subtitle: m.type,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.formFactor,
+                      subtitle: m.formFactor,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: "ECC",
+                      subtitle: m.ecc == true 
+                        ? AppLocalizations.of(context)!.yes
+                        : AppLocalizations.of(context)!.no,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.voltage,
+                      subtitle: "${m.voltageConfigured} V",
+                    ),
+                  )
+                ],
+              )
             ],
           ))
         ];
