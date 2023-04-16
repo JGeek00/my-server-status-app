@@ -51,6 +51,10 @@ dependencies:
   percent_indicator: ^4.2.3
   url_launcher: ^6.1.10
   fl_chart: ^0.61.0
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/window_size
 
 dev_dependencies:
   flutter_test:
