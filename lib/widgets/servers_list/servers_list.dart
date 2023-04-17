@@ -453,8 +453,8 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
     }
 
     Widget serverTile(int index) {
-      return SizedBox(
-        width: (width/2)-4,
+      return FractionallySizedBox(
+        widthFactor: 0.5,
         child: Card(
           margin: generateMargins(index),
           child: Padding(
