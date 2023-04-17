@@ -205,8 +205,8 @@ class ServersProvider with ChangeNotifier {
   Future<bool> removeFromDb(String id) async {
     try {
       return await _dbInstance!.transaction((txn) async {
-        await txn.rawDelete(
-          'DELETE FROM servers WHERE id = "$id"',
+        await txn.delete(
+          'servers', where: 'id = ?', whereArgs: [id]
         );
         return true;
       });
@@ -218,11 +218,16 @@ class ServersProvider with ChangeNotifier {
   Future<dynamic> setDefaultServerDb(String id) async {
     try {
       return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE servers SET defaultServer = 0 WHERE defaultServer = 1',
+        await txn.update(
+          'servers',
+          {'defaultServer': '0'},
+          where: 'defaultServer = 1',
         );
-        await txn.rawUpdate(
-          'UPDATE servers SET defaultServer = 1 WHERE id = "$id"',
+        await txn.update(
+          'servers',
+          {'defaultServer': '1'},
+          where: 'defaultServer = ?',
+          whereArgs: [id]
         );
         return null;
       });
