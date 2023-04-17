@@ -16,6 +16,8 @@ class ApiAnnouncementModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return AlertDialog(
       scrollable: true,
       title: Column(
@@ -36,16 +38,19 @@ class ApiAnnouncementModal extends StatelessWidget {
           )
         ],
       ),
-      content: Column(
-        children: [
-          Text(AppLocalizations.of(context)!.importantAnnouncementDescription),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            icon: const Icon(MyServerStatusIcons.github),
-            label: Text(AppLocalizations.of(context)!.installationInstructions),
-            onPressed: () => openUrl(Urls.apiInstallationInstructions),
-          )
-        ],
+      content: SizedBox(
+        width: width > 400 ? 400 : width,
+        child: Column(
+          children: [
+            Text(AppLocalizations.of(context)!.importantAnnouncementDescription),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              icon: const Icon(MyServerStatusIcons.github),
+              label: Text(AppLocalizations.of(context)!.installationInstructions),
+              onPressed: () => openUrl(Urls.apiInstallationInstructions),
+            )
+          ],
+        ),
       ),
       actions: [
         Row(

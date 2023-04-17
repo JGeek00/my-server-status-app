@@ -179,7 +179,7 @@ class ServersProvider with ChangeNotifier {
       return await _dbInstance!.transaction((txn) async {
         await txn.rawInsert(
           'INSERT INTO servers (id, name, connectionMethod, domain, path, port, user, password, defaultServer, authToken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [server.id, server.name, server.connectionMethod, server.domain, server.path, server.port, server.user, server.password, server.defaultServer, server.authToken]
+          [server.id, server.name, server.connectionMethod, server.domain, server.path, server.port, server.user, server.password, convertFromBoolToInt(server.defaultServer), server.authToken]
         );
         return null;
       });
