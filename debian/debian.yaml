@@ -10,5 +10,5 @@ control:
   Essential: no
   Priority: optional
   Depends:
-  Maintainer:
+  Maintainer: JGeek00
   Description: Server hardware monitoring app
