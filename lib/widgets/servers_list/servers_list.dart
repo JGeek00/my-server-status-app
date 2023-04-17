@@ -104,7 +104,8 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
           showDialog(
             context: context, 
             barrierDismissible: false,
-            builder: (context) => const AddServerModal(
+            builder: (context) => AddServerModal(
+              server: server,
               window: true,
             ),
           )
