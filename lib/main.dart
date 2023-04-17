@@ -29,8 +29,8 @@ void main() async {
 
   if (Platform.isWindows || Platform.isLinux) {
     sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
   }
-  databaseFactory = databaseFactoryFfi;
 
   final appConfigProvider = AppConfigProvider();
   final serversProvider = ServersProvider();

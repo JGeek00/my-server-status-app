@@ -249,7 +249,6 @@ class _AddServerModalState extends State<AddServerModal> {
         }
         final serverCreated = await serversProvider.createServer(serverObj);
         if (serverCreated == null) {
-          
           Navigator.pop(context);
         }
         else {
