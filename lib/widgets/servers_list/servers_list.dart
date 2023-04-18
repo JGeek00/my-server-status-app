@@ -82,6 +82,8 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
     final serversProvider = Provider.of<ServersProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     List<Server> servers = serversProvider.serversList;
 
     void showDeleteModal(Server server) async {
@@ -98,10 +100,25 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
 
     void openAddServerBottomSheet({Server? server}) async {
       await Future.delayed(const Duration(seconds: 0), (() => {
-        Navigator.push(context, MaterialPageRoute(
-          fullscreenDialog: true,
-          builder: (BuildContext context) => AddServerModal(server: server)
-        ))
+        if (width > 700) {
+          showDialog(
+            context: context, 
+            barrierDismissible: false,
+            builder: (context) => AddServerModal(
+              server: server,
+              window: true,
+            ),
+          )
+        }
+        else {
+          Navigator.push(context, MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: (BuildContext context) => AddServerModal(
+              server: server,
+              window: false,
+            )
+          ))
+        }
       }));
     }
 
@@ -212,7 +229,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
       }
     }
 
-    Widget topRow(Server server, int index) {
+    Widget topRow(Server server, int index, bool showArrow) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -256,7 +273,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
               ],
             ),
           ),
-          RotationTransition(
+          if (showArrow == true) RotationTransition(
             turns: animation,
             child: const Icon(Icons.keyboard_arrow_down_rounded),
           ),
@@ -365,66 +382,127 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
       );
     }
 
-    return servers.isNotEmpty ? 
-      ListView.builder(
-        controller: widget.scrollController,
-        itemCount: servers.length,
-        itemBuilder: (context, index) => Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                width: 1
-              )
+    Widget serverRow(int index) {
+      return Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              width: 1
             )
-          ),
-          child: ExpandableNotifier(
-            controller: widget.controllers[index],
-            child: Column(
-              children: [
-                Expandable(
-                  collapsed: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => widget.onChange(index),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: topRow(servers[index], index),
+          )
+        ),
+        child: ExpandableNotifier(
+          controller: widget.controllers[index],
+          child: Column(
+            children: [
+              Expandable(
+                collapsed: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => widget.onChange(index),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: topRow(servers[index], index, true),
+                    ),
+                  ),
+                ),
+                expanded: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => widget.onChange(index),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Column(
+                        children: [
+                          topRow(servers[index], index, true),
+                          bottomRow(servers[index], index)
+                        ],
                       ),
                     ),
                   ),
-                  expanded: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => widget.onChange(index),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: Column(
-                          children: [
-                            topRow(servers[index], index),
-                            bottomRow(servers[index], index)
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ) 
+                )
+              ) 
+            ],
+          ),
+        ),
+      );
+    }
+
+    EdgeInsets generateMargins(int index) {
+      if (index == 0) {
+        return const EdgeInsets.only(top: 16, left: 16, right: 8, bottom: 8);
+      }
+      if (index == 1) {
+        return const EdgeInsets.only(top: 16, left: 8, right: 16, bottom: 8);
+      }
+      else if (index == servers.length-1 && index%2 == 0) {
+        return const EdgeInsets.only(top: 8, left: 8, right: 16, bottom: 16);
+      }
+      else if (index == servers.length-1 && index%2 == 1) {
+        return const EdgeInsets.only(top: 8, left: 16, right: 8, bottom: 16);
+      }
+      else {
+        if (index%2 == 0) {
+          return const EdgeInsets.only(top: 8, left: 8, right: 16, bottom: 8);
+        }
+        else {
+          return const EdgeInsets.only(top: 8, left: 16, right: 8, bottom: 8);
+        }
+      }
+    }
+
+    Widget serverTile(int index) {
+      return FractionallySizedBox(
+        widthFactor: 0.5,
+        child: Card(
+          margin: generateMargins(index),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                topRow(servers[index], index, false),
+                bottomRow(servers[index], index)
               ],
             ),
           ),
-        )
-    ) : SizedBox(
-          height: double.maxFinite,
-          child: Center(
-            child: Text(
-              AppLocalizations.of(context)!.noSavedConnections,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+        ),
+      );
+    }
+
+    if (servers.isNotEmpty) {
+      if (width > 700) {
+        return ListView(
+          children: [
+            Wrap(
+              children: servers.asMap().entries.map((s) => serverTile(s.key)).toList(),
+            ),
+            const SizedBox(height: 8)
+          ],
+        );
+      }
+      else {  
+        return ListView.builder(
+          controller: widget.scrollController,
+          itemCount: servers.length,
+          itemBuilder: (context, index) => serverRow(index)
+        );
+      }
+    }
+    else {
+      return SizedBox(
+        height: double.maxFinite,
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context)!.noSavedConnections,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
-        );
+        ),
+      );
+    }
   }
 }

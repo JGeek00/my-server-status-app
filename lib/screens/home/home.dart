@@ -102,6 +102,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   Widget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     if (serversProvider.selectedServer == null && refreshTimer != null) {
       refreshTimer!.cancel();
     }
@@ -132,22 +134,94 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             ),
           );
         case LoadStatus.loaded: 
-          return ListView(
-            children: [
-              CpuSectionHome(
-                cpuInfo: serversProvider.serverInfo.data!.cpu
-              ),
-              MemorySectionHome(
-                memoryInfo: serversProvider.serverInfo.data!.memory
-              ),
-              StorageSectionHome(
-                storageInfo: serversProvider.serverInfo.data!.storageFs
-              ),
-              NetworkSectionHome(
-                networkInfo: serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').toList()
-              )
-            ],
-          );
+          if (width > 700) {
+            return ListView(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 24,
+                          left: 24,
+                          right: 16, 
+                          bottom: 16
+                        ),
+                        child: CpuSectionHome(
+                          cpuInfo: serversProvider.serverInfo.data!.cpu
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 24,
+                          left: 16,
+                          right: 24, 
+                          bottom: 16
+                        ),
+                        child: MemorySectionHome(
+                          memoryInfo: serversProvider.serverInfo.data!.memory
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          left: 24,
+                          right: 16, 
+                          bottom: 25
+                        ),
+                        child: StorageSectionHome(
+                          storageInfo: serversProvider.serverInfo.data!.storageFs
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          left: 16,
+                          right: 24, 
+                          bottom: 24
+                        ),
+                        child: NetworkSectionHome(
+                          networkInfo: serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').toList()
+                        ),
+                      )
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+          else {
+            return ListView(
+              children: [
+                CpuSectionHome(
+                  cpuInfo: serversProvider.serverInfo.data!.cpu
+                ),
+                MemorySectionHome(
+                  memoryInfo: serversProvider.serverInfo.data!.memory
+                ),
+                StorageSectionHome(
+                  storageInfo: serversProvider.serverInfo.data!.storageFs
+                ),
+                NetworkSectionHome(
+                  networkInfo: serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').toList()
+                )
+              ],
+            );
+          }
 
         case LoadStatus.error:
           return SizedBox(

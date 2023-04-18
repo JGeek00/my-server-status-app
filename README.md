@@ -40,6 +40,50 @@ This application is intended to monitor your own machine. Don not try to use it 
 
 <br>
 
+## Generate production build
+<ul>
+  <li>
+    <b>macOS</b>
+    <ol>  
+      <li>flutter clean</li>
+      <li>flutter pub get</li>
+      <li>flutter build macos --release</li>
+      <li>Open macos/Runner.xcworkspace on Xcode</li>
+      <li>Make sure all the pods have the minimum deployment version at 10.14</li>
+      <li>Select Runner > Targets Runner</li>
+      <li>Make sure the Version and Build numbers are correct</li>
+      <li>Click on Product menu and on Archive</li>
+      <li>Select the first on the list and click on Distribute app, select Copy App and click on Next</li>
+    </ol>
+  </li>
+  <li>
+    <b>Linux</b>
+    <ol>
+      <li>flutter clean</li>
+      <li>flutter pub get</li>
+      <li>flutter build linux --release</li>
+      <li>Open debian.yaml file inside debian/ and update the version number</li>
+      <li>Run flutter_to_debian</li>
+      <li>The .deb package is at debian/packages</li>
+    </ol>
+  </li>
+  <li>
+    <b>Windows</b>
+    <ol>
+      <li>flutter clean</li>
+      <li>flutter pub get</li>
+      <li>flutter build windows</li>
+      <li>Open Inno Setup Compiler application and load the script</li>
+      <li>The script is located at windows/innosetup_build_installer.iss</li>
+      <li>Update the version number and save the changes</li>
+      <li>Click on the Compile button</li>
+      <li>The installer will be generated at build/windows/my_server_status_installer.exe</li>
+    </ol>
+  </li>
+</ul>
+
+<br>
+
 ## Third party libraries
 - [provider](https://pub.dev/packages/provider)
 - [sqflite](https://pub.dev/packages/sqflite)

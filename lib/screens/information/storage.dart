@@ -23,10 +23,25 @@ class StorageTab extends StatelessWidget {
     final serversProvider = Provider.of<ServersProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     String generateValue(String? value) {
       return value != null && value != '' && value != 'Default string' 
         ? value
         : 'N/A';
+    }
+
+    Widget listTile(Widget widget) {
+      return SizedBox(
+         width: width > 700
+          ? width > 900 
+            ? width > 1300 
+              ? (width-91)/3
+              : (width-91)/2 
+            : width/2
+          : width,
+        child: widget,
+      );
     }
 
     return CustomTabContent(
@@ -76,22 +91,32 @@ class StorageTab extends StatelessWidget {
                   ? (disk.value.name != "" ? disk.value.name : disk.value.device)!
                   : "${AppLocalizations.of(context)!.storageDevice} ${disk.key}"
               ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.size,
-                subtitle: disk.value.size != null 
-                  ? disk.value.size! > 104857600 
-                    ? "${convertMemoryToGb(disk.value.size!)} GB" 
-                    : "${convertMemoryToMb(disk.value.size!.toDouble())} MB" 
-                  : "N/A",
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.type,
-                subtitle: disk.value.type,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.vendor,
-                subtitle: generateValue(disk.value.vendor),
-              ),
+              Wrap(
+                children: [
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.size,
+                      subtitle: disk.value.size != null 
+                        ? disk.value.size! > 104857600 
+                          ? "${convertMemoryToGb(disk.value.size!)} GB" 
+                          : "${convertMemoryToMb(disk.value.size!.toDouble())} MB" 
+                        : "N/A",
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.type,
+                      subtitle: disk.value.type,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.vendor,
+                      subtitle: generateValue(disk.value.vendor),
+                    ),
+                  )
+                ],
+              )
             ],
           )),
           if (blockDevices.isNotEmpty) Padding(
@@ -119,19 +144,29 @@ class StorageTab extends StatelessWidget {
                 title: AppLocalizations.of(context)!.storageDevice,
                 subtitle: device.device,
               ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.type,
-                subtitle: device.type,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.size,
-                subtitle: device.size > 104857600 
-                  ? "${convertMemoryToGb(device.size)} GB" 
-                  : "${convertMemoryToMb(device.size.toDouble())} MB" 
-              ),
-              if (device.mount != "") CustomListTile(
-                title: AppLocalizations.of(context)!.mountPoint,
-                subtitle: device.mount,
+              Wrap(
+                children: [
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.type,
+                      subtitle: device.type,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.size,
+                      subtitle: device.size > 104857600 
+                        ? "${convertMemoryToGb(device.size)} GB" 
+                        : "${convertMemoryToMb(device.size.toDouble())} MB" 
+                    ),
+                  ),
+                  if (device.mount != "") listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.mountPoint,
+                      subtitle: device.mount,
+                    )
+                  )
+                ],
               )
             ],
           )),
@@ -156,26 +191,38 @@ class StorageTab extends StatelessWidget {
           ...storage.fsSize.map((fs) => Column(
             children: [
               SectionLabel(label: fs.fs),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.mountPoint,
-                subtitle: fs.mount,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.type,
-                subtitle: fs.type,
-              ),
-              CustomListTile(
-                title: AppLocalizations.of(context)!.size,
-                subtitle: fs.size > 104857600 
-                  ? "${convertMemoryToGb(fs.size)} GB" 
-                  : "${convertMemoryToMb(fs.size.toDouble())} MB" 
-              ),
-              CustomListTile(
-                title: "RW",
-                subtitle: fs.rw == true 
-                  ? AppLocalizations.of(context)!.yes
-                  : AppLocalizations.of(context)!.no,
-              ),
+              Wrap(
+                children: [
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.mountPoint,
+                      subtitle: fs.mount,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.type,
+                      subtitle: fs.type,
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.size,
+                      subtitle: fs.size > 104857600 
+                        ? "${convertMemoryToGb(fs.size)} GB" 
+                        : "${convertMemoryToMb(fs.size.toDouble())} MB" 
+                    ),
+                  ),
+                  listTile(
+                    CustomListTile(
+                      title: "RW",
+                      subtitle: fs.rw == true 
+                        ? AppLocalizations.of(context)!.yes
+                        : AppLocalizations.of(context)!.no,
+                    ),
+                  )
+                ],
+              )
             ],
           )),
           const SizedBox(height: 16)

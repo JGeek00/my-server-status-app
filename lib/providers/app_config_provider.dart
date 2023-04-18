@@ -153,7 +153,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setOverrideSslCheck(bool status) async {
-    final updated = await updateOverrideSslCheckQuery(_dbInstance!, status == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'overrideSslCheck', status == true ? 1 : 0);
     if (updated == true) {
       _overrideSslCheck = status == true ? 1 : 0;
       notifyListeners();
@@ -165,7 +165,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setSelectedTheme(int value) async {
-    final updated = await updateThemeQuery(_dbInstance!, value);
+    final updated = await updateConfigQuery(_dbInstance!, 'theme', value);
     if (updated == true) {
       _selectedTheme = value;
       notifyListeners();
@@ -177,7 +177,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setUseDynamicColor(bool value) async {
-    final updated = await updateDynamicColorQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'useDynamicColor', value == true ? 1 : 0);
     if (updated == true) {
       _useDynamicColor = value;
       notifyListeners();
@@ -189,7 +189,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setStaticColor(int value) async {
-    final updated = await updateStaticColorQuery(_dbInstance!, value);
+    final updated = await updateConfigQuery(_dbInstance!, 'staticColor', value);
     if (updated == true) {
       _staticColor = value;
       notifyListeners();
@@ -201,7 +201,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setAutoRefreshTimeHome(int value) async {
-    final updated = await updateAutoRefreshHomeQuery(_dbInstance!, value);
+    final updated = await updateConfigQuery(_dbInstance!, 'autoRefreshTimeHome', value);
     if (updated == true) {
       _autoRefreshTimeHome = value;
       notifyListeners();
@@ -213,7 +213,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setAutoRefreshTimeStatus(int value) async {
-    final updated = await updateAutoRefreshStatusQuery(_dbInstance!, value);
+    final updated = await updateConfigQuery(_dbInstance!, 'autoRefreshTimeStatus', value);
     if (updated == true) {
       _autoRefreshTimeStatus = value;
       notifyListeners();
@@ -225,7 +225,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setApiAnnouncementReaden(bool value) async {
-    final updated = await updateApiAnnouncementReadenQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'apiAnnouncementReaden', value == true ? 1 : 0);
     if (updated == true) {
       _apiAnnouncementReaden = value;
       notifyListeners();
@@ -237,7 +237,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setTimeoutRequests(bool value) async {
-    final updated = await updateTimeoutRequestsQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'timeoutRequests', value == true ? 1 : 0);
     if (updated == true) {
       _timeoutRequests = value;
       notifyListeners();
@@ -249,7 +249,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setStatusColorsCharts(bool value) async {
-    final updated = await updateStatusColorsChartsQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'statusColorsCharts', value == true ? 1 : 0);
     if (updated == true) {
       _statusColorsCharts = value;
       notifyListeners();
@@ -261,7 +261,7 @@ class AppConfigProvider with ChangeNotifier {
   }
 
   Future<bool> setHideVolumesNoMountPoint(bool value) async {
-    final updated = await updateHideVolumesNoMountPointQuery(_dbInstance!, value == true ? 1 : 0);
+    final updated = await updateConfigQuery(_dbInstance!, 'hideVolumesNoMountPoint', value == true ? 1 : 0);
     if (updated == true) {
       _hideVolumesNoMountPoint = value;
       notifyListeners();

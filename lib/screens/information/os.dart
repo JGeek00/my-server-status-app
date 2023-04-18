@@ -20,10 +20,25 @@ class OsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     String generateValue(String? value) {
       return value != null && value != '' && value != 'Default string' 
         ? value
         : 'N/A';
+    }
+
+    Widget listTile(Widget widget) {
+      return SizedBox(
+         width: width > 700
+          ? width > 900 
+            ? width > 1300 
+              ? (width-91)/3
+              : (width-91)/2 
+            : width/2
+          : width,
+        child: widget,
+      );
     }
 
     return CustomTabContent(
@@ -46,39 +61,60 @@ class OsTab extends StatelessWidget {
       contentGenerator: () {
         final os = serversProvider.systemSpecsInfo.data!.osInfo;
         return [
-          CustomListTile(
-            title: AppLocalizations.of(context)!.operatingSystem,
-            subtitle: os.distro,
-          ),
-          CustomListTile(
-            title: AppLocalizations.of(context)!.platform,
-            subtitle: os.platform.capitalize(),
-          ),
-          CustomListTile(
-            title: AppLocalizations.of(context)!.version,
-            subtitle: os.release,
-          ),
-          CustomListTile(
-            title: "Build",
-            subtitle: generateValue(os.build),
-          ),
-          CustomListTile(
-            title: "Kernel",
-            subtitle: os.kernel,
-          ),
-          CustomListTile(
-            title: AppLocalizations.of(context)!.architecture,
-            subtitle: os.arch,
-          ),
-          CustomListTile(
-            title: AppLocalizations.of(context)!.hostName,
-            subtitle: os.hostname,
-          ),
-          CustomListTile(
-            title: "UEFI",
-            subtitle: os.uefi == true 
-              ? AppLocalizations.of(context)!.yes
-              : AppLocalizations.of(context)!.no,
+          const SizedBox(height: 16),
+          Wrap(
+            children: [
+              listTile(
+                CustomListTile(
+                  title: AppLocalizations.of(context)!.operatingSystem,
+                  subtitle: os.distro,
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: AppLocalizations.of(context)!.platform,
+                  subtitle: os.platform.capitalize(),
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: AppLocalizations.of(context)!.version,
+                  subtitle: os.release,
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: "Build",
+                  subtitle: generateValue(os.build),
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: "Kernel",
+                  subtitle: os.kernel,
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: AppLocalizations.of(context)!.architecture,
+                  subtitle: os.arch,
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: AppLocalizations.of(context)!.hostName,
+                  subtitle: os.hostname,
+                ),
+              ),
+              listTile(
+                CustomListTile(
+                  title: "UEFI",
+                  subtitle: os.uefi == true 
+                    ? AppLocalizations.of(context)!.yes
+                    : AppLocalizations.of(context)!.no,
+                ),
+              )
+            ],
           ),
           const SizedBox(height: 16)
         ];

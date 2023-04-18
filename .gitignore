@@ -45,3 +45,8 @@ app.*.map.json
 
 # Untranslated strings
 untranslated.json
+
+# .dev build
+debian/packages/build
+debian/packages/*.deb
+linux/flutter/ephemeral

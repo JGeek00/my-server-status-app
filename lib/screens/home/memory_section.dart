@@ -95,30 +95,44 @@ class MemorySectionHome extends StatelessWidget {
                     height: 100,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               AppLocalizations.of(context)!.ramUsed,
                               style: const TextStyle(
-                                fontWeight: FontWeight.w700
+                                fontSize: 16
                               ),
                             ),
-                            Text("${convertMemoryToGb(memoryInfo.info.active)} GB (${((memoryInfo.info.active/memoryInfo.info.total)*100).toInt().toString()}%)")
+                            const SizedBox(height: 2),
+                            Text(
+                              "${convertMemoryToGb(memoryInfo.info.active)} GB (${((memoryInfo.info.active/memoryInfo.info.total)*100).toInt().toString()}%)",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700
+                              ),
+                            )
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        const SizedBox(height: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               AppLocalizations.of(context)!.swapUsed,
                               style: const TextStyle(
-                                fontWeight: FontWeight.w700
+                                fontSize: 16
                               ),
                             ),
-                            Text("${convertMemoryToGb(memoryInfo.info.swapused)} GB (${((memoryInfo.info.swapused/memoryInfo.info.swaptotal)*100).toInt().toString()}%)")
+                            Text(
+                              "${convertMemoryToGb(memoryInfo.info.swapused)} GB (${((memoryInfo.info.swapused/memoryInfo.info.swaptotal)*100).toInt().toString()}%)",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700
+                              ),
+                            )
                           ],
                         ),
                       ],

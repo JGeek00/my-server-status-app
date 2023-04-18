@@ -1,11 +1,12 @@
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter/material.dart';
+
 import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/functions/conversions.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:my_server_status/models/server_info.dart';
 import 'package:my_server_status/models/system_specs_info.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:flutter/material.dart';
-
+import 'package:my_server_status/services/database/queries.dart';
 import 'package:my_server_status/models/server.dart';
 
 class ServersProvider with ChangeNotifier {
@@ -86,7 +87,7 @@ class ServersProvider with ChangeNotifier {
   }
  
   Future<dynamic> createServer(Server server) async {
-    final saved = await saveServerIntoDb(server);
+    final saved = await saveServerQuery(_dbInstance!, server);
     if (saved == null) {
       if (server.defaultServer == true) {
         final defaultServer = await setDefaultServer(server);
@@ -111,7 +112,7 @@ class ServersProvider with ChangeNotifier {
   }
 
   Future<dynamic> setDefaultServer(Server server) async {
-    final updated = await setDefaultServerDb(server.id);
+    final updated = await setDefaultServerQuery(_dbInstance!, server.id);
     if (updated == null) {
       List<Server> newServers = _serversList.map((s) {
         if (s.id == server.id) {
@@ -133,7 +134,7 @@ class ServersProvider with ChangeNotifier {
   }
 
   Future<dynamic> editServer(Server server) async {
-    final result = await editServerDb(server);
+    final result = await editServerQuery(_dbInstance!, server);
     if (result == null) {
       List<Server> newServers = _serversList.map((s) {
         if (s.id == server.id) {
@@ -153,7 +154,7 @@ class ServersProvider with ChangeNotifier {
   }
 
   Future<bool> removeServer(Server server) async {
-    final result = await removeFromDb(server.id);
+    final result = await removeServerQuery(_dbInstance!, server.id);
     if (result == true) {
       if (_selectedServer != null && server.id == _selectedServer!.id) {
         _selectedServer = null;
@@ -171,63 +172,6 @@ class ServersProvider with ChangeNotifier {
     }
     else {
       return false;
-    }
-  }
-
-  Future<dynamic> saveServerIntoDb(Server server) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawInsert(
-          'INSERT INTO servers (id, name, connectionMethod, domain, path, port, user, password, defaultServer, authToken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [server.id, server.name, server.connectionMethod, server.domain, server.path, server.port, server.user, server.password, server.defaultServer, server.authToken]
-        );
-        return null;
-      });
-    } catch (e) {
-      return e;
-    }
-  }
-
-  Future<dynamic> editServerDb(Server server) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE servers SET name = ?, connectionMethod = ?, domain = ?, path = ?, port = ?, user = ?, password = ?, authToken = ? WHERE id = "${server.id}"',
-          [server.name, server.connectionMethod, server.domain, server.path, server.port, server.user, server.password, server.authToken]
-        );
-        return null;
-      });
-    } catch (e) {
-      return e;
-    }
-  }
-
-  Future<bool> removeFromDb(String id) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawDelete(
-          'DELETE FROM servers WHERE id = "$id"',
-        );
-        return true;
-      });
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<dynamic> setDefaultServerDb(String id) async {
-    try {
-      return await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'UPDATE servers SET defaultServer = 0 WHERE defaultServer = 1',
-        );
-        await txn.rawUpdate(
-          'UPDATE servers SET defaultServer = 1 WHERE id = "$id"',
-        );
-        return null;
-      });
-    } catch (e) {
-      return e;
     }
   }
 

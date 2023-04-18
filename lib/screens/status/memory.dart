@@ -28,6 +28,9 @@ class MemoryTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     List<double> chartData() {
       if (data.length < 20) {
         List<double> v = List.filled(20, 0);
@@ -110,7 +113,9 @@ class MemoryTab extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
               width: double.maxFinite,
-              height: 300,
+              height: width > 900 
+                ? height-280 
+                : height-380,
               child: CustomLinearChart(
                 data: [
                   ChartData(

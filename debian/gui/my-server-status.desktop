@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=My Server Status
+Comment=Monitor your server's hardware
+Exec=my-server-status
+Icon=${SNAP}/meta/gui/my-server-status.png
+Terminal=false
+Type=Application
+Categories=Utilities;

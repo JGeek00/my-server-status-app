@@ -51,6 +51,12 @@ dependencies:
   percent_indicator: ^4.2.3
   url_launcher: ^6.1.10
   fl_chart: ^0.61.0
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/window_size
+  sqlite3_flutter_libs: ^0.5.13
+  sqflite_common_ffi: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +80,12 @@ flutter_icons:
   image_path_android: "assets/icons/icon-android.png"
   adaptive_icon_foreground: "assets/icons/icon-foreground.png"
   adaptive_icon_background: "#263238"
+  macos:
+    generate: true
+    image_path: "assets/icons/icon-macos.png"
+  windows:
+    generate: true
+    image_path: "assets/icons/icon-circle.png"
 
 
 flutter_native_splash:
@@ -103,6 +115,7 @@ flutter:
     - assets/resources/apple-silicon.png
     - assets/icons/icon-circle.png
     - assets/icons/icon-foreground.png
+    - assets/icons/icon-macos.png
     - assets/icons/icon-android.png
     - assets/icons/icon.png
     - assets/icons/splash-icon-lightmode.png

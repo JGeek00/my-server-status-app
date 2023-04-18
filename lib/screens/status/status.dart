@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_server_status/constants/enums.dart';
@@ -116,6 +117,7 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
 
     List<Cpu> getCpu() {
       return currentStatus.map((e) => e.cpu).toList();
@@ -145,72 +147,173 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
     return DefaultTabController(
       length: 4,
-      child: NestedScrollView(
-        controller: scrollController,
-        headerSliverBuilder: ((context, innerBoxIsScrolled) {
-          return [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                title: Text(AppLocalizations.of(context)!.status),
-                pinned: true,
-                floating: true,
-                centerTitle: false,
-                forceElevated: innerBoxIsScrolled,
-                bottom: TabBar(
-                  controller: tabController,
-                  unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                  isScrollable: MediaQuery.of(context).size.width < 380
-                    ? true : false,
-                  tabs: [
-                    const Tab(
-                      icon: Icon(Icons.memory_rounded),
-                      text: "CPU",
-                    ),
-                    Tab(
-                      icon: const Icon(MyServerStatusIcons.memory),
-                      text: AppLocalizations.of(context)!.memory,
-                    ),
-                    Tab(
-                      icon: const Icon(MyServerStatusIcons.storage),
-                      text: AppLocalizations.of(context)!.storage,
-                    ),
-                    Tab(
-                      icon: const Icon(Icons.settings_ethernet_rounded),
-                      text: AppLocalizations.of(context)!.network,
-                    ),
-                  ]
-                )
+      child: !(Platform.isAndroid || Platform.isIOS)
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.status),
+              centerTitle: false,
+              bottom: TabBar(
+                controller: tabController,
+                unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                isScrollable: true,
+                tabs: [
+                  Tab(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.memory_rounded),
+                        SizedBox(width: 8),
+                        Text("CPU")
+                      ],
+                    )
+                  ),
+                  Tab(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(MyServerStatusIcons.memory),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.memory)
+                      ],
+                    )
+                  ),
+                  Tab(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(MyServerStatusIcons.storage),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.storage)
+                      ],
+                    )
+                  ),
+                  Tab(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.settings_ethernet_rounded),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.network)
+                      ],
+                    )
+                  ),
+                ]
+              )
+            ),
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                CpuTab(
+                  loadStatus: loadStatus,
+                  data: getCpu(),
+                  onRefresh: requestCurrentStatus,
+                ),
+                MemoryTab(
+                  loadStatus: loadStatus,
+                  data: getMemory(),
+                  onRefresh: requestCurrentStatus,
+                ),
+                StorageTab(
+                  loadStatus: loadStatus,
+                  data: getStorage(),
+                  onRefresh: requestCurrentStatus,
+                ),
+                NetworkTab(
+                  loadStatus: loadStatus,
+                  data: getNetwork(),
+                  onRefresh: requestCurrentStatus,
+                ),
+              ]
+            ),
+        ) : NestedScrollView(
+          controller: scrollController,
+          headerSliverBuilder: ((context, innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  title: Text(AppLocalizations.of(context)!.status),
+                  pinned: true,
+                  floating: true,
+                  centerTitle: false,
+                  forceElevated: innerBoxIsScrolled,
+                  bottom: TabBar(
+                    controller: tabController,
+                    unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.memory_rounded),
+                            SizedBox(width: 8),
+                            Text("CPU")
+                          ],
+                        )
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(MyServerStatusIcons.memory),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.memory)
+                          ],
+                        )
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(MyServerStatusIcons.storage),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.storage)
+                          ],
+                        )
+                      ),
+                      Tab(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.settings_ethernet_rounded),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.network)
+                          ],
+                        )
+                      ),
+                    ]
+                  )
+                ),
+              )
+            ];
+          }), 
+          body: TabBarView(
+            controller: tabController,
+            children: [
+              CpuTab(
+                loadStatus: loadStatus,
+                data: getCpu(),
+                onRefresh: requestCurrentStatus,
               ),
-            )
-          ];
-        }), 
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            CpuTab(
-              loadStatus: loadStatus,
-              data: getCpu(),
-              onRefresh: requestCurrentStatus,
-            ),
-            MemoryTab(
-              loadStatus: loadStatus,
-              data: getMemory(),
-              onRefresh: requestCurrentStatus,
-            ),
-            StorageTab(
-              loadStatus: loadStatus,
-              data: getStorage(),
-              onRefresh: requestCurrentStatus,
-            ),
-            NetworkTab(
-              loadStatus: loadStatus,
-              data: getNetwork(),
-              onRefresh: requestCurrentStatus,
-            ),
-          ]
-        ),
-      )
+              MemoryTab(
+                loadStatus: loadStatus,
+                data: getMemory(),
+                onRefresh: requestCurrentStatus,
+              ),
+              StorageTab(
+                loadStatus: loadStatus,
+                data: getStorage(),
+                onRefresh: requestCurrentStatus,
+              ),
+              NetworkTab(
+                loadStatus: loadStatus,
+                data: getNetwork(),
+                onRefresh: requestCurrentStatus,
+              ),
+            ]
+          ),
+        )
     );
   }
 }

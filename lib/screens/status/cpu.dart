@@ -36,6 +36,8 @@ class _CpuTabState extends State<CpuTab> {
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     List<Map<String, dynamic>> chartData() {
       if (coreChartConfig.length != widget.data[0].cores.length) {
         for (var _ in widget.data[0].cores) {
@@ -288,51 +290,59 @@ class _CpuTabState extends State<CpuTab> {
               ),
             ),
           ),
-          ...formattedData.asMap().entries.map((core) {
-            final widgets = generateChart(coreChartConfig[core.key], core.value, core.key);
-            final renderWidget = Column(
-              children: [
-                SectionLabel(
-                  label: AppLocalizations.of(context)!.core(core.key),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: widgets["header"]
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    height: 100,
-                    child: widgets["chart"]
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SegmentedButton<CoreChartConfig>(
-                    segments: [
-                      ButtonSegment(
-                        value: CoreChartConfig.load,
-                        label: Text(AppLocalizations.of(context)!.load)
+          Wrap(
+            children: formattedData.asMap().entries.map((core) {
+              final widgets = generateChart(coreChartConfig[core.key], core.value, core.key);
+              final renderWidget = Container(
+                width: width > 600 
+                  ? width > 900 ? (width-91)/2 : width/2
+                  : null,
+                padding: width > 600 ? const EdgeInsets.all(8) : null,
+                child: Column(
+                  children: [
+                    SectionLabel(
+                      label: AppLocalizations.of(context)!.core(core.key),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: widgets["header"]
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        height: width > 600 ? 150 : 100,
+                        child: widgets["chart"]
                       ),
-                      ButtonSegment(
-                        value: CoreChartConfig.speed,
-                        label: Text(AppLocalizations.of(context)!.speed)
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: SegmentedButton<CoreChartConfig>(
+                        segments: [
+                          ButtonSegment(
+                            value: CoreChartConfig.load,
+                            label: Text(AppLocalizations.of(context)!.load)
+                          ),
+                          ButtonSegment(
+                            value: CoreChartConfig.speed,
+                            label: Text(AppLocalizations.of(context)!.speed)
+                          ),
+                          ButtonSegment(
+                            value: CoreChartConfig.temperature,
+                            label: Text(AppLocalizations.of(context)!.temp)
+                          ),
+                        ], 
+                        selected: <CoreChartConfig>{coreChartConfig[core.key]},
+                        onSelectionChanged: (value) => setState(() => coreChartConfig[core.key] = value.first),
                       ),
-                      ButtonSegment(
-                        value: CoreChartConfig.temperature,
-                        label: Text(AppLocalizations.of(context)!.temp)
-                      ),
-                    ], 
-                    selected: <CoreChartConfig>{coreChartConfig[core.key]},
-                    onSelectionChanged: (value) => setState(() => coreChartConfig[core.key] = value.first),
-                  ),
-                )
-              ],
-            );
-            return renderWidget;
-          }).toList()
+                    )
+                  ],
+                ),
+              );
+              return renderWidget;
+            }).toList()
+          )
         ];
       }, 
       errorGenerator: () => Column(
