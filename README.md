@@ -61,10 +61,23 @@ This application is intended to monitor your own machine. Don not try to use it 
     <ol>
       <li>flutter clean</li>
       <li>flutter pub get</li>
-      <li>flutter build macos --release</li>
+      <li>flutter build linux --release</li>
       <li>Open debian.yaml file inside debian/ and update the version number</li>
       <li>Run flutter_to_debian</li>
       <li>The .deb package is at debian/packages</li>
+    </ol>
+  </li>
+  <li>
+    <b>Windows</b>
+    <ol>
+      <li>flutter clean</li>
+      <li>flutter pub get</li>
+      <li>flutter build windows</li>
+      <li>Open Inno Setup Compiler application and load the script</li>
+      <li>The script is located at windows/innosetup_build_installer.iss</li>
+      <li>Update the version number and save the changes</li>
+      <li>Click on the Compile button</li>
+      <li>The installer will be generated at build/windows/my_server_status_installer.exe</li>
     </ol>
   </li>
 </ul>
