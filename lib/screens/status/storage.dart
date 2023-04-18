@@ -114,7 +114,7 @@ class _StorageTabState extends State<StorageTab> {
               width: double.maxFinite,
               height: width > 900 
                 ? height-230 
-                : height-310,
+                : height-330,
               child: CustomLinearChart(
                 data: [
                   ChartData(

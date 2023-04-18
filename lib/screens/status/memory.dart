@@ -115,7 +115,7 @@ class MemoryTab extends StatelessWidget {
               width: double.maxFinite,
               height: width > 900 
                 ? height-280 
-                : height-360,
+                : height-380,
               child: CustomLinearChart(
                 data: [
                   ChartData(
