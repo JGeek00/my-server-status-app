@@ -76,12 +76,13 @@ Future<dynamic> setDefaultServerQuery(Database db, String id) async {
       await txn.update(
         'servers',
         {'defaultServer': '0'},
-        where: 'defaultServer = 1',
+        where: 'defaultServer = ?',
+        whereArgs: [1]
       );
       await txn.update(
         'servers',
         {'defaultServer': '1'},
-        where: 'defaultServer = ?',
+        where: 'id = ?',
         whereArgs: [id]
       );
       return null;
