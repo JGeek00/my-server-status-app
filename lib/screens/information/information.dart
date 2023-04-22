@@ -1,13 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/screens/information/memory_desktop.dart';
+import 'package:my_server_status/screens/information/network_desktop.dart';
+import 'package:my_server_status/screens/information/os_desktop.dart';
+import 'package:my_server_status/screens/information/storage_desktop.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/information/cpu.dart';
 import 'package:my_server_status/screens/information/memory.dart';
 import 'package:my_server_status/screens/information/os.dart';
+import 'package:my_server_status/screens/information/cpu_desktop.dart';
 import 'package:my_server_status/screens/information/network.dart';
+import 'package:my_server_status/screens/information/system_desktop.dart';
 import 'package:my_server_status/screens/information/system.dart';
 import 'package:my_server_status/screens/information/storage.dart';
 
@@ -156,80 +162,100 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
       );
     }
 
-    return DefaultTabController(
-      length: 6,
-      child: !(Platform.isAndroid || Platform.isIOS)
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(context)!.information),
-              centerTitle: false,
-              bottom: tabBar()
-            ),
-            body: TabBarView(
-              controller: tabController,
-              children: [
-                SystemTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                CpuTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                MemoryTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                StorageTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                NetworkTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                OsTab(
-                  onRefresh: requestHardwareInfo,
-                )
-              ]
-            ),
-          )
-        : NestedScrollView(
-            controller: scrollController,
-            headerSliverBuilder: ((context, innerBoxIsScrolled) {
-              return [
-                SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  sliver: SliverAppBar(
-                    title: Text(AppLocalizations.of(context)!.information),
-                    pinned: true,
-                    floating: true,
-                    centerTitle: false,
-                    forceElevated: innerBoxIsScrolled,
-                    bottom: tabBar()
+    if (Platform.isAndroid || Platform.isIOS) {
+      return DefaultTabController(
+        length: 6,
+        child: !(Platform.isAndroid || Platform.isIOS)
+          ? Scaffold(
+              appBar: AppBar(
+                title: Text(AppLocalizations.of(context)!.information),
+                centerTitle: false,
+                bottom: tabBar()
+              ),
+              body: TabBarView(
+                controller: tabController,
+                children: [
+                  SystemTab(
+                    onRefresh: requestHardwareInfo,
                   ),
-                )
-              ];
-            }), 
-            body: TabBarView(
-              controller: tabController,
-              children: [
-                SystemTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                CpuTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                MemoryTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                StorageTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                NetworkTab(
-                  onRefresh: requestHardwareInfo,
-                ),
-                OsTab(
-                  onRefresh: requestHardwareInfo,
-                )
-              ]
-            ),
-          )
-    );
+                  CpuTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  MemoryTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  StorageTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  NetworkTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  OsTab(
+                    onRefresh: requestHardwareInfo,
+                  )
+                ]
+              ),
+            )
+          : NestedScrollView(
+              controller: scrollController,
+              headerSliverBuilder: ((context, innerBoxIsScrolled) {
+                return [
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    sliver: SliverAppBar(
+                      title: Text(AppLocalizations.of(context)!.information),
+                      pinned: true,
+                      floating: true,
+                      centerTitle: false,
+                      forceElevated: innerBoxIsScrolled,
+                      bottom: tabBar()
+                    ),
+                  )
+                ];
+              }), 
+              body: TabBarView(
+                controller: tabController,
+                children: [
+                  SystemTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  CpuTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  MemoryTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  StorageTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  NetworkTab(
+                    onRefresh: requestHardwareInfo,
+                  ),
+                  OsTab(
+                    onRefresh: requestHardwareInfo,
+                  )
+                ]
+              ),
+            )
+      );
+    }
+    else {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          title: Text(AppLocalizations.of(context)!.information)
+        ),
+        body: Wrap(
+          children: const [
+            SystemDesktop(),
+            CpuDesktop(),
+            MemoryDesktop(),
+            StorageDesktop(),
+            NetworkDesktop(),
+            OsDesktop()
+          ],
+        ),
+      );
+    }
   }
 }

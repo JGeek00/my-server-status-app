@@ -213,5 +213,14 @@
   "hideVolumesNoMountPointDescription": "Volumes with no mounting point won't be displayed",
   "available": "available",
   "installed": "installed",
-  "screens": "Screens"
+  "screens": "Screens",
+  "biosVendor": "BIOS vendor",
+  "biosVersion": "BIOS version",
+  "biosReleaseDate": "BIOS release date",
+  "drivesInstalled": "Drives installed",
+  "totalCapacity": "Total capacity",
+  "installedMemory": "Installed memory",
+  "interfaces": "Interfaces",
+  "onService": "On service",
+  "ipAddress": "IP address"
 }

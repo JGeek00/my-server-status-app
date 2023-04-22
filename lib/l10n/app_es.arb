@@ -213,5 +213,14 @@
   "hideVolumesNoMountPointDescription": "Los volúmenes sin punto de montaje no se mostrarán",
   "available": "disponible",
   "installed": "instalada",
-  "screens": "Pantallas"
+  "screens": "Pantallas",
+  "biosVendor": "Fabricante de BIOS",
+  "biosVersion": "Versión de BIOS",
+  "biosReleaseDate": "Fecha de lanzamiento de BIOS",
+  "drivesInstalled": "Unidades instaladas",
+  "totalCapacity": "Capacidad total",
+  "installedMemory": "Memoria instalada",
+  "interfaces": "Interfaces",
+  "onService": "En servicio",
+  "ipAddress": "Dirección IP"
 }
