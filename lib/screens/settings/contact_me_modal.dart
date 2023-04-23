@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 
+import 'package:my_server_status/functions/open_url.dart';
 import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/constants/urls.dart';
 
@@ -16,22 +16,6 @@ class ContactMeModal extends StatefulWidget {
 
 class _ContactMeModalState extends State<ContactMeModal> {
   final expandableController = ExpandableController();
-
-  void _openGitHubIsues() {
-    FlutterWebBrowser.openWebPage(
-      url: Urls.appIssues,
-      customTabsOptions: const CustomTabsOptions(
-        instantAppsEnabled: true,
-        showTitle: true,
-        urlBarHidingEnabled: false,
-      ),
-      safariVCOptions: const SafariViewControllerOptions(
-        barCollapsingEnabled: true,
-        dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-        modalPresentationCapturesStatusBarAppearance: true,
-      )
-    );
-  }
 
   void _sendEmail() {
     String? encodeQueryParameters(Map<String, String> params) {
@@ -83,7 +67,7 @@ class _ContactMeModalState extends State<ContactMeModal> {
             Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: _openGitHubIsues,
+                onTap: () => openUrl(Urls.gitHub),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 10, 
