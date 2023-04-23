@@ -319,7 +319,17 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
       return Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          title: Text(AppLocalizations.of(context)!.information)
+          title: Text(AppLocalizations.of(context)!.information),
+          actions: [
+            if (Platform.isMacOS || Platform.isLinux || Platform.isWindows) ...[
+              IconButton(
+                onPressed: requestHardwareInfo, 
+                icon: const Icon(Icons.refresh_rounded),
+                tooltip: AppLocalizations.of(context)!.refresh,
+              ),
+              const SizedBox(width: 8)
+            ]
+          ],
         ),
         body: desktopBody()
       );

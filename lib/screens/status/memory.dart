@@ -72,19 +72,6 @@ class MemoryTab extends StatelessWidget {
       ), 
       contentGenerator: () {
         return [
-          Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                "${memorySize()} ${data[0].specs.type}",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500
-                ),
-              )
-            ),
-          ),
           SectionLabel(
             label: AppLocalizations.of(context)!.memoryUsage,
           ),
@@ -114,8 +101,8 @@ class MemoryTab extends StatelessWidget {
             child: SizedBox(
               width: double.maxFinite,
               height: width > 900 
-                ? height-280 
-                : height-380,
+                ? height-200 
+                : height-280,
               child: CustomLinearChart(
                 data: [
                   ChartData(

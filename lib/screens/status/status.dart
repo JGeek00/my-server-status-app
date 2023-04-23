@@ -152,6 +152,16 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.status),
               centerTitle: false,
+              actions: [
+                if (Platform.isMacOS || Platform.isLinux || Platform.isWindows) ...[
+                  IconButton(
+                    onPressed: requestCurrentStatus, 
+                    icon: const Icon(Icons.refresh_rounded),
+                    tooltip: AppLocalizations.of(context)!.refresh,
+                  ),
+                  const SizedBox(width: 8)
+                ]
+              ],
               bottom: TabBar(
                 controller: tabController,
                 unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,

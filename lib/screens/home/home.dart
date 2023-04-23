@@ -260,7 +260,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     }
 
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(onRefresh: requestHardwareInfo),
       body: RefreshIndicator(
         onRefresh: requestHardwareInfo,
         child: body(), 

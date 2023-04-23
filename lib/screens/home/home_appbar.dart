@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,7 +9,12 @@ import 'package:my_server_status/screens/servers/servers.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
-  const HomeAppBar({Key? key}) : super(key: key);
+  final Future<bool> Function() onRefresh;
+
+  const HomeAppBar({
+    Key? key,
+    required this.onRefresh,
+  }) : super(key: key);
 
   @override
   PreferredSizeWidget build(BuildContext context) {
@@ -64,6 +71,16 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
                       const Icon(Icons.storage_rounded),
                       const SizedBox(width: 10),
                       Text(AppLocalizations.of(context)!.servers)
+                    ],
+                  ),
+                ),
+                if (Platform.isMacOS || Platform.isLinux || Platform.isWindows) PopupMenuItem(
+                  onTap: () => Future.delayed(const Duration(seconds: 0), () => onRefresh()),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.refresh_rounded),
+                      const SizedBox(width: 10),
+                      Text(AppLocalizations.of(context)!.refresh)
                     ],
                   ),
                 ),

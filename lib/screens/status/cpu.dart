@@ -252,44 +252,6 @@ class _CpuTabState extends State<CpuTab> {
       contentGenerator: () {
         final formattedData = chartData();
         return [
-          Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.data[0].specs.name,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "${AppLocalizations.of(context)!.cores}: ${widget.data[0].cores.length}",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      Text(
-                        widget.data[0].specs.minSpeed == widget.data[0].specs.maxSpeed
-                          ? "${widget.data[0].specs.maxSpeed} GHz"
-                          : "${widget.data[0].specs.minSpeed} GHz - ${widget.data[0].specs.maxSpeed} GHz",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
           Wrap(
             children: formattedData.asMap().entries.map((core) {
               final widgets = generateChart(coreChartConfig[core.key], core.value, core.key);
