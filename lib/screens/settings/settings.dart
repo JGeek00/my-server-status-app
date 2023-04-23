@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/models/server.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,20 +31,17 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   int? selectedItem;
 
+  final customizationKey = GlobalKey<NavigatorState>();
+  final serversKey = GlobalKey<NavigatorState>();
+  final generalSettingsKey = GlobalKey<NavigatorState>();
+  final advancedSettingsKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
     final serversProvider = Provider.of<ServersProvider>(context);
 
     final width = MediaQuery.of(context).size.width;
-
-    void navigateServers() {
-      Future.delayed(const Duration(milliseconds: 0), (() {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const Servers())
-        );
-      }));
-    }
 
     void openContactModal() {
       showDialog(
@@ -52,22 +50,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
     }
 
-    Widget generateWidget() {
-      switch (selectedItem) {
-        case 0:
-          return const Customization();
+    void onScreenChange(int val, BuildContext context) {
+      if (selectedItem == val) {
+        switch (val) {
+          case 0:
+            customizationKey.currentState!.popUntil((route) => route.isFirst);
+            break;
 
-        case 1:
-          return const Servers();
+          case 1:
+            serversKey.currentState!.popUntil((route) => route.isFirst);
+            break;
 
-        case 2:
-          return const GeneralSettings();
+          case 2:
+            generalSettingsKey.currentState!.popUntil((route) => route.isFirst);
+            break;
 
-        case 3:
-          return const AdvancedSettings();
+          case 3:
+            advancedSettingsKey.currentState!.popUntil((route) => route.isFirst);
+            break;
 
-        default:
-          return Container();
+          default:
+            break;
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            selectedItem = val;
+          });
+        }
       }
     }
 
@@ -188,7 +198,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Expanded(
               flex: 2,
-              child: generateWidget()
+              child: IndexedStack(
+                index: selectedItem,
+                children: [
+                  Navigator(
+                    key: customizationKey,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => const Customization(),
+                    ),
+                  ),
+                  Navigator(
+                    key: serversKey,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => const Servers(),
+                    ),
+                  ),
+                  Navigator(
+                    key: generalSettingsKey,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => const GeneralSettings(),
+                    ),
+                  ),
+                  Navigator(
+                    key: advancedSettingsKey,
+                    onGenerateRoute: (route) => MaterialPageRoute(
+                      settings: route,
+                      builder: (context) => const AdvancedSettings(),
+                    ),
+                  ),
+                ],
+              )
             )
           ],
         ),
@@ -205,9 +247,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.palette_rounded,
               title: AppLocalizations.of(context)!.customization, 
               subtitle: AppLocalizations.of(context)!.customizationDescription,
-              onTap: () => Navigator.push(context, MaterialPageRoute(
-                builder: (context) => const Customization()
-              ))
+              onTap: () {
+                if (width > 900) {
+                  onScreenChange(0, context);
+                }
+                else {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const Customization()
+                  ));
+                }
+              },
             ),
             CustomListTile(
               icon: Icons.storage_rounded,
@@ -217,30 +266,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ? "${AppLocalizations.of(context)!.connectedTo} ${serversProvider.selectedServer!.name}"
                   : "${AppLocalizations.of(context)!.selectedServer} ${serversProvider.selectedServer!.name}"
                 : AppLocalizations.of(context)!.noServerSelected,
-              onTap: navigateServers,
+              onTap: () {
+                if (width > 900) {
+                  onScreenChange(1, context);
+                }
+                else {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const Servers()
+                  ));
+                }
+              },
             ),
             CustomListTile(
               icon: Icons.settings,
               title: AppLocalizations.of(context)!.generalSettings,
               subtitle: AppLocalizations.of(context)!.generalSettingsDescription,
-              onTap: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
+              onTap: () {
+                if (width > 900) {
+                  onScreenChange(2, context);
+                }
+                else {
+                  Navigator.push(context, MaterialPageRoute(
                     builder: (context) => const GeneralSettings()
-                  )
-                )
+                  ));
+                }
               },
             ),
             CustomListTile(
               icon: Icons.build_outlined,
               title: AppLocalizations.of(context)!.advancedSettings,
               subtitle: AppLocalizations.of(context)!.advancedSetupDescription,
-              onTap: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
+              onTap: () {
+                if (width > 900) {
+                  onScreenChange(3, context);
+                }
+                else {
+                  Navigator.push(context, MaterialPageRoute(
                     builder: (context) => const AdvancedSettings()
-                  )
-                )
+                  ));
+                }
               },
             ),
             SectionLabel(label: AppLocalizations.of(context)!.aboutApp),

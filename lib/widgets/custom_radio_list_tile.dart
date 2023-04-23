@@ -9,6 +9,7 @@ class CustomRadioListTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final void Function(String) onChanged;
+  final EdgeInsets? padding;
 
   const CustomRadioListTile({
     Key? key,
@@ -18,6 +19,7 @@ class CustomRadioListTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     required this.onChanged,
+    this.padding
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class CustomRadioListTile extends StatelessWidget {
       child: InkWell(
         onTap: () => onChanged(value),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: padding ?? const EdgeInsets.symmetric(
             horizontal: 16, 
             vertical: 12
           ),
@@ -44,14 +46,11 @@ class CustomRadioListTile extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width-110,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.onSurface
-                      ),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface
                     ),
                   ),
                   if (subtitle != null) ...[

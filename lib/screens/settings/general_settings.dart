@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/screens/settings/auto_refresh_tile_modal_desktop.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,37 +20,71 @@ class GeneralSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
+    final width = MediaQuery.of(context).size.width;
+
     void openAutoRefreshTimeModal(int time, String screen) {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => AutoRefreshTimeModal(
-          time: time, 
-          screenHeight: MediaQuery.of(context).size.height,
-          screen: screen,
-          onChange: (value) async {
-            final result = screen == "Status"
-              ? await appConfigProvider.setAutoRefreshTimeStatus(value)
-              : await appConfigProvider.setAutoRefreshTimeHome(value);
-            if (result == true) {
-              showSnacbkar(
-                context: context, 
-                appConfigProvider: appConfigProvider, 
-                label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
-                color: Colors.green
-              );
+      if (width > 900) {
+        showDialog(
+          context: context, 
+          builder: (context) => AutoRefreshTimeModalDesktop(
+            time: time, 
+            screen: screen,
+            onChange: (value) async {
+              final result = screen == "Status"
+                ? await appConfigProvider.setAutoRefreshTimeStatus(value)
+                : await appConfigProvider.setAutoRefreshTimeHome(value);
+              if (result == true) {
+                showSnacbkar(
+                  context: context, 
+                  appConfigProvider: appConfigProvider, 
+                  label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
+                  color: Colors.green
+                );
+              }
+              else {
+                showSnacbkar(
+                  context: context, 
+                  appConfigProvider: appConfigProvider, 
+                  label: AppLocalizations.of(context)!.cannotUpdateSettings, 
+                  color: Colors.red
+                );
+              }
             }
-            else {
-              showSnacbkar(
-                context: context, 
-                appConfigProvider: appConfigProvider, 
-                label: AppLocalizations.of(context)!.cannotUpdateSettings, 
-                color: Colors.red
-              );
+          )
+        );
+      }
+      else {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => AutoRefreshTimeModal(
+            time: time, 
+            screenHeight: MediaQuery.of(context).size.height,
+            screen: screen,
+            onChange: (value) async {
+              final result = screen == "Status"
+                ? await appConfigProvider.setAutoRefreshTimeStatus(value)
+                : await appConfigProvider.setAutoRefreshTimeHome(value);
+              if (result == true) {
+                showSnacbkar(
+                  context: context, 
+                  appConfigProvider: appConfigProvider, 
+                  label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
+                  color: Colors.green
+                );
+              }
+              else {
+                showSnacbkar(
+                  context: context, 
+                  appConfigProvider: appConfigProvider, 
+                  label: AppLocalizations.of(context)!.cannotUpdateSettings, 
+                  color: Colors.red
+                );
+              }
             }
-          }
-        )
-      );
+          )
+        );
+      }
     }
 
     Future changeSetting({
