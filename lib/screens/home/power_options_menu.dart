@@ -99,7 +99,7 @@ class PowerOptionsMenu extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               ...header(),
               Wrap(
                 children: listOptions(),
