@@ -222,5 +222,6 @@
   "installedMemory": "Memoria instalada",
   "interfaces": "Interfaces",
   "onService": "En servicio",
-  "ipAddress": "Dirección IP"
+  "ipAddress": "Dirección IP",
+  "showFullDetails": "Todos los detalles"
 }

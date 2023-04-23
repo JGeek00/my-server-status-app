@@ -75,100 +75,101 @@ class NetworkTab extends StatelessWidget {
         final network = serversProvider.systemSpecsInfo.data!.networkInfo;
         return [
             ...network.networkInterfaces.map((i) => Column(
-            children: [
-              SectionLabel(label: i.iface),
-              Wrap(
-                children: [
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.state,
-                      subtitle: i.operstate == 'up' 
-                        ? AppLocalizations.of(context)!.up
-                        : AppLocalizations.of(context)!.down,
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.isDefault,
-                      subtitle: i.networkInterfaceDefault == true 
-                        ? AppLocalizations.of(context)!.yes
-                        : AppLocalizations.of(context)!.no,
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.ipv4address,
-                      subtitle: generateValue(i.ip4),
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.ipv4subnet,
-                      subtitle: generateValue(i.ip4Subnet),
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.ipv6address,
-                      subtitle: generateValue(i.ip6),
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.ipv6subnet,
-                      subtitle: generateValue(i.ip6Subnet),
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.macAddress,
-                      subtitle: generateValue(i.mac),
-                    ),
-                  ),
-                  if (i.speed != null) listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.speed,
-                      subtitle: "${i.speed.toString()} Mbps",
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.internalInterface,
-                      subtitle: i.internal == true 
-                        ? AppLocalizations.of(context)!.yes
-                        : AppLocalizations.of(context)!.no,
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.virtualInterface,
-                      subtitle: i.virtual == true 
-                        ? AppLocalizations.of(context)!.yes
-                        : AppLocalizations.of(context)!.no,
-                    ),
-                  ),
-                  listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.interfaceType,
-                      subtitle: interfaceType(i.type)
-                    ),
-                  ),
-                  if (i.duplex != null && i.duplex != "") listTile(
-                    CustomListTile(
-                      title: AppLocalizations.of(context)!.duplex,
-                      subtitle: i.duplex!.capitalize()
-                    ),
-                  ),
-                  if (i.mtu != null) listTile(
+              children: [
+                SectionLabel(label: i.iface),
+                Wrap(
+                  children: [
+                    listTile(
                       CustomListTile(
-                      title: "MTU",
-                      subtitle: i.mtu.toString(),
+                        title: AppLocalizations.of(context)!.state,
+                        subtitle: i.operstate == 'up' 
+                          ? AppLocalizations.of(context)!.up
+                          : AppLocalizations.of(context)!.down,
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.isDefault,
+                        subtitle: i.networkInterfaceDefault == true 
+                          ? AppLocalizations.of(context)!.yes
+                          : AppLocalizations.of(context)!.no,
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.ipv4address,
+                        subtitle: generateValue(i.ip4),
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.ipv4subnet,
+                        subtitle: generateValue(i.ip4Subnet),
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.ipv6address,
+                        subtitle: generateValue(i.ip6),
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.ipv6subnet,
+                        subtitle: generateValue(i.ip6Subnet),
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.macAddress,
+                        subtitle: generateValue(i.mac),
+                      ),
+                    ),
+                    if (i.speed != null) listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.speed,
+                        subtitle: "${i.speed.toString()} Mbps",
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.internalInterface,
+                        subtitle: i.internal == true 
+                          ? AppLocalizations.of(context)!.yes
+                          : AppLocalizations.of(context)!.no,
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.virtualInterface,
+                        subtitle: i.virtual == true 
+                          ? AppLocalizations.of(context)!.yes
+                          : AppLocalizations.of(context)!.no,
+                      ),
+                    ),
+                    listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.interfaceType,
+                        subtitle: interfaceType(i.type)
+                      ),
+                    ),
+                    if (i.duplex != null && i.duplex != "") listTile(
+                      CustomListTile(
+                        title: AppLocalizations.of(context)!.duplex,
+                        subtitle: i.duplex!.capitalize()
+                      ),
+                    ),
+                    if (i.mtu != null) listTile(
+                        CustomListTile(
+                        title: "MTU",
+                        subtitle: i.mtu.toString(),
+                      )
                     )
-                  )
-                ],
-              )
-            ],
-          )),
+                  ],
+                )
+              ],
+            )
+          ),
           const SizedBox(height: 16)
         ];
       }, 

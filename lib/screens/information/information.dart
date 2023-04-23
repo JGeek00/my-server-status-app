@@ -1,10 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_server_status/screens/information/memory_desktop.dart';
-import 'package:my_server_status/screens/information/network_desktop.dart';
-import 'package:my_server_status/screens/information/os_desktop.dart';
-import 'package:my_server_status/screens/information/storage_desktop.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,6 +12,10 @@ import 'package:my_server_status/screens/information/network.dart';
 import 'package:my_server_status/screens/information/system_desktop.dart';
 import 'package:my_server_status/screens/information/system.dart';
 import 'package:my_server_status/screens/information/storage.dart';
+import 'package:my_server_status/screens/information/memory_desktop.dart';
+import 'package:my_server_status/screens/information/network_desktop.dart';
+import 'package:my_server_status/screens/information/os_desktop.dart';
+import 'package:my_server_status/screens/information/storage_desktop.dart';
 
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -90,7 +90,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final serversProvider = Provider.of<ServersProvider>(context);
 
     PreferredSizeWidget tabBar() {
       return TabBar(
@@ -160,6 +160,82 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
           ),
         ]
       );
+    }
+
+    Widget desktopBody() {
+      switch (serversProvider.systemSpecsInfo.loadStatus) {
+        case LoadStatus.loading:
+          return SizedBox(
+            width: double.maxFinite,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 30),
+                  Text(
+                    AppLocalizations.of(context)!.loadingHardwareInfo,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+
+        case LoadStatus.loaded:
+          return SingleChildScrollView(
+            child: Wrap(
+              children: const [
+                SystemDesktop(),
+                CpuDesktop(),
+                MemoryDesktop(),
+                StorageDesktop(),
+                NetworkDesktop(),
+                OsDesktop()
+              ],
+            ),
+          );
+
+        case LoadStatus.error:
+          return SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 50,
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  AppLocalizations.of(context)!.hardwareInfoNotLoaded,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                TextButton.icon(
+                  onPressed: requestHardwareInfo, 
+                  icon: const Icon(Icons.refresh_rounded), 
+                  label: Text(AppLocalizations.of(context)!.refresh)
+                )
+              ],
+            ),
+          );
+
+        default:
+          return const SizedBox();
+      }
     }
 
     if (Platform.isAndroid || Platform.isIOS) {
@@ -245,16 +321,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
           centerTitle: false,
           title: Text(AppLocalizations.of(context)!.information)
         ),
-        body: Wrap(
-          children: const [
-            SystemDesktop(),
-            CpuDesktop(),
-            MemoryDesktop(),
-            StorageDesktop(),
-            NetworkDesktop(),
-            OsDesktop()
-          ],
-        ),
+        body: desktopBody()
       );
     }
   }
