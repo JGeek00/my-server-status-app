@@ -223,5 +223,16 @@
   "interfaces": "Interfaces",
   "onService": "En servicio",
   "ipAddress": "Dirección IP",
-  "showFullDetails": "Todos los detalles"
+  "showFullDetails": "Todos los detalles",
+  "powerOptions": "Opciones de energía",
+  "reboot": "Reiniciar",
+  "rebootDescription": "Reinicia el servidor",
+  "powerOff": "Apagar",
+  "powerOffDescription": "Apaga el servidor",
+  "turningOff": "Apagando...",
+  "rebooting": "Reiniciando...",
+  "serverPoweredOff": "Orden de apagado enviada satisfactoriamente",
+  "serverRebooted": "Orden de reinicio enviada satisfactoriamente",
+  "serverPoweredOffFailed": "Orden de apagado fallida",
+  "serverRebootFailed": "Orden de reinicio fallida"
 }

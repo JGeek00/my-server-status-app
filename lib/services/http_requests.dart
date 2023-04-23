@@ -364,3 +364,61 @@ Future getCurrentStatus({required Server server, required bool overrideTimeout})
     return result;
   }
 }
+
+Future<bool> requestPowerOff({
+  required Server server
+}) async {
+  try {
+    final result = await http.get(
+      Uri.parse("${server.connectionMethod}://${server.domain}${server.port != null ? ':${server.port}' : ""}${server.path ?? ""}/v1/shutdown"),
+      headers: {
+        'Authorization': server.authToken!
+      }
+    );
+
+    if (result.statusCode == 200) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  } 
+  catch (e) {
+    // The server powers off before the API can send the response back to the client
+    if (e.toString() == 'Connection closed before full header was received') {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
+Future<bool> requestReboot({
+  required Server server
+}) async {
+  try {
+    final result = await http.get(
+      Uri.parse("${server.connectionMethod}://${server.domain}${server.port != null ? ':${server.port}' : ""}${server.path ?? ""}/v1/reboot"),
+      headers: {
+        'Authorization': server.authToken!
+      }
+    );
+
+    if (result.statusCode == 200) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  } 
+  catch (e) {
+    // The server reboots before the API can send the response back to the client
+    if (e.toString() == 'Connection closed before full header was received') {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}

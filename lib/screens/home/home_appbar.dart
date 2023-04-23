@@ -1,11 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:my_server_status/screens/home/power_options_menu.dart';
 import 'package:my_server_status/screens/servers/servers.dart';
 
+import 'package:my_server_status/constants/enums.dart';
+import 'package:my_server_status/classes/process_modal.dart';
+import 'package:my_server_status/functions/snackbar.dart';
+import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -19,8 +27,77 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   PreferredSizeWidget build(BuildContext context) {
     final serversProvider = Provider.of<ServersProvider>(context);
+    final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
     final server = serversProvider.selectedServer;
+
+    final width = MediaQuery.of(context).size.width;
+
+    void rebootServer() async {
+      ProcessModal process = ProcessModal(context: context);
+      process.open(AppLocalizations.of(context)!.rebooting);
+
+      final result = await requestReboot(server: serversProvider.selectedServer!);
+
+      process.close();
+
+      if (result == true) {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverRebooted, 
+          color: Colors.green,
+          labelColor: Colors.white
+        );
+
+        serversProvider.setSelectedServer(null);
+        serversProvider.setServerConnected(null);
+        serversProvider.setServerInfoLoadStatus(LoadStatus.loading);
+        serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
+      }
+      else {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverRebootFailed, 
+          color: Colors.red,
+          labelColor: Colors.white
+        );
+      }
+    }
+
+    void powerOffServer() async {
+      ProcessModal process = ProcessModal(context: context);
+      process.open(AppLocalizations.of(context)!.turningOff);
+
+      final result = await requestPowerOff(server: serversProvider.selectedServer!);
+
+      process.close();
+
+      if (result == true) {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverPoweredOff, 
+          color: Colors.green,
+          labelColor: Colors.white
+        );
+        
+        serversProvider.setSelectedServer(null);
+        serversProvider.setServerConnected(null);
+        serversProvider.setServerInfoLoadStatus(LoadStatus.loading);
+        serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
+      }
+      else {
+        showSnacbkar(
+          context: context, 
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverPoweredOffFailed, 
+          color: Colors.red,
+          labelColor: Colors.white
+        );
+      }
+    }
 
     return AppBar(
       toolbarHeight: 70,
@@ -81,6 +158,38 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
                       const Icon(Icons.refresh_rounded),
                       const SizedBox(width: 10),
                       Text(AppLocalizations.of(context)!.refresh)
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  onTap: () => Future.delayed(const Duration(seconds: 0), () {
+                    if (width > 700) {
+                      showDialog(
+                        context: context, 
+                        builder: (context) => PowerOptionsMenu(
+                          isDialog: true,
+                          onPowerOff: powerOffServer,
+                          onReboot: rebootServer,
+                        )
+                      );
+                    }
+                    else {
+                      showModalBottomSheet(
+                        isScrollControlled: true,  
+                        context: context, 
+                        builder: (context) => PowerOptionsMenu(
+                          isDialog: false,
+                          onPowerOff: powerOffServer,
+                          onReboot: rebootServer,
+                        )
+                      );
+                    }
+                  }),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.settings_power_rounded),
+                      const SizedBox(width: 10),
+                      Text(AppLocalizations.of(context)!.powerOptions)
                     ],
                   ),
                 ),

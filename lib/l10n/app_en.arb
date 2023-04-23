@@ -223,5 +223,16 @@
   "interfaces": "Interfaces",
   "onService": "On service",
   "ipAddress": "IP address",
-  "showFullDetails": "Show full details"
+  "showFullDetails": "Show full details",
+  "powerOptions": "Power options",
+  "reboot": "Reboot",
+  "rebootDescription": "Reboots the server",
+  "powerOff": "Power off",
+  "powerOffDescription": "Powers off the server",
+  "turningOff": "Turning off...",
+  "rebooting": "Rebooting...",
+  "serverPoweredOff": "Shutdown order sent successfully",
+  "serverRebooted": "Reboot order sent successfully",
+  "serverPoweredOffFailed": "Shutdown order failed",
+  "serverRebootFailed": "Reboot order failed"
 }
