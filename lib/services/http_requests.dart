@@ -365,6 +365,63 @@ Future getCurrentStatus({required Server server, required bool overrideTimeout})
   }
 }
 
+Future getApiVersion({required Server server}) async {
+  final result = await apiRequest(
+    server: server,
+    method: 'get',
+    urlPath: '/v1/api-version', 
+    type: 'api-version',
+  );
+
+  if (result['hasResponse'] == true) {
+    if (result['statusCode'] == 200) {
+      return {
+        'result': 'success',
+        'data': result['body']
+      };
+    }
+    else if (result['statusCode'] == 401) {
+      return {
+        'result': 'invalid_username_password',
+        'log': AppLog(
+          type: 'api-version', 
+          dateTime: DateTime.now(), 
+          message: 'invalid_username_password',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+    else if (result['statusCode'] == 500) {
+      return {
+        'result': 'server_error',
+        'log': AppLog(
+          type: 'api-version', 
+          dateTime: DateTime.now(), 
+          message: 'server_error',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+    else {
+      return {
+        'result': 'error',
+        'log': AppLog(
+          type: 'api-version', 
+          dateTime: DateTime.now(), 
+          message: 'error_code_not_expected',
+          statusCode: result['statusCode'].toString(),
+          resBody: result['body']
+        )
+      };
+    }
+  }
+  else {
+    return result;
+  }
+}
+
 Future<bool> requestPowerOff({
   required Server server
 }) async {

@@ -1,3 +1,4 @@
+import 'package:my_server_status/services/http_requests.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 
@@ -175,6 +176,14 @@ class ServersProvider with ChangeNotifier {
     }
   }
 
+  void checkApiVersion(Server server) async {
+    final result = await getApiVersion(server: server);
+    if (result['result'] == 'success') {
+      _selectedServer!.apiVersion = result['data'];
+      notifyListeners();
+    }
+  }
+
   void saveFromDb(List<Map<String, dynamic>>? data) async {
     if (data != null) {
       for (var server in data) {
@@ -193,6 +202,7 @@ class ServersProvider with ChangeNotifier {
         _serversList.add(serverObj);
         if (convertFromIntToBool(server['defaultServer']) == true) {
           _selectedServer = serverObj;
+          checkApiVersion(serverObj);
         }
       }
     }

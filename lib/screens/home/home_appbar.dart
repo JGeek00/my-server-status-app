@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_server_status/functions/compare_versions.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -161,7 +162,13 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
                     ],
                   ),
                 ),
-                PopupMenuItem(
+                if (
+                  serversProvider.selectedServer!.apiVersion != null &&
+                  serverVersionIsAhead(
+                    currentVersion: serversProvider.selectedServer!.apiVersion!,
+                    referenceVersion: '1.1.0'
+                  )
+                ) PopupMenuItem(
                   onTap: () => Future.delayed(const Duration(seconds: 0), () {
                     if (width > 700) {
                       showDialog(

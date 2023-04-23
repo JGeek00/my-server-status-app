@@ -135,6 +135,8 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
         serversProvider.setSelectedServer(server);
         serversProvider.setServerConnected(true);
 
+        serversProvider.checkApiVersion(server);
+
         process.close();
       }
       else {

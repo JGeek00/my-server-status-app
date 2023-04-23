@@ -9,6 +9,7 @@ class Server {
   String? password;
   bool defaultServer;
   String? authToken;
+  String? apiVersion;
 
   Server({
     required this.id,
@@ -21,5 +22,6 @@ class Server {
     this.password,
     required this.defaultServer,
     this.authToken,
+    this.apiVersion
   });
 }

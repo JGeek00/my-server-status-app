@@ -53,7 +53,7 @@ class PowerOptionsMenu extends StatelessWidget {
         CustomListTile(
           title: AppLocalizations.of(context)!.powerOff,
           subtitle: AppLocalizations.of(context)!.powerOffDescription,
-          icon: Icons.power_off_rounded,
+          icon: Icons.power_settings_new_rounded,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           onTap: () {
             Navigator.pop(context);
