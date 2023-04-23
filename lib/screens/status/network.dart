@@ -30,6 +30,8 @@ class _NetworkTabState extends State<NetworkTab> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final paddingTop = MediaQuery.of(context).viewPadding.top;
+    final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
     List<Map<String, dynamic>> chartData() {
       if (widget.data!.length < 20) {
@@ -129,8 +131,8 @@ class _NetworkTabState extends State<NetworkTab> {
                 child: SizedBox(
                   width: double.maxFinite,
                   height: width > 900 
-                    ? height-240 
-                    : height-310,
+                    ? (height-paddingTop-paddingBottom)-240 
+                    : (height-paddingTop-paddingBottom)-310,
                   child: CustomLinearChart(
                     data: [
                       ChartData(

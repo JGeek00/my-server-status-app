@@ -30,6 +30,8 @@ class MemoryTab extends StatelessWidget {
 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final paddingTop = MediaQuery.of(context).viewPadding.top;
+    final paddingBottom = MediaQuery.of(context).viewPadding.bottom;
 
     List<double> chartData() {
       if (data.length < 20) {
@@ -101,8 +103,8 @@ class MemoryTab extends StatelessWidget {
             child: SizedBox(
               width: double.maxFinite,
               height: width > 900 
-                ? height-200 
-                : height-280,
+                ? (height-paddingTop-paddingBottom)-200 
+                : (height-paddingTop-paddingBottom)-280,
               child: CustomLinearChart(
                 data: [
                   ChartData(
