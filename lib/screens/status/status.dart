@@ -117,8 +117,6 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     List<Cpu> getCpu() {
       return currentStatus.map((e) => e.cpu).toList();
     }

@@ -234,5 +234,6 @@
   "serverPoweredOff": "Orden de apagado enviada satisfactoriamente",
   "serverRebooted": "Orden de reinicio enviada satisfactoriamente",
   "serverPoweredOffFailed": "Orden de apagado fallida",
-  "serverRebootFailed": "Orden de reinicio fallida"
+  "serverRebootFailed": "Orden de reinicio fallida",
+  "noDataAvailable": "No hay datos disponibles"
 }

@@ -234,5 +234,6 @@
   "serverPoweredOff": "Shutdown order sent successfully",
   "serverRebooted": "Reboot order sent successfully",
   "serverPoweredOffFailed": "Shutdown order failed",
-  "serverRebootFailed": "Reboot order failed"
+  "serverRebootFailed": "Reboot order failed",
+  "noDataAvailable": "No data available"
 }
