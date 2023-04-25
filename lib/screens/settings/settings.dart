@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_server_status/models/server.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -212,7 +211,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     key: serversKey,
                     onGenerateRoute: (route) => MaterialPageRoute(
                       settings: route,
-                      builder: (context) => const Servers(),
+                      builder: (context) => const Servers(
+                        breakigWidth: 1200,
+                      ),
                     ),
                   ),
                   Navigator(

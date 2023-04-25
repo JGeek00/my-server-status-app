@@ -23,6 +23,7 @@ class ServersList extends StatefulWidget {
   final List<ExpandableController> controllers;
   final Function(int) onChange;
   final ScrollController scrollController;
+  final double breakingWidth;
 
   const ServersList({
     Key? key,
@@ -30,6 +31,7 @@ class ServersList extends StatefulWidget {
     required this.controllers,
     required this.onChange,
     required this.scrollController,
+    required this.breakingWidth,
   }) : super(key: key);
 
   @override
@@ -248,7 +250,8 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
                     children: [
                       Text(
                         "${server.connectionMethod}://${server.domain}${server.path ?? ""}${server.port != null ? ':${server.port}' : ""}",
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -261,6 +264,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
                           Text(
                             servers[index].name,
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -438,14 +442,14 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
       if (index == 1) {
         return const EdgeInsets.only(top: 16, left: 8, right: 16, bottom: 8);
       }
-      else if (index == servers.length-1 && index%2 == 0) {
+      else if (index == servers.length-1 && (index+1)%2 == 0) {
         return const EdgeInsets.only(top: 8, left: 8, right: 16, bottom: 16);
       }
-      else if (index == servers.length-1 && index%2 == 1) {
+      else if (index == servers.length-1 && (index+1)%2 == 1) {
         return const EdgeInsets.only(top: 8, left: 16, right: 8, bottom: 16);
       }
       else {
-        if (index%2 == 0) {
+        if ((index+1)%2 == 0) {
           return const EdgeInsets.only(top: 8, left: 8, right: 16, bottom: 8);
         }
         else {
@@ -473,7 +477,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
     }
 
     if (servers.isNotEmpty) {
-      if (width > 700) {
+      if (width > widget.breakingWidth) {
         return ListView(
           children: [
             Wrap(

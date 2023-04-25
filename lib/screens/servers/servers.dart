@@ -11,7 +11,12 @@ import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
 class Servers extends StatefulWidget {
-  const Servers({Key? key}) : super(key: key);
+  final double? breakigWidth;
+
+  const Servers({
+    Key? key,
+    this.breakigWidth
+  }) : super(key: key);
 
   @override
   State<Servers> createState() => _ServersState();
@@ -82,44 +87,31 @@ class _ServersState extends State<Servers> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.servers),
-        actions: [
-          if (width > 700) IconButton(
-            onPressed: openAddServerModal, 
-            icon: const Icon(Icons.add_rounded)
-          ),
-          const SizedBox(width: 8)
-        ],
       ),
-      body: width > 700
-        ? ServersList(
+      body: Stack(
+        children: [
+          ServersList(
             context: context, 
             controllers: expandableControllerList, 
             onChange: expandOrContract,
-            scrollController: scrollController
-          )
-        : Stack(
-          children: [
-            ServersList(
-              context: context, 
-              controllers: expandableControllerList, 
-              onChange: expandOrContract,
-              scrollController: scrollController
+            scrollController: scrollController,
+            breakingWidth: widget.breakigWidth ?? 700,
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+            bottom: isVisible ?
+              appConfigProvider.showingSnackbar
+                ? 70 : 20
+              : -70,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: openAddServerModal,
+              child: const Icon(Icons.add),
             ),
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeInOut,
-              bottom: isVisible ?
-                appConfigProvider.showingSnackbar
-                  ? 70 : 20
-                : -70,
-              right: 20,
-              child: FloatingActionButton(
-                onPressed: openAddServerModal,
-                child: const Icon(Icons.add),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

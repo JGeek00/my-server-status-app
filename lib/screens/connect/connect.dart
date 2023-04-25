@@ -69,6 +69,7 @@ class _ConnectScreenState extends State<ConnectScreen> {
             controllers: expandableControllerList, 
             onChange: expandOrContract,
             scrollController: scrollController,
+            breakingWidth: 700,
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 100),
