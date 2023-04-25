@@ -127,7 +127,9 @@ class MemorySectionHome extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "${convertMemoryToGb(memoryInfo.info.swapused)} GB (${((memoryInfo.info.swapused/memoryInfo.info.swaptotal)*100).toInt().toString()}%)",
+                              memoryInfo.info.swaptotal > 0
+                                ? "${convertMemoryToGb(memoryInfo.info.swapused)} GB (${((memoryInfo.info.swapused/memoryInfo.info.swaptotal)*100).toInt().toString()}%)"
+                                : "N/A",
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700
