@@ -25,18 +25,22 @@ class DeleteModal extends StatelessWidget {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
 
     void removeServer() async {
+      final previouslySelectedServer = serversProvider.selectedServer;
+
       final deleted = await serversProvider.removeServer(serverToDelete);
 
       Navigator.pop(context);
 
       if (deleted == true) {
-        appConfigProvider.setSelectedScreen(0);
+        if (previouslySelectedServer != null && previouslySelectedServer.id == serverToDelete.id) {
+          appConfigProvider.setSelectedScreen(0);
 
-        serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
-        serversProvider.setSystemSpecsInfoData(null);
+          serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
+          serversProvider.setSystemSpecsInfoData(null);
 
-        serversProvider.setSelectedServer(null);
-        serversProvider.setServerConnected(null);
+          serversProvider.setSelectedServer(null);
+          serversProvider.setServerConnected(null);
+        }
 
         showSnacbkar(
           context: context, 
