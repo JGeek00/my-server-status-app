@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -149,6 +151,8 @@ class _CpuTabState extends State<CpuTab> {
           };
 
         case CoreChartConfig.speed:
+          final values = List<double>.from(value['speed'].map((e) => e.toDouble()));
+          final maxValue = values.reduce(max);
           return {
             "header": Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,13 +174,22 @@ class _CpuTabState extends State<CpuTab> {
             "chart": CustomLinearChart(
               data: [
                 ChartData(
-                  data: List<double>.from(value['speed'].map((e) => e.toDouble())), 
+                  data: values,
                   color: appConfigProvider.statusColorsCharts 
-                    ? generateIntermediateColor((widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100)
+                    ? generateIntermediateColor(
+                        (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100 > 100
+                          ? 100
+                          : (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100
+                      )
                     : Theme.of(context).colorScheme.primary
                 )
               ],
-              scale: Scale(min: 0, max: widget.data[0].specs.maxSpeed),
+              scale: Scale(
+                min: 0, 
+                max: maxValue > widget.data[0].specs.maxSpeed
+                  ? maxValue
+                  : widget.data[0].specs.maxSpeed
+              ),
               yScaleTextFormatter: (v) => v.toStringAsFixed(2),
               tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
               linesInterval: widget.data[0].specs.maxSpeed/4,
