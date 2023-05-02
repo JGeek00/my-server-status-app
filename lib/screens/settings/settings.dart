@@ -197,40 +197,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Expanded(
               flex: 2,
-              child: IndexedStack(
-                index: selectedItem,
-                children: [
-                  Navigator(
-                    key: customizationKey,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => const Customization(),
-                    ),
-                  ),
-                  Navigator(
-                    key: serversKey,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => const Servers(
-                        breakigWidth: 1200,
+              child: ClipRect(
+                child: IndexedStack(
+                  index: selectedItem,
+                  children: [
+                    Navigator(
+                      key: customizationKey,
+                      onGenerateRoute: (route) => MaterialPageRoute(
+                        settings: route,
+                        builder: (context) => const Customization(),
                       ),
                     ),
-                  ),
-                  Navigator(
-                    key: generalSettingsKey,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => const GeneralSettings(),
+                    Navigator(
+                      key: serversKey,
+                      onGenerateRoute: (route) => MaterialPageRoute(
+                        settings: route,
+                        builder: (context) => const Servers(
+                          breakigWidth: 1200,
+                        ),
+                      ),
                     ),
-                  ),
-                  Navigator(
-                    key: advancedSettingsKey,
-                    onGenerateRoute: (route) => MaterialPageRoute(
-                      settings: route,
-                      builder: (context) => const AdvancedSettings(),
+                    Navigator(
+                      key: generalSettingsKey,
+                      onGenerateRoute: (route) => MaterialPageRoute(
+                        settings: route,
+                        builder: (context) => const GeneralSettings(),
+                      ),
                     ),
-                  ),
-                ],
+                    Navigator(
+                      key: advancedSettingsKey,
+                      onGenerateRoute: (route) => MaterialPageRoute(
+                        settings: route,
+                        builder: (context) => const AdvancedSettings(),
+                      ),
+                    ),
+                  ],
+                ),
               )
             )
           ],
