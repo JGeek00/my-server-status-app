@@ -19,6 +19,7 @@ import 'package:my_server_status/base.dart';
 import 'package:my_server_status/config/theme.dart';
 import 'package:my_server_status/classes/http_override.dart';
 import 'package:my_server_status/services/database/database.dart';
+import 'package:my_server_status/config/globals.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/constants/colors.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
@@ -168,6 +169,7 @@ class _MainState extends State<Main> {
           Locale('en', ''),
           Locale('es', '')
         ],
+        scaffoldMessengerKey: scaffoldMessengerKey,
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

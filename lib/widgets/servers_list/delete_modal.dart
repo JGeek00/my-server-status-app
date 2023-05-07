@@ -42,16 +42,14 @@ class DeleteModal extends StatelessWidget {
           serversProvider.setServerConnected(null);
         }
 
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.connectionRemoved, 
           color: Colors.green
         );
       }
       else {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.connectionCannotBeRemoved, 
           color: Colors.red

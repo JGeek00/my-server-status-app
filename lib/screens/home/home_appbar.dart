@@ -43,8 +43,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
       process.close();
 
       if (result == true) {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.serverRebooted, 
           color: Colors.green,
@@ -57,8 +56,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
         serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
       }
       else {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.serverRebootFailed, 
           color: Colors.red,
@@ -76,8 +74,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
       process.close();
 
       if (result == true) {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.serverPoweredOff, 
           color: Colors.green,
@@ -90,8 +87,7 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
         serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loading);
       }
       else {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.serverPoweredOffFailed, 
           color: Colors.red,

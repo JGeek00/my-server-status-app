@@ -26,7 +26,7 @@ class GeneralSettings extends StatelessWidget {
       if (width > 900) {
         showDialog(
           context: context, 
-          builder: (context) => AutoRefreshTimeModalDesktop(
+          builder: (c) => AutoRefreshTimeModalDesktop(
             time: time, 
             screen: screen,
             onChange: (value) async {
@@ -34,16 +34,14 @@ class GeneralSettings extends StatelessWidget {
                 ? await appConfigProvider.setAutoRefreshTimeStatus(value)
                 : await appConfigProvider.setAutoRefreshTimeHome(value);
               if (result == true) {
-                showSnacbkar(
-                  context: context, 
+                showSnackbar(
                   appConfigProvider: appConfigProvider, 
                   label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
                   color: Colors.green
                 );
               }
               else {
-                showSnacbkar(
-                  context: context, 
+                showSnackbar(
                   appConfigProvider: appConfigProvider, 
                   label: AppLocalizations.of(context)!.cannotUpdateSettings, 
                   color: Colors.red
@@ -57,7 +55,7 @@ class GeneralSettings extends StatelessWidget {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (context) => AutoRefreshTimeModal(
+          builder: (c) => AutoRefreshTimeModal(
             time: time, 
             screenHeight: MediaQuery.of(context).size.height,
             screen: screen,
@@ -66,16 +64,14 @@ class GeneralSettings extends StatelessWidget {
                 ? await appConfigProvider.setAutoRefreshTimeStatus(value)
                 : await appConfigProvider.setAutoRefreshTimeHome(value);
               if (result == true) {
-                showSnacbkar(
-                  context: context, 
+                showSnackbar(
                   appConfigProvider: appConfigProvider, 
                   label: AppLocalizations.of(context)!.settingsSavedSuccessfully, 
                   color: Colors.green
                 );
               }
               else {
-                showSnacbkar(
-                  context: context, 
+                showSnackbar(
                   appConfigProvider: appConfigProvider, 
                   label: AppLocalizations.of(context)!.cannotUpdateSettings, 
                   color: Colors.red
@@ -95,16 +91,14 @@ class GeneralSettings extends StatelessWidget {
     }) async {
       final result = await fn(value);
       if (result == true) {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: customSuccessMessage ?? AppLocalizations.of(context)!.settingsUpdatedSuccessfully, 
           color: Colors.green
         );
       }
       else {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: customErrorMessage ?? AppLocalizations.of(context)!.cannotUpdateSettings, 
           color: Colors.red

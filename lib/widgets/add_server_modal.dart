@@ -1,14 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:my_server_status/widgets/api_announcement.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:my_server_status/widgets/api_announcement.dart';
+
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/models/app_log.dart';
 import 'package:my_server_status/functions/encode_base64.dart';
+import 'package:my_server_status/functions/snackbar.dart';
 import 'package:my_server_status/models/server.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
@@ -259,57 +261,57 @@ class _AddServerModalState extends State<AddServerModal> {
               message: serverCreated.toString()
             )
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.connectionNotCreated),
-              backgroundColor: Colors.red,
-            )
+          showSnackbar(
+            appConfigProvider: appConfigProvider, 
+            label: AppLocalizations.of(context)!.connectionNotCreated, 
+            color: Colors.red,
+            labelColor: Colors.white
           );
         }
       }
       else if (result['result'] == 'invalid_username_password') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.invalidUsernamePassword),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.invalidUsernamePassword, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'no_connection') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.cantReachServer),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.cantReachServer, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'ssl_error') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.sslError),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.sslError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'server_error') {
-        appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.serverError),
-            backgroundColor: Colors.red,
-          )
+        appConfigProvider.addLog(result['log']);       
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.unknownError),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.unknownError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
     }
@@ -347,57 +349,57 @@ class _AddServerModalState extends State<AddServerModal> {
               message: serverSaved.toString()
             )
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.connectionNotCreated),
-              backgroundColor: Colors.red,
-            )
+          showSnackbar(
+            appConfigProvider: appConfigProvider, 
+            label: AppLocalizations.of(context)!.connectionNotCreated, 
+            color: Colors.red,
+            labelColor: Colors.white
           );
         }
       }
       else if (result['result'] == 'invalid_username_password') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.invalidUsernamePassword),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.invalidUsernamePassword, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'no_connection') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.cantReachServer),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.cantReachServer, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'ssl_error') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.sslError),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.sslError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else if (result['result'] == 'server_error') {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.serverError),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.serverError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
       else {
         appConfigProvider.addLog(result['log']);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.unknownError),
-            backgroundColor: Colors.red,
-          )
+        showSnackbar(
+          appConfigProvider: appConfigProvider, 
+          label: AppLocalizations.of(context)!.unknownError, 
+          color: Colors.red,
+          labelColor: Colors.white
         );
       }
     }

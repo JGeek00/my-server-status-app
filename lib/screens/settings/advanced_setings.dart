@@ -26,16 +26,14 @@ class AdvancedSettings extends StatelessWidget {
     }) async {
       final result = await fn(value);
       if (result == true) {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: customSuccessMessage ?? AppLocalizations.of(context)!.settingsUpdatedSuccessfully, 
           color: Colors.green
         );
       }
       else {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: customErrorMessage ?? AppLocalizations.of(context)!.cannotUpdateSettings, 
           color: Colors.red

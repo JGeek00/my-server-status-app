@@ -144,8 +144,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
       else {
         process.close();
         appConfigProvider.addLog(result['log']);
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.cannotConnect, 
           color: Colors.red
@@ -156,8 +155,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
     void setDefaultServer(Server server) async {
       final result = await serversProvider.setDefaultServer(server);
       if (result == null) {
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.connectionDefaultSuccessfully, 
           color: Colors.green
@@ -171,8 +169,7 @@ class _ServersListState extends State<ServersList> with SingleTickerProviderStat
             message: result.toString()
           )
         );
-        showSnacbkar(
-          context: context, 
+        showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.connectionDefaultFailed, 
           color: Colors.red
