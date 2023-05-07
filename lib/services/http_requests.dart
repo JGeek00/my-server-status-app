@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:my_server_status/models/app_log.dart';
@@ -110,6 +111,7 @@ Future<Map<String, dynamic>> apiRequest({
       )
     };
   } catch (e) {
+    Sentry.captureException(e);
     return {
       'result': 'error', 
       'message': e.toString(),

@@ -63,10 +63,19 @@ void main() async {
   PackageInfo appInfo = await PackageInfo.fromPlatform();
   appConfigProvider.setAppInfo(appInfo);
 
-  if (kReleaseMode) {
+  if (
+    (
+      kReleaseMode &&
+      (dotenv.env['SENTRY_DSN'] != null && dotenv.env['SENTRY_DSN'] != "")
+    ) || (
+      dotenv.env['ENABLE_SENTRY'] == "true" &&
+      (dotenv.env['SENTRY_DSN'] != null && dotenv.env['SENTRY_DSN'] != "")
+    )
+  ) {
     SentryFlutter.init(
       (options) {
         options.dsn = dotenv.env['SENTRY_DSN'];
+        options.sendDefaultPii = false;
       },
       appRunner: () => runApp(
         MultiProvider(

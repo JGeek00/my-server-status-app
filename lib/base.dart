@@ -15,7 +15,6 @@ import 'package:my_server_status/config/app_screens.dart';
 import 'package:my_server_status/models/app_screen.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 
-
 class Base extends StatefulWidget {
   final AppConfigProvider appConfigProvider;
 
