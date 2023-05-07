@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/widgets/custom_list_tile.dart';
-import 'package:my_server_status/widgets/section_label.dart';
 
 import 'package:my_server_status/extensions/capitalize.dart';
 import 'package:my_server_status/models/network_info.dart';
-import 'package:my_server_status/providers/app_config_provider.dart';
 
-class NetworkModalDetails extends StatelessWidget {
+class NetworkModalDetails extends StatefulWidget {
   final NetworkInfo data;
 
   const NetworkModalDetails({
@@ -18,10 +15,23 @@ class NetworkModalDetails extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final appConfigProvider = Provider.of<AppConfigProvider>(context);
+  State<NetworkModalDetails> createState() => _NetworkModalDetailsState();
+}
 
+class _NetworkModalDetailsState extends State<NetworkModalDetails> {
+  String selectedEntry = "";
+
+  @override
+  void initState() {
+    selectedEntry = widget.data.networkInterfaces[0].iface;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
+    final iface = widget.data.networkInterfaces.firstWhere((i) => i.iface == selectedEntry);
 
     String generateValue(String? value) {
       return value != null && value != '' && value != 'Default string' 
@@ -40,7 +50,6 @@ class NetworkModalDetails extends StatelessWidget {
         return "N/A";
       }
     }
-
 
     return Dialog(
       child: ConstrainedBox(
@@ -69,79 +78,90 @@ class NetworkModalDetails extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    children: [
-                      ...data.networkInterfaces.map((i) => Column(
-                        children: [
-                          SectionLabel(label: i.iface),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.state,
-                            subtitle: i.operstate == 'up' 
-                              ? AppLocalizations.of(context)!.up
-                              : AppLocalizations.of(context)!.down,
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.isDefault,
-                            subtitle: i.networkInterfaceDefault == true 
-                              ? AppLocalizations.of(context)!.yes
-                              : AppLocalizations.of(context)!.no,
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.ipv4address,
-                            subtitle: generateValue(i.ip4),
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.ipv4subnet,
-                            subtitle: generateValue(i.ip4Subnet),
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.ipv6address,
-                            subtitle: generateValue(i.ip6),
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.ipv6subnet,
-                            subtitle: generateValue(i.ip6Subnet),
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.macAddress,
-                            subtitle: generateValue(i.mac),
-                          ),
-                          if (i.speed != null) CustomListTile(
-                            title: AppLocalizations.of(context)!.speed,
-                            subtitle: "${i.speed.toString()} Mbps",
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.internalInterface,
-                            subtitle: i.internal == true 
-                              ? AppLocalizations.of(context)!.yes
-                              : AppLocalizations.of(context)!.no,
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.virtualInterface,
-                            subtitle: i.virtual == true 
-                              ? AppLocalizations.of(context)!.yes
-                              : AppLocalizations.of(context)!.no,
-                          ),
-                          CustomListTile(
-                            title: AppLocalizations.of(context)!.interfaceType,
-                            subtitle: interfaceType(i.type)
-                          ),
-                          if (i.duplex != null && i.duplex != "") CustomListTile(
-                            title: AppLocalizations.of(context)!.duplex,
-                            subtitle: i.duplex!.capitalize()
-                          ),
-                          if (i.mtu != null) CustomListTile(
-                            title: "MTU",
-                            subtitle: i.mtu.toString(),
-                          )
-                        ],
-                      )
+              DropdownButtonFormField(
+                value: selectedEntry,
+                items: widget.data.networkInterfaces.map((e) => DropdownMenuItem(
+                  value: e.iface,
+                  child: Text(e.iface),
+                )).toList(), 
+                onChanged: (value) => setState(() => selectedEntry = value.toString()),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
                     ),
-                    ],
                   ),
+                  label: Text(AppLocalizations.of(context)!.interfaces),                 
                 ),
+                alignment: AlignmentDirectional.centerStart,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  children: [
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.state,
+                      subtitle: iface.operstate == 'up' 
+                        ? AppLocalizations.of(context)!.up
+                        : AppLocalizations.of(context)!.down,
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.isDefault,
+                      subtitle: iface.networkInterfaceDefault == true 
+                        ? AppLocalizations.of(context)!.yes
+                        : AppLocalizations.of(context)!.no,
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.ipv4address,
+                      subtitle: generateValue(iface.ip4),
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.ipv4subnet,
+                      subtitle: generateValue(iface.ip4Subnet),
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.ipv6address,
+                      subtitle: generateValue(iface.ip6),
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.ipv6subnet,
+                      subtitle: generateValue(iface.ip6Subnet),
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.macAddress,
+                      subtitle: generateValue(iface.mac),
+                    ),
+                    if (iface.speed != null) CustomListTile(
+                      title: AppLocalizations.of(context)!.speed,
+                      subtitle: "${iface.speed.toString()} Mbps",
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.internalInterface,
+                      subtitle: iface.internal == true 
+                        ? AppLocalizations.of(context)!.yes
+                        : AppLocalizations.of(context)!.no,
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.virtualInterface,
+                      subtitle: iface.virtual == true 
+                        ? AppLocalizations.of(context)!.yes
+                        : AppLocalizations.of(context)!.no,
+                    ),
+                    CustomListTile(
+                      title: AppLocalizations.of(context)!.interfaceType,
+                      subtitle: interfaceType(iface.type)
+                    ),
+                    if (iface.duplex != null && iface.duplex != "") CustomListTile(
+                      title: AppLocalizations.of(context)!.duplex,
+                      subtitle: iface.duplex!.capitalize()
+                    ),
+                    if (iface.mtu != null) CustomListTile(
+                      title: "MTU",
+                      subtitle: iface.mtu.toString(),
+                    )
+                  ],
+                )
               )
             ],
           ),

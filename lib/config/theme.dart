@@ -15,6 +15,7 @@ ThemeData lightTheme(ColorScheme? dynamicColorScheme) => ThemeData(
     textColor: dynamicColorScheme != null ? dynamicColorScheme.onSurfaceVariant : const Color.fromRGBO(117, 117, 117, 1),
     iconColor: dynamicColorScheme != null ? dynamicColorScheme.onSurfaceVariant : const Color.fromRGBO(117, 117, 117, 1),
   ),
+  canvasColor: dynamicColorScheme != null ? dynamicColorScheme.surface : Colors.white,
 );
 
 ThemeData darkTheme(ColorScheme? dynamicColorScheme) => ThemeData(
@@ -33,6 +34,7 @@ ThemeData darkTheme(ColorScheme? dynamicColorScheme) => ThemeData(
     textColor: dynamicColorScheme != null ? dynamicColorScheme.onSurfaceVariant : const Color.fromRGBO(187, 187, 187, 1),
     iconColor: dynamicColorScheme != null ? dynamicColorScheme.onSurfaceVariant : const Color.fromRGBO(187, 187, 187, 1),
   ),
+  canvasColor: dynamicColorScheme != null ? dynamicColorScheme.surface : Colors.black,
 );
 
 ThemeData lightThemeOldVersions(MaterialColor primaryColor) => ThemeData(

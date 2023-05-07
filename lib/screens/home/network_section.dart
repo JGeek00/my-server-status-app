@@ -53,7 +53,7 @@ class _NetworkSectionHomeState extends State<NetworkSectionHome> {
           ),
           const SizedBox(height: 24),
           ...widget.networkInfo.sublist(
-            0, showAllEntries == true ? widget.networkInfo.length : (widget.networkInfo.length > 3 ? 3 :  widget.networkInfo.length)
+            0, showAllEntries == true ? widget.networkInfo.length : (widget.networkInfo.length > 3 ? 3 : widget.networkInfo.length)
           ).asMap().entries.where(
             (i) => i.value.operstate != 'unknown' && i.value.type != '' && !i.value.iface.toLowerCase().contains("bluetooth")
             ).map((item) => Column(
@@ -153,7 +153,7 @@ class _NetworkSectionHomeState extends State<NetworkSectionHome> {
             ),
           ).toList(),
           const SizedBox(height: 16),
-          if (widget.networkInfo.length > 2) Row(
+          if (widget.networkInfo.length > 3) Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(

@@ -53,7 +53,7 @@ class _StorageSectionHomeState extends State<StorageSectionHome> {
           ),
           const SizedBox(height: 24),
           ...widget.storageInfo.sublist(
-            0, showAllEntries == true ? widget.storageInfo.length : (widget.storageInfo.length > 3 ? 3 :  widget.storageInfo.length)
+            0, showAllEntries == true ? widget.storageInfo.length : (widget.storageInfo.length > 3 ? 3 : widget.storageInfo.length)
           ).toList().asMap().entries.map(
             (item) => Column(
               children: [
@@ -94,7 +94,7 @@ class _StorageSectionHomeState extends State<StorageSectionHome> {
               ],
             )
           ).toList(),
-          if (widget.storageInfo.length > 2) Row(
+          if (widget.storageInfo.length > 3) Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(

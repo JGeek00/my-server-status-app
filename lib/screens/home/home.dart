@@ -217,7 +217,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                   memoryInfo: serversProvider.serverInfo.data!.memory
                 ),
                 StorageSectionHome(
-                  storageInfo: serversProvider.serverInfo.data!.storageFs
+                  storageInfo: serversProvider.serverInfo.data!.storageFs.where(
+                    (e) => !e.mount.contains('/var/lib/docker')
+                  ).toList()
                 ),
                 NetworkSectionHome(
                   networkInfo: serversProvider.serverInfo.data!.network.where((i) => i.operstate != 'unknown').toList()
