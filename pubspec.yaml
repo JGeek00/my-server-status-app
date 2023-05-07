@@ -21,6 +21,10 @@ version: 1.2.1+11
 environment:
   sdk: '>=2.19.2 <3.0.0'
 
+scripts:
+  build:
+    linux: "./linux/build-app.sh"
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
