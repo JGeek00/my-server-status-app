@@ -40,6 +40,11 @@ This application is intended to monitor your own machine. Don not try to use it 
 
 <br>
 
+## Privacy policy
+You can check the privacy policy [here](https://github.com/JGeek00/my-server-status-app/wiki/Privacy-policy).
+
+<br>
+
 ## Generate production build
 <ul>
   <li>
