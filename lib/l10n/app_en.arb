@@ -235,5 +235,7 @@
   "serverRebooted": "Reboot order sent successfully",
   "serverPoweredOffFailed": "Shutdown order failed",
   "serverRebootFailed": "Reboot order failed",
-  "noDataAvailable": "No data available"
+  "noDataAvailable": "No data available",
+  "showMoreEntries": "Show {number} more entries",
+  "showLessEntries": "Show less entries"
 }

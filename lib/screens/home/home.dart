@@ -170,6 +170,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       flex: 1,
@@ -181,7 +182,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                           bottom: 25
                         ),
                         child: StorageSectionHome(
-                          storageInfo: serversProvider.serverInfo.data!.storageFs
+                          storageInfo: serversProvider.serverInfo.data!.storageFs.where(
+                            (e) => !e.mount.contains('/var/lib/docker')
+                          ).toList()
                         ),
                       ),
                     ),

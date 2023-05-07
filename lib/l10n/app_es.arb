@@ -235,5 +235,7 @@
   "serverRebooted": "Orden de reinicio enviada satisfactoriamente",
   "serverPoweredOffFailed": "Orden de apagado fallida",
   "serverRebootFailed": "Orden de reinicio fallida",
-  "noDataAvailable": "No hay datos disponibles"
+  "noDataAvailable": "No hay datos disponibles",
+  "showMoreEntries": "Mostrar {number} entradas más",
+  "showLessEntries": "Mostrar menos entradas"
 }

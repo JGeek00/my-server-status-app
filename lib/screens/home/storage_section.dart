@@ -4,7 +4,7 @@ import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/models/general_info.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class StorageSectionHome extends StatelessWidget {
+class StorageSectionHome extends StatefulWidget {
   final List<StorageFs> storageInfo;
 
   const StorageSectionHome({
@@ -13,12 +13,18 @@ class StorageSectionHome extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    int currentIndexStorage = 0;   // To know current index on storage map
+  State<StorageSectionHome> createState() => _StorageSectionHomeState();
+}
 
+class _StorageSectionHomeState extends State<StorageSectionHome> {
+  bool showAllEntries = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,7 +41,7 @@ class StorageSectionHome extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "${convertMemoryToGb(storageInfo.map((i) => i.size).reduce((a, b) => a+b))} GB",
+                    "${convertMemoryToGb(widget.storageInfo.map((i) => i.size).reduce((a, b) => a+b))} GB",
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -46,43 +52,61 @@ class StorageSectionHome extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          ...storageInfo.map(
-            (item) {
-              currentIndexStorage++;
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(item.mount),
-                        Text("${item.use}%")
-                      ],
-                    ),
+          ...widget.storageInfo.sublist(
+            0, showAllEntries == true ? widget.storageInfo.length : (widget.storageInfo.length > 3 ? 3 :  widget.storageInfo.length)
+          ).toList().asMap().entries.map(
+            (item) => Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.value.mount,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ),
+                      const SizedBox(width: 16),
+                      Text("${item.value.use}%")
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  LinearPercentIndicator(
-                    lineHeight: 4,
-                    percent: item.use/100,
-                    barRadius: const Radius.circular(5),
-                    progressColor: Theme.of(context).colorScheme.primary,
-                    backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                ),
+                const SizedBox(height: 8),
+                LinearPercentIndicator(
+                  lineHeight: 4,
+                  percent: item.value.use/100,
+                  barRadius: const Radius.circular(5),
+                  progressColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(AppLocalizations.of(context)!.storageUsageString(convertMemoryToGb(item.value.size), convertMemoryToGb(item.value.used)))                            ],
                   ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(AppLocalizations.of(context)!.storageUsageString(convertMemoryToGb(item.size), convertMemoryToGb(item.used)))                            ],
-                    ),
-                  ),
-                  if (currentIndexStorage < storageInfo.length) const SizedBox(height: 20),
-                ],
-              );
-            }
-          ).toList()
+                ),
+                if (item.key < widget.storageInfo.length) const SizedBox(height: 20),
+              ],
+            )
+          ).toList(),
+          if (widget.storageInfo.length > 2) Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => setState(() => showAllEntries = !showAllEntries), 
+                child: Text(
+                  showAllEntries == false
+                    ? AppLocalizations.of(context)!.showMoreEntries(widget.storageInfo.length-3)
+                    : AppLocalizations.of(context)!.showLessEntries
+                )
+              )
+            ],
+          )
         ],
       ),
     );

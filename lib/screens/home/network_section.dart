@@ -3,13 +3,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/models/general_info.dart';
 
-class NetworkSectionHome extends StatelessWidget {
+class NetworkSectionHome extends StatefulWidget {
   final List<Network> networkInfo;
 
   const NetworkSectionHome({
     Key? key,
     required this.networkInfo
   }) : super(key: key);
+
+  @override
+  State<NetworkSectionHome> createState() => _NetworkSectionHomeState();
+}
+
+class _NetworkSectionHomeState extends State<NetworkSectionHome> {
+  bool showAllEntries = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +39,8 @@ class NetworkSectionHome extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    networkInfo.length > 1
-                      ? AppLocalizations.of(context)!.nInterfaces(networkInfo.length.toString())
+                    widget.networkInfo.length > 1
+                      ? AppLocalizations.of(context)!.nInterfaces(widget.networkInfo.length.toString())
                       : AppLocalizations.of(context)!.oneInterface,
                     style: const TextStyle(
                       fontSize: 12,
@@ -45,7 +52,9 @@ class NetworkSectionHome extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          ...networkInfo.asMap().entries.where(
+          ...widget.networkInfo.sublist(
+            0, showAllEntries == true ? widget.networkInfo.length : (widget.networkInfo.length > 3 ? 3 :  widget.networkInfo.length)
+          ).asMap().entries.where(
             (i) => i.value.operstate != 'unknown' && i.value.type != '' && !i.value.iface.toLowerCase().contains("bluetooth")
             ).map((item) => Column(
               children: [
@@ -139,10 +148,24 @@ class NetworkSectionHome extends StatelessWidget {
                     )
                   ],
                 ),
-                if (item.key < networkInfo.length-1) const SizedBox(height: 20),
+                if (item.key < widget.networkInfo.length-1) const SizedBox(height: 20),
               ],
             ),
-          ).toList()
+          ).toList(),
+          const SizedBox(height: 16),
+          if (widget.networkInfo.length > 2) Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => setState(() => showAllEntries = !showAllEntries), 
+                child: Text(
+                  showAllEntries == false
+                    ? AppLocalizations.of(context)!.showMoreEntries(widget.networkInfo.length-3)
+                    : AppLocalizations.of(context)!.showLessEntries
+                )
+              )
+            ],
+          )
         ],
       ),
     );
