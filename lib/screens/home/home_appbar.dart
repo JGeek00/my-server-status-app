@@ -17,7 +17,7 @@ import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
-class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Future<bool> Function() onRefresh;
 
   const HomeAppBar({

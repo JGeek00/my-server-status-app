@@ -196,10 +196,24 @@ Future getHardwareInfo({required Server server, required bool overrideTimeout}) 
 
   if (result['hasResponse'] == true) {
     if (result['statusCode'] == 200) {
-      return {
-        'result': 'success',
-        'data': GeneralInfo.fromJson(jsonDecode(result['body']))
-      };
+      try {
+        return {
+          'result': 'success',
+          'data': GeneralInfo.fromJson(jsonDecode(result['body']))
+        };
+      } catch (e) {
+        Sentry.captureException(e);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'general_info', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
+      }
     }
     else if (result['statusCode'] == 401) {
       return {
@@ -269,18 +283,32 @@ Future getSystemInformation({required Server server, required bool overrideTimeo
       result[4]['statusCode'] == 200 &&
       result[5]['statusCode'] == 200
     ) {
-      final Map<String, dynamic> mappedData = {
-        'systemInfo': jsonDecode(result[0]['body']),
-        'cpuInfo': jsonDecode(result[1]['body']),
-        'memoryInfo': jsonDecode(result[2]['body']),
-        'storageInfo': jsonDecode(result[3]['body']),
-        'networkInfo': jsonDecode(result[4]['body']),
-        'osInfo': jsonDecode(result[5]['body']),
-      };
-      return {
-        'result': 'success',
-        'data': SystemSpecsInformationData.fromJson(mappedData)
-      };
+      try {
+        final Map<String, dynamic> mappedData = {
+          'systemInfo': jsonDecode(result[0]['body']),
+          'cpuInfo': jsonDecode(result[1]['body']),
+          'memoryInfo': jsonDecode(result[2]['body']),
+          'storageInfo': jsonDecode(result[3]['body']),
+          'networkInfo': jsonDecode(result[4]['body']),
+          'osInfo': jsonDecode(result[5]['body']),
+        };
+        return {
+          'result': 'success',
+          'data': SystemSpecsInformationData.fromJson(mappedData)
+        };
+      } catch (e) {
+        Sentry.captureException(e);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'get_system_information', 
+            dateTime: DateTime.now(), 
+            message: 'no_response',
+            statusCode: result.map((res) => res['statusCode'] ?? 'null').toString(),
+            resBody: result.map((res) => res['body'] ?? 'null').toString()
+          )
+        };
+      }
     }
     else {
       return {
@@ -320,10 +348,24 @@ Future getCurrentStatus({required Server server, required bool overrideTimeout})
 
   if (result['hasResponse'] == true) {
     if (result['statusCode'] == 200) {
-      return {
-        'result': 'success',
-        'data': CurrentStatus.fromJson(jsonDecode(result['body']))
-      };
+      try {
+        return {
+          'result': 'success',
+          'data': CurrentStatus.fromJson(jsonDecode(result['body']))
+        };
+      } catch (e) {
+        Sentry.captureException(e);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'status', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
+      }
     }
     else if (result['statusCode'] == 401) {
       return {

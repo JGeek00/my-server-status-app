@@ -116,7 +116,9 @@ class SystemModalDetails extends StatelessWidget {
                       ),
                       CustomListTile(
                         title: AppLocalizations.of(context)!.maxAllowedMemory,
-                        subtitle: "${convertMemoryToGb(data.baseboard.memMax)} GB",
+                        subtitle: data.baseboard.memMax != null
+                          ? "${convertMemoryToGb(data.baseboard.memMax!)} GB"
+                          : "N/A",
                       ),
                       CustomListTile(
                         title: AppLocalizations.of(context)!.memorySlots,

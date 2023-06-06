@@ -35,7 +35,7 @@ class CurrentStatus {
 }
 
 class Cpu {
-  final CpuSpecs specs;
+  final CpuSpecs? specs;
   final List<Core> cores;
   final Average average;
 
@@ -46,7 +46,7 @@ class Cpu {
   });
 
   factory Cpu.fromJson(Map<String, dynamic> json) => Cpu(
-    specs: CpuSpecs.fromJson(json["specs"]),
+    specs: json["specs"] != null ? CpuSpecs.fromJson(json["specs"]) : null,
     cores: List<Core>.from(json["cores"].map((x) => Core.fromJson(x))),
     average: Average.fromJson(json["average"]),
   );
@@ -59,7 +59,7 @@ class Cpu {
 
 class CpuSpecs {
   final String name;
-  final double minSpeed;
+  final double? minSpeed;
   final double speed;
   final double maxSpeed;
 

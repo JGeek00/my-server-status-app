@@ -171,30 +171,41 @@ class _CpuTabState extends State<CpuTab> {
                 ),
               ],
             ),
-            "chart": CustomLinearChart(
-              data: [
-                ChartData(
-                  data: values,
-                  color: appConfigProvider.statusColorsCharts 
-                    ? generateIntermediateColor(
-                        (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100 > 100
-                          ? 100
-                          : (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs.maxSpeed)*100
-                      )
-                    : Theme.of(context).colorScheme.primary
+            "chart":  widget.data[0].specs != null
+              ? CustomLinearChart(
+                  data: [
+                    ChartData(
+                      data: values,
+                      color: appConfigProvider.statusColorsCharts 
+                        ? generateIntermediateColor(
+                            (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100 > 100
+                              ? 100
+                              : (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100
+                          )
+                        : Theme.of(context).colorScheme.primary
+                    )
+                  ],
+                  scale: Scale(
+                    min: 0, 
+                    max: maxValue > widget.data[0].specs!.maxSpeed
+                      ? maxValue
+                      : widget.data[0].specs!.maxSpeed
+                  ),
+                  yScaleTextFormatter: (v) => v.toStringAsFixed(2),
+                  tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
+                  linesInterval: widget.data[0].specs!.maxSpeed/4,
+                  labelsInterval: widget.data[0].specs!.maxSpeed/4,
                 )
-              ],
-              scale: Scale(
-                min: 0, 
-                max: maxValue > widget.data[0].specs.maxSpeed
-                  ? maxValue
-                  : widget.data[0].specs.maxSpeed
-              ),
-              yScaleTextFormatter: (v) => v.toStringAsFixed(2),
-              tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
-              linesInterval: widget.data[0].specs.maxSpeed/4,
-              labelsInterval: widget.data[0].specs.maxSpeed/4,
-            ),
+              : Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.noDataAvailable,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant
+                    ),
+                  ),
+                )
           };
 
         case CoreChartConfig.temperature:
@@ -299,7 +310,7 @@ class _CpuTabState extends State<CpuTab> {
                             value: CoreChartConfig.load,
                             label: Text(AppLocalizations.of(context)!.load)
                           ),
-                          ButtonSegment(
+                          if (widget.data[0].specs != null) ButtonSegment(
                             value: CoreChartConfig.speed,
                             label: Text(AppLocalizations.of(context)!.speed)
                           ),

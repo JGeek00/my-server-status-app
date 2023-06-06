@@ -151,7 +151,9 @@ class SystemTab extends StatelessWidget {
               listTile(
                 CustomListTile(
                   title: AppLocalizations.of(context)!.maxAllowedMemory,
-                  subtitle: "${convertMemoryToGb(system.baseboard.memMax)} GB",
+                  subtitle: system.baseboard.memMax != null
+                    ? "${convertMemoryToGb(system.baseboard.memMax!)} GB"
+                    : "N/A",
                 ),
               ),
               listTile(

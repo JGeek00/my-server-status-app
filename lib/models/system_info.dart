@@ -31,8 +31,8 @@ class Baseboard {
   final String model;
   final String version;
   final String serial;
-  final int memMax;
-  final int memSlots;
+  final int? memMax;
+  final int? memSlots;
 
   Baseboard({
     required this.manufacturer,
