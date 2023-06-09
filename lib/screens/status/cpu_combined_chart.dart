@@ -28,16 +28,25 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
 
   @override
   Widget build(BuildContext context) {
-    String configUnit(value) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    String configUnit(int core) {
       switch (coreChartConfig) {
         case CoreChartConfig.load:
-          return "${value.toStringAsFixed(0)}%";
+          return "${widget.data[widget.data.length-1].cores[core].load['load']!.toStringAsFixed(0)}%";
 
         case CoreChartConfig.speed:
-          return "${value.toStringAsFixed(2)} GHz";
+          return "${widget.data[widget.data.length-1].cores[core].speed.toStringAsFixed(2)} GHz";
 
         case CoreChartConfig.temperature:
-          return "${value.toStringAsFixed(0)}ºC";
+          final value = widget.data[widget.data.length-1].cores[core].temperature;
+          if (value != null) {
+            return "${value.toStringAsFixed(0)}ºC";
+          }
+          else {
+            return "N/A";
+          }
 
         default:
           return "";
@@ -80,6 +89,79 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
       }
     }
 
+    Widget chart() {
+      return Container(
+        height: width > 900
+          ? height-190
+          : 500,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: CustomLinearChart(
+          data: List<ChartData>.from(widget.formattedData.asMap().entries.map(
+            (core) => ChartData(
+              data: List<double>.from(core.value[coreChartConfig.name].map((e) => e.toDouble())), 
+              color: chartColors[core.key]
+            ))
+          ),
+          scale: Scale(
+            min: 0.0, 
+            max: generateMaxScale()
+          ),
+          yScaleTextFormatter: (v) => v.toStringAsFixed(0),
+          tooltipTextFormatter: (v, i) => "${AppLocalizations.of(context)!.core(i)}: ${configUnit(i)}",
+          linesInterval: coreChartConfig == CoreChartConfig.speed
+            ? widget.data[0].specs!.maxSpeed/4
+            : 10.0,
+          labelsInterval: coreChartConfig == CoreChartConfig.speed
+            ? widget.data[0].specs!.maxSpeed/4
+            : 10,
+        ),
+      );
+    }
+
+    Widget legend() {
+      return Wrap(
+        children: widget.formattedData.asMap().entries.map(
+          (core) => FractionallySizedBox(
+            widthFactor: width > 900
+              ? 1
+              : 0.5,
+            child: Padding(
+              padding: width > 900
+                ? const EdgeInsets.all(16)
+                : const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: chartColors[core.key]
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    AppLocalizations.of(context)!.core(core.key),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      "(${configUnit(core.key)})",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ).toList()
+      );
+    }
+
     return Column(
       children: [
         Padding(
@@ -108,63 +190,29 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
             ],
           )
         ),
-        Container(
-          height: 500,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CustomLinearChart(
-            data: List<ChartData>.from(widget.formattedData.asMap().entries.map(
-              (core) => ChartData(
-                data: List<double>.from(core.value[coreChartConfig.name].map((e) => e.toDouble())), 
-                color: chartColors[core.key]
-              ))
-            ),
-            scale: Scale(
-              min: 0.0, 
-              max: generateMaxScale()
-            ),
-            yScaleTextFormatter: (v) => v.toStringAsFixed(0),
-            tooltipTextFormatter: (v, i) => "${AppLocalizations.of(context)!.core(i)}: ${configUnit(v)}",
-            linesInterval: coreChartConfig == CoreChartConfig.speed
-              ? widget.data[0].specs!.maxSpeed/4
-              : 10.0,
-            labelsInterval: coreChartConfig == CoreChartConfig.speed
-              ? widget.data[0].specs!.maxSpeed/4
-              : 10,
+        if (width > 900) SizedBox(
+          height: width > 900
+            ? height-190
+            : null,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: chart(),
+              ),
+              Expanded(
+                flex: 1,
+                child: legend()
+              )
+            ],
           ),
         ),
+        if (width <= 900) ...[
+          chart(),  
+          const SizedBox(height: 16),
+          legend(),
+        ],
         const SizedBox(height: 16),
-        Wrap(
-          children: widget.formattedData.asMap().entries.map(
-            (core) => FractionallySizedBox(
-              widthFactor: 0.5,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: chartColors[core.key]
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      AppLocalizations.of(context)!.core(core.key),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text("(${configUnit(core.value[coreChartConfig.name][core.value[coreChartConfig.name].length-1])})")
-                  ],
-                ),
-              ),
-            )
-          ).toList()
-        )
       ],
     );
   }
