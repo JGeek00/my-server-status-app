@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_server_status/constants/app_icons.dart';
 
 import 'package:my_server_status/screens/home/arc_chart.dart';
 
+import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/functions/intermediate_color_generator.dart';
 import 'package:my_server_status/functions/memory_conversion.dart';
 import 'package:my_server_status/models/general_info.dart';

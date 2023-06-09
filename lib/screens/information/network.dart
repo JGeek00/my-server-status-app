@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/widgets/custom_list_tile.dart';
-import 'package:my_server_status/widgets/section_label.dart';
 import 'package:my_server_status/widgets/tab_content.dart';
 
 import 'package:my_server_status/extensions/capitalize.dart';

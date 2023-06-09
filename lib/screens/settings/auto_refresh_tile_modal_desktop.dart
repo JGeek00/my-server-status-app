@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_server_status/widgets/custom_list_tile_dialog.dart';
+
 import 'package:my_server_status/widgets/custom_radio_list_tile.dart';
 
 class AutoRefreshTimeModalDesktop extends StatefulWidget {
