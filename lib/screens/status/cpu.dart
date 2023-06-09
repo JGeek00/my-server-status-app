@@ -51,22 +51,23 @@ class _CpuTabState extends State<CpuTab> {
         List<Map<String, dynamic>> cores = List.filled(widget.data[0].cores.length, {});
 
         for (var i = 0; i < cores.length; i++) {
-          List<double> temp = List.filled(20, 0);
+          List<double>? temp = List.filled(20, 0);
           List<double> speed = List.filled(20, 0.0);
           List<double> load = List.filled(20, 0.0);
 
           for (var j = 0; j < widget.data.length; j++) {
-            if (widget.data[j].cores[i].temperature != null) {
-              temp[j] = widget.data[j].cores[i].temperature!.toDouble();
-            }
-            else if (widget.data[j].average.temperature != null) {
-              temp[j] = widget.data[j].average.temperature!.toDouble();
-            }
-            else {
-              temp[j] = 0.0;
-            }
             speed[j] = widget.data[j].cores[i].speed;
             load[j] = widget.data[j].cores[i].load["load"] ?? 0.0;
+          }
+
+          for (var j = 0; j < widget.data.length; j++) {
+            if (widget.data[j].cores[i].temperature != null) {
+              temp![j] = widget.data[j].cores[i].temperature!.toDouble();
+            }
+            else {
+              temp = null;
+              break;
+            }
           }
 
           cores[i] = {
@@ -83,22 +84,23 @@ class _CpuTabState extends State<CpuTab> {
         List<Map<String, dynamic>> cores = List.filled(widget.data[0].cores.length, {});
 
         for (var i = 0; i < cores.length; i++) {
-          List<double> temp = [];
+          List<double>? temp = [];
           List<double> speed = [];
           List<double> load = [];
 
           for (var d in widget.data) {
-            if (d.cores[i].temperature != null) {
-              temp.add(d.cores[i].temperature!.toDouble());
-            }
-            else if (d.average.temperature != null) {
-              temp.add(d.average.temperature!.toDouble());
-            }
-            else {
-              temp.add(0.0);
-            }
             speed.add(d.cores[i].speed);
             load.add(d.cores[i].load["load"] ?? 0.0);
+          }
+
+          for (var d in widget.data) {
+            if (d.cores[i].temperature != null) {
+              temp!.add(d.cores[i].temperature!.toDouble());
+            }
+            else {
+              temp = null;
+              break;
+            }
           }
 
           cores[i] = {
@@ -209,44 +211,77 @@ class _CpuTabState extends State<CpuTab> {
           };
 
         case CoreChartConfig.temperature:
-          return {
-            "header": Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${AppLocalizations.of(context)!.temperature} (ºC)",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
+          if (value['temperature'] != null) {
+            return {
+              "header": Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${AppLocalizations.of(context)!.temperature} (ºC)",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  Text(
+                    "${value['temperature'][widget.data.length-1].toStringAsFixed(0)}ºC",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                ],
+              ),
+              "chart": CustomLinearChart(
+                data: [
+                  ChartData(
+                    data: List<double>.from(value['temperature'].map((e) => e.toDouble())), 
+                    color: appConfigProvider.statusColorsCharts && widget.data[widget.data.length-1].cores[nCore].temperature != null
+                      ? generateIntermediateColor(
+                          widget.data[widget.data.length-1].cores[nCore].temperature! < 100 
+                            ? widget.data[widget.data.length-1].cores[nCore].temperature!.toDouble()
+                            : 100.00
+                        )
+                      : Theme.of(context).colorScheme.primary
+                  )
+                ],
+                scale: const Scale(min: 0.0, max: 100.0),
+                yScaleTextFormatter: (v) => v.toStringAsFixed(0),
+                tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
+                linesInterval: 25.0,
+                labelsInterval: 50,
+              ),
+            };
+          }
+          else {
+            return {
+              "header": Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${AppLocalizations.of(context)!.load} (%)",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const Text(
+                    "---",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                ],
+              ),
+              "chart": Center(
+                child: Text(
+                  AppLocalizations.of(context)!.noDataAvailable,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant
                   ),
                 ),
-                Text(
-                  "${value['temperature'][widget.data.length-1].toStringAsFixed(0)}ºC",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ],
-            ),
-            "chart": CustomLinearChart(
-              data: [
-                ChartData(
-                  data: List<double>.from(value['temperature'].map((e) => e.toDouble())), 
-                  color: appConfigProvider.statusColorsCharts && widget.data[widget.data.length-1].cores[nCore].temperature != null
-                    ? generateIntermediateColor(
-                        widget.data[widget.data.length-1].cores[nCore].temperature! < 100 
-                          ? widget.data[widget.data.length-1].cores[nCore].temperature!.toDouble()
-                          : 100.00
-                      )
-                    : Theme.of(context).colorScheme.primary
-                )
-              ],
-              scale: const Scale(min: 0.0, max: 100.0),
-              yScaleTextFormatter: (v) => v.toStringAsFixed(0),
-              tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
-              linesInterval: 25.0,
-              labelsInterval: 50,
-            ),
-          };
+              )
+            };
+          }
 
         default:
           return {
@@ -314,7 +349,7 @@ class _CpuTabState extends State<CpuTab> {
                             value: CoreChartConfig.speed,
                             label: Text(AppLocalizations.of(context)!.speed)
                           ),
-                          ButtonSegment(
+                          if (core.value['temperature'] != null) ButtonSegment(
                             value: CoreChartConfig.temperature,
                             label: Text(AppLocalizations.of(context)!.temp)
                           ),
