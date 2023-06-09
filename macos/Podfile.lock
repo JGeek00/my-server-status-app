@@ -9,28 +9,28 @@ PODS:
   - FMDB/standard (2.7.5)
   - package_info_plus (0.0.1):
     - FlutterMacOS
-  - Sentry/HybridSDK (8.5.0):
-    - SentryPrivate (= 8.5.0)
+  - Sentry/HybridSDK (8.7.3):
+    - SentryPrivate (= 8.7.3)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.5.0)
-  - SentryPrivate (8.5.0)
+    - Sentry/HybridSDK (= 8.7.3)
+  - SentryPrivate (8.7.3)
   - sqflite (0.0.2):
     - FlutterMacOS
     - FMDB (>= 2.7.5)
-  - sqlite3 (3.41.0):
-    - sqlite3/common (= 3.41.0)
-  - sqlite3/common (3.41.0)
-  - sqlite3/fts5 (3.41.0):
+  - sqlite3 (3.41.2):
+    - sqlite3/common (= 3.41.2)
+  - sqlite3/common (3.41.2)
+  - sqlite3/fts5 (3.41.2):
     - sqlite3/common
-  - sqlite3/perf-threadsafe (3.41.0):
+  - sqlite3/perf-threadsafe (3.41.2):
     - sqlite3/common
-  - sqlite3/rtree (3.41.0):
+  - sqlite3/rtree (3.41.2):
     - sqlite3/common
   - sqlite3_flutter_libs (0.0.1):
     - FlutterMacOS
-    - sqlite3 (~> 3.41.0)
+    - sqlite3 (~> 3.41.2)
     - sqlite3/fts5
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
@@ -83,15 +83,15 @@ SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
-  Sentry: 3be3f42e40e5a552935552e115744d5810a216d9
-  sentry_flutter: c75806c304706163b2c129394c4621a786ad84e9
-  SentryPrivate: 8c9463280e282527f938d1a5d1d60f8e10ff279b
+  Sentry: c7a86f43510a7d5678d4de28d78c28ab351d295b
+  sentry_flutter: f2710a4f537e9a7143b02562b8754ccdc8224751
+  SentryPrivate: 2eaabf598a46d4b9b8822aef766df2a84caf2e6f
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  sqlite3: d31b2b69d59bd1b4ab30e5c92eb18fd8e82fa392
-  sqlite3_flutter_libs: f20746e4a0245afbee4f20d9afc0072ebff7cc26
+  sqlite3: fd89671d969f3e73efe503ce203e28b016b58f68
+  sqlite3_flutter_libs: 00a50503d69f7ab0fe85a5ff25b33082f4df4ce9
   url_launcher_macos: 5335912b679c073563f29d89d33d10d459f95451
   window_size: 339dafa0b27a95a62a843042038fa6c3c48de195
 
 PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.12.1
