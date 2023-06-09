@@ -17,10 +17,12 @@ class Scale {
 class ChartData {
   final List<double> data;
   final Color color;
+  final String? label;
 
   ChartData({
     required this.data,
-    required this.color
+    required this.color,
+    this.label
   });
 }
 
@@ -28,7 +30,7 @@ class CustomLinearChart extends StatelessWidget {
   final List<ChartData> data;
   final Scale? scale;
   final Function(double)? yScaleTextFormatter;
-  final Function(double)? tooltipTextFormatter;
+  final Function(double, int)? tooltipTextFormatter;
   final double? linesInterval;
   final double? labelsInterval;
   final double? reservedSizeYLabels;
@@ -115,7 +117,7 @@ class CustomLinearChart extends StatelessWidget {
           maxContentWidth: 150,
           getTooltipItems: (items) => items.asMap().entries.map((e) => LineTooltipItem(
             tooltipTextFormatter != null
-              ? tooltipTextFormatter!(e.value.y)
+              ? tooltipTextFormatter!(e.value.y, e.key)
               : e.value.y.toString(), 
             TextStyle(
               fontWeight: FontWeight.bold,

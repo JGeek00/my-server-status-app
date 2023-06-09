@@ -28,21 +28,37 @@ Future<Map<String, dynamic>> loadDb(bool acceptsDynamicTheme) async {
     });
   }
 
+  Future upgradeDbToV4(Database db) async {
+    await db.execute("ALTER TABLE appConfig ADD COLUMN combinedCpuChart NUMERIC");
+    await db.execute("UPDATE appConfig SET combinedCpuChart = 1");
+
+    await db.transaction((txn) async{
+      await txn.rawQuery(
+        'SELECT * FROM appConfig',
+      );
+    });
+  }
+
   Database db = await openDatabase(
     'my_server_status.db',
-    version: 3,
+    version: 4,
     onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE servers (id TEXT PRIMARY KEY, name TEXT, connectionMethod TEXT, domain TEXT, path TEXT, port INTEGER, user TEXT, password TEXT, defaultServer INTEGER, authToken TEXT)");
-      await db.execute("CREATE TABLE appConfig (theme NUMERIC, overrideSslCheck NUMERIC, useDynamicColor NUMERIC, staticColor NUMERIC, autoRefreshTimeHome NUMERIC, autoRefreshTimeStatus NUMERIC, apiAnnouncementReaden NUMERIC, timeoutRequests NUMERIC, statusColorsCharts NUMERIC, hideVolumesNoMountPoint NUMERIC)");
-      await db.execute("INSERT INTO appConfig (theme, overrideSslCheck, useDynamicColor, staticColor, autoRefreshTimeHome, autoRefreshTimeStatus, apiAnnouncementReaden, timeoutRequests, statusColorsCharts, hideVolumesNoMountPoint) VALUES (0, 0, ${acceptsDynamicTheme == true ? 1 : 0}, 0, 2, 2, 0, 1, 0, 1)");
+      await db.execute("CREATE TABLE appConfig (theme NUMERIC, overrideSslCheck NUMERIC, useDynamicColor NUMERIC, staticColor NUMERIC, autoRefreshTimeHome NUMERIC, autoRefreshTimeStatus NUMERIC, apiAnnouncementReaden NUMERIC, timeoutRequests NUMERIC, statusColorsCharts NUMERIC, hideVolumesNoMountPoint NUMERIC, combinedCpuChart NUMERIC)");
+      await db.execute("INSERT INTO appConfig (theme, overrideSslCheck, useDynamicColor, staticColor, autoRefreshTimeHome, autoRefreshTimeStatus, apiAnnouncementReaden, timeoutRequests, statusColorsCharts, hideVolumesNoMountPoint, combinedCpuChart) VALUES (0, 0, ${acceptsDynamicTheme == true ? 1 : 0}, 0, 2, 2, 0, 1, 0, 1, 1)");
     },
     onUpgrade: (Database db, int oldVersion, int newVersion) async {
       if (oldVersion == 1) {
         await upgradeDbToV2(db);
         await upgradeDbToV3(db);
+        await upgradeDbToV4(db);
       }
       if (oldVersion == 2) {
         await upgradeDbToV3(db);
+        await upgradeDbToV4(db);
+      }
+      if (oldVersion == 3) {
+        await upgradeDbToV4(db);
       }
     },
     onOpen: (Database db) async {

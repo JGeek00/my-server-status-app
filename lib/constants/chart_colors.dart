@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+
+const List<Color> chartColors = [
+  Colors.red,
+  Colors.green,
+  Colors.blue,
+  Colors.yellow,
+  Colors.orange,
+  Colors.brown,
+  Colors.cyan,
+  Colors.orange,
+  Colors.purple,
+  Colors.pink,
+  Colors.deepOrange,
+  Colors.indigo,
+  Colors.amber,
+  Colors.limeAccent,
+  Colors.teal,
+  Colors.purpleAccent,
+  Colors.limeAccent,
+  Colors.tealAccent,
+  Colors.deepOrangeAccent,
+  Colors.redAccent,
+  Colors.grey,
+  Colors.yellowAccent,
+  Colors.greenAccent,
+  Colors.pinkAccent,
+  Colors.cyanAccent,
+  Colors.blueGrey,
+  Colors.amberAccent,
+  Colors.indigoAccent
+];  

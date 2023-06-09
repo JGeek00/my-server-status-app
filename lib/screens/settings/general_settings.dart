@@ -151,6 +151,16 @@ class GeneralSettings extends StatelessWidget {
               value: v
             ),
           ),
+          CustomSwitchListTile(
+            icon: Icons.show_chart_rounded,
+            title: AppLocalizations.of(context)!.combinedCpuChart,
+            subtitle: AppLocalizations.of(context)!.combinedCpuChartDescription,
+            value: appConfigProvider.combinedCpuChart,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setCombinedCpuChart, 
+              value: v
+            ),
+          ),
         ],
       ),
     );  

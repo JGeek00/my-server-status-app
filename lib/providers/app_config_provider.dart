@@ -37,6 +37,8 @@ class AppConfigProvider with ChangeNotifier {
 
   bool _hideVolumesNoMountPoint = true;
 
+  bool _combinedCpuChart = true;
+
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
@@ -119,6 +121,10 @@ class AppConfigProvider with ChangeNotifier {
 
   bool get hideVolumesNoMountPoint {
     return _hideVolumesNoMountPoint;
+  }
+
+  bool get combinedCpuChart {
+    return _combinedCpuChart;
   }
 
   void setDbInstance(Database db) {
@@ -272,6 +278,18 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> setCombinedCpuChart(bool value) async {
+    final updated = await updateConfigQuery(_dbInstance!, 'combinedCpuChart', value == true ? 1 : 0);
+    if (updated == true) {
+      _combinedCpuChart = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   void saveFromDb(Database dbInstance, Map<String, dynamic> dbData) {
     _selectedTheme = dbData['theme'];
     _overrideSslCheck = dbData['overrideSslCheck'];
@@ -283,6 +301,7 @@ class AppConfigProvider with ChangeNotifier {
     _timeoutRequests = convertFromIntToBool(dbData['timeoutRequests'])!;
     _statusColorsCharts = convertFromIntToBool(dbData['statusColorsCharts'])!;
     _hideVolumesNoMountPoint = convertFromIntToBool(dbData['hideVolumesNoMountPoint'])!;
+    _combinedCpuChart = convertFromIntToBool(dbData['combinedCpuChart'])!;
 
     _dbInstance = dbInstance;
     notifyListeners();

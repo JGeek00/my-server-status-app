@@ -162,7 +162,7 @@ class _NetworkTabState extends State<NetworkTab> {
                           return parsed.toString();
                         }
                       },
-                      tooltipTextFormatter: (v) => v > 1048576
+                      tooltipTextFormatter: (v, i) => v > 1048576
                         ? "${convertMemoryToMb(v)} MB/s"
                         : "${convertMemoryToKb(v)} KB/s",
                       reservedSizeYLabels: 50,

@@ -1,15 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:my_server_status/screens/status/chart.dart';
-import 'package:my_server_status/widgets/section_label.dart';
+import 'package:my_server_status/screens/status/cpu_combined_chart.dart';
+import 'package:my_server_status/screens/status/cpu_separated_chart.dart';
 import 'package:my_server_status/widgets/tab_content.dart';
 
 import 'package:my_server_status/providers/app_config_provider.dart';
-import 'package:my_server_status/functions/intermediate_color_generator.dart';
 import 'package:my_server_status/models/current_status.dart';
 import 'package:my_server_status/constants/enums.dart';
 
@@ -37,8 +34,6 @@ class _CpuTabState extends State<CpuTab> {
   @override
   Widget build(BuildContext context) {
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
-
-    final width = MediaQuery.of(context).size.width;
 
     List<Map<String, dynamic>> chartData() {
       if (coreChartConfig.length != widget.data[0].cores.length) {
@@ -114,183 +109,6 @@ class _CpuTabState extends State<CpuTab> {
       }
     }
 
-    Map<String, Widget> generateChart(CoreChartConfig config, Map<String, dynamic> value, int nCore) {
-      switch (config) {
-        case CoreChartConfig.load:
-          return {
-            "header": Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${AppLocalizations.of(context)!.load} (%)",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                Text(
-                  "${value['load'][widget.data.length-1].toStringAsFixed(2)}%",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ],
-            ),
-            "chart": CustomLinearChart(
-              data: [
-                ChartData(
-                  data: List<double>.from(value['load'].map((e) => e.toDouble())), 
-                  color: appConfigProvider.statusColorsCharts
-                    ? generateIntermediateColor(widget.data[widget.data.length-1].cores[nCore].load['load'] ?? 0)
-                    : Theme.of(context).colorScheme.primary
-                )
-              ],
-              scale: const Scale(min: 0.0, max: 100.0),
-              yScaleTextFormatter: (v) => v.toStringAsFixed(0),
-              tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)}%",
-              linesInterval: 25.0,
-              labelsInterval: 50,
-            ),
-          };
-
-        case CoreChartConfig.speed:
-          final values = List<double>.from(value['speed'].map((e) => e.toDouble()));
-          final maxValue = values.reduce(max);
-          return {
-            "header": Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${AppLocalizations.of(context)!.speed} (GHz)",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                Text(
-                  "${value['speed'][widget.data.length-1].toStringAsFixed(2)} GHz",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ],
-            ),
-            "chart":  widget.data[0].specs != null
-              ? CustomLinearChart(
-                  data: [
-                    ChartData(
-                      data: values,
-                      color: appConfigProvider.statusColorsCharts 
-                        ? generateIntermediateColor(
-                            (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100 > 100
-                              ? 100
-                              : (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100
-                          )
-                        : Theme.of(context).colorScheme.primary
-                    )
-                  ],
-                  scale: Scale(
-                    min: 0, 
-                    max: maxValue > widget.data[0].specs!.maxSpeed
-                      ? maxValue
-                      : widget.data[0].specs!.maxSpeed
-                  ),
-                  yScaleTextFormatter: (v) => v.toStringAsFixed(2),
-                  tooltipTextFormatter: (v) => "${v.toStringAsFixed(2)} GHz",
-                  linesInterval: widget.data[0].specs!.maxSpeed/4,
-                  labelsInterval: widget.data[0].specs!.maxSpeed/4,
-                )
-              : Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.noDataAvailable,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant
-                    ),
-                  ),
-                )
-          };
-
-        case CoreChartConfig.temperature:
-          if (value['temperature'] != null) {
-            return {
-              "header": Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${AppLocalizations.of(context)!.temperature} (ºC)",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  Text(
-                    "${value['temperature'][widget.data.length-1].toStringAsFixed(0)}ºC",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                ],
-              ),
-              "chart": CustomLinearChart(
-                data: [
-                  ChartData(
-                    data: List<double>.from(value['temperature'].map((e) => e.toDouble())), 
-                    color: appConfigProvider.statusColorsCharts && widget.data[widget.data.length-1].cores[nCore].temperature != null
-                      ? generateIntermediateColor(
-                          widget.data[widget.data.length-1].cores[nCore].temperature! < 100 
-                            ? widget.data[widget.data.length-1].cores[nCore].temperature!.toDouble()
-                            : 100.00
-                        )
-                      : Theme.of(context).colorScheme.primary
-                  )
-                ],
-                scale: const Scale(min: 0.0, max: 100.0),
-                yScaleTextFormatter: (v) => v.toStringAsFixed(0),
-                tooltipTextFormatter: (v) => "${v.toStringAsFixed(0)}ºC",
-                linesInterval: 25.0,
-                labelsInterval: 50,
-              ),
-            };
-          }
-          else {
-            return {
-              "header": Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${AppLocalizations.of(context)!.load} (%)",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  const Text(
-                    "---",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                ],
-              ),
-              "chart": Center(
-                child: Text(
-                  AppLocalizations.of(context)!.noDataAvailable,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant
-                  ),
-                ),
-              )
-            };
-          }
-
-        default:
-          return {
-            "header": const SizedBox(),
-            "chart": const SizedBox()
-          };
-      }
-    }
-
     return CustomTabContent(
       loadingGenerator: () => Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -311,58 +129,14 @@ class _CpuTabState extends State<CpuTab> {
       contentGenerator: () {
         final formattedData = chartData();
         return [
-          Wrap(
-            children: formattedData.asMap().entries.map((core) {
-              final widgets = generateChart(coreChartConfig[core.key], core.value, core.key);
-              final renderWidget = Container(
-                width: width > 600 
-                  ? width > 900 ? (width-91)/2 : width/2
-                  : null,
-                padding: width > 600 ? const EdgeInsets.all(8) : null,
-                child: Column(
-                  children: [
-                    SectionLabel(
-                      label: AppLocalizations.of(context)!.core(core.key),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: widgets["header"]
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SizedBox(
-                        width: double.maxFinite,
-                        height: width > 600 ? 150 : 100,
-                        child: widgets["chart"]
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SegmentedButton<CoreChartConfig>(
-                        segments: [
-                          ButtonSegment(
-                            value: CoreChartConfig.load,
-                            label: Text(AppLocalizations.of(context)!.load)
-                          ),
-                          if (widget.data[0].specs != null) ButtonSegment(
-                            value: CoreChartConfig.speed,
-                            label: Text(AppLocalizations.of(context)!.speed)
-                          ),
-                          if (core.value['temperature'] != null) ButtonSegment(
-                            value: CoreChartConfig.temperature,
-                            label: Text(AppLocalizations.of(context)!.temp)
-                          ),
-                        ], 
-                        selected: <CoreChartConfig>{coreChartConfig[core.key]},
-                        onSelectionChanged: (value) => setState(() => coreChartConfig[core.key] = value.first),
-                      ),
-                    )
-                  ],
-                ),
-              );
-              return renderWidget;
-            }).toList()
+          if (appConfigProvider.combinedCpuChart == true) CpuCombinedChart(
+            formattedData: formattedData, 
+            data: widget.data
+          ),
+          if (appConfigProvider.combinedCpuChart == false) CpuSeparatedChart(
+            coreChartConfig: coreChartConfig, 
+            formattedData: formattedData, 
+            data: widget.data
           )
         ];
       }, 

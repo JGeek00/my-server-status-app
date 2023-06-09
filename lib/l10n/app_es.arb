@@ -237,5 +237,7 @@
   "serverRebootFailed": "Orden de reinicio fallida",
   "noDataAvailable": "No hay datos disponibles",
   "showMoreEntries": "Mostrar {number} entradas más",
-  "showLessEntries": "Mostrar menos entradas"
+  "showLessEntries": "Mostrar menos entradas",
+  "combinedCpuChart": "Gráfico de CPU combinado",
+  "combinedCpuChartDescription": "Combina todos los valores de todos los núcleos en un único gráfico"
 }

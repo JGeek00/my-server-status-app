@@ -237,5 +237,7 @@
   "serverRebootFailed": "Reboot order failed",
   "noDataAvailable": "No data available",
   "showMoreEntries": "Show {number} more entries",
-  "showLessEntries": "Show less entries"
+  "showLessEntries": "Show less entries",
+  "combinedCpuChart": "Combined CPU chart",
+  "combinedCpuChartDescription": "Combines the values of all cores into one chart"
 }
