@@ -31,6 +31,10 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
+    final removedNullValues = List<Map<String, dynamic>>.from(
+      widget.formattedData.map((core) => core[coreChartConfig.name] != null ? core : null).where((core) => core != null).toList()
+    );
+
     String configUnit(int core) {
       switch (coreChartConfig) {
         case CoreChartConfig.load:
@@ -55,7 +59,7 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
 
     double getMaxValueDouble() {
       List<double> allValues = [];
-      for (var item in widget.formattedData) {
+      for (var item in removedNullValues) {
         allValues = [...allValues, ...item[coreChartConfig.name]];
       }
       return allValues.reduce(max);
@@ -97,10 +101,17 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: CustomLinearChart(
           data: List<ChartData>.from(widget.formattedData.asMap().entries.map(
-            (core) => ChartData(
-              data: List<double>.from(core.value[coreChartConfig.name].map((e) => e.toDouble())), 
-              color: chartColors[core.key]
-            ))
+            (core) {
+              if (core.value[coreChartConfig.name] != null) {
+                return ChartData(
+                  data: List<double>.from(core.value[coreChartConfig.name].map((e) => e.toDouble())), 
+                  color: chartColors[core.key]
+                );
+              }
+              else {
+                return null;
+              }
+            }).where((core) => core != null)
           ),
           scale: Scale(
             min: 0.0, 
@@ -120,45 +131,41 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
 
     Widget legend() {
       return Wrap(
-        children: widget.formattedData.asMap().entries.map(
-          (core) => FractionallySizedBox(
-            widthFactor: width > 900
-              ? 1
-              : 0.5,
-            child: Padding(
-              padding: width > 900
-                ? const EdgeInsets.all(16)
-                : const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: chartColors[core.key]
-                    ),
+        children: removedNullValues.asMap().entries.map((core) => FractionallySizedBox(
+          widthFactor: width > 900
+            ? 1
+            : 0.5,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: chartColors[core.key]
                   ),
-                  const SizedBox(width: 16),
-                  Text(
-                    AppLocalizations.of(context)!.core(core.key),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400
-                    ),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  AppLocalizations.of(context)!.core(core.key),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400
                   ),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      "(${configUnit(core.key)})",
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    "(${configUnit(core.key)})",
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
             ),
-          )
-        ).toList()
+          ),
+        )).toList()
       );
     }
 

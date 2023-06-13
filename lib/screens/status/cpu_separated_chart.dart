@@ -249,13 +249,13 @@ class _CpuSeparatedChartState extends State<CpuSeparatedChart> {
                       selected: widget.coreChartConfig[core.key] == CoreChartConfig.load,
                       onSelected: (_) => setState(() => widget.coreChartConfig[core.key] = CoreChartConfig.load)
                     ),
-                    FilterChip(
+                    if (widget.data[0].specs != null) FilterChip(
                       label: Text(AppLocalizations.of(context)!.speed), 
                       tooltip: AppLocalizations.of(context)!.speed,
                       selected: widget.coreChartConfig[core.key] == CoreChartConfig.speed,
                       onSelected: (_) => setState(() => widget.coreChartConfig[core.key] = CoreChartConfig.speed)
                     ),
-                    FilterChip(
+                    if (core.value['temperature'] != null) FilterChip(
                       label: Text(AppLocalizations.of(context)!.temperature),
                       tooltip: AppLocalizations.of(context)!.temperature, 
                       selected: widget.coreChartConfig[core.key] == CoreChartConfig.temperature,

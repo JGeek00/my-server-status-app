@@ -30,8 +30,8 @@ class CpuDetails {
   final String manufacturer;
   final String brand;
   final double speed;
-  final double speedMin;
-  final double speedMax;
+  final double? speedMin;
+  final double? speedMax;
   final int cores;
   final int physicalCores;
   final int performanceCores;
