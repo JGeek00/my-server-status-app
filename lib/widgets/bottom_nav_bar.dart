@@ -36,6 +36,9 @@ class BottomNavBar extends StatelessWidget {
         case 'status':
           return AppLocalizations.of(context)!.status;
 
+        case 'docker':
+          return "Docker";
+
         default:
           return '';
       }
@@ -49,6 +52,8 @@ class BottomNavBar extends StatelessWidget {
           color: screens[appConfigProvider.selectedScreen] == screen
             ? Theme.of(context).colorScheme.onSecondaryContainer
             : Theme.of(context).colorScheme.onSurfaceVariant,
+          size: screen.name == 'docker'
+            ? 20 : 24,
         ), 
         label: translatedName(screen.name)
       )).toList(),

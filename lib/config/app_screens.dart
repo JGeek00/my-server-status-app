@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:my_server_status/screens/home/home.dart';
+import 'package:my_server_status/screens/docker/docker_screen.dart';
 import 'package:my_server_status/screens/information/information.dart';
 import 'package:my_server_status/screens/settings/settings.dart';
 import 'package:my_server_status/screens/connect/connect.dart';
 import 'package:my_server_status/screens/status/status.dart';
+import 'package:my_server_status/screens/home/home.dart';
 
+import 'package:my_server_status/constants/docker_icons.dart';
 import 'package:my_server_status/models/app_screen.dart';
 
 List<AppScreen> screensSelectServer = [
@@ -36,6 +38,11 @@ List<AppScreen> screensServerConnected = [
     name: "status", 
     icon: Icons.analytics_rounded, 
     body: StatusScreen(),
+  ),
+  const AppScreen(
+    name: "docker", 
+    icon: DockerIcons.docker, 
+    body: DockerScreen(),
   ),
   const AppScreen(
     name: "settings", 

@@ -239,5 +239,17 @@
   "showMoreEntries": "Show {number} more entries",
   "showLessEntries": "Show less entries",
   "combinedCpuChart": "Combined CPU chart",
-  "combinedCpuChartDescription": "Combines the values of all cores into one chart"
+  "combinedCpuChartDescription": "Combines the values of all cores into one chart",
+  "images": "Images",
+  "containers": "Containers",
+  "running": "Running",
+  "paused": "Paused",
+  "stopped": "Stopped",
+  "containersStatus": "Containers status",
+  "dockerStatus": "Docker status",
+  "hardwareResources": "Hardware resources",
+  "cpuCores": "CPU cores",
+  "loadingDockerInformation": "Loading Docker information",
+  "dockerInformationNotLoaded": "Docker information couldn't be loaded",
+  "dockerNotAvailable": "Docker is not available on this machine"
 }
