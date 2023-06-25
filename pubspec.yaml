@@ -139,6 +139,9 @@ flutter:
     - family: DockerIcons
       fonts:
         - asset: assets/resources/docker_icons.ttf
+    - family: OSIcons
+      fonts:
+        - asset: assets/resources/os_icons.ttf
 
   #
   # For details regarding fonts from package dependencies,
