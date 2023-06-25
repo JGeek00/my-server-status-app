@@ -679,11 +679,11 @@ Future getDockerContainers({required Server server}) async {
 
   if (result['hasResponse'] == true) {
     if (result['statusCode'] == 200) {
+      try {
         return {
           'result': 'success',
           'data': List<DockerContainer>.from(jsonDecode(result['body']).map((i) => DockerContainer.fromJson(i)))
         };
-      try {
       } catch (e) {
         Sentry.captureException(e);
         return {
