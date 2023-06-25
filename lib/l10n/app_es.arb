@@ -270,5 +270,20 @@
   "labels": "Labels",
   "tapSeeValues": "Toca para ver los valores",
   "exposedPorts": "Puertos expuestos",
-  "tags": "Etiquetas"
+  "tags": "Etiquetas",
+  "created": "Creado",
+  "containerDetails": "Detalles del contenedor",
+  "containerId": "ID de contenedor",
+  "command": "Comando",
+  "started": "Iniciado",
+  "finished": "Terminado",
+  "restartCount": "Reinicios",
+  "ports": "Puertos",
+  "notExposedPorts": "Puertos no expuestos",
+  "publicPort": "Puerto público",
+  "privatePort": "Puerto privado",
+  "source": "Fuente",
+  "destination": "Destino",
+  "mode": "Modo",
+  "propagation": "Propagación"
 }

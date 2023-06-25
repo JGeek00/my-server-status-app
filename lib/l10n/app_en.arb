@@ -270,5 +270,20 @@
   "labels": "Labels",
   "tapSeeValues": "Tap to see values",
   "exposedPorts": "Exposed ports",
-  "tags": "Tags"
+  "tags": "Tags",
+  "created": "Created",
+  "containerDetails": "Container details",
+  "containerId": "Container ID",
+  "command": "Command",
+  "started": "Started",
+  "finished": "Finished",
+  "restartCount": "Restart count",
+  "ports": "Ports",
+  "notExposedPorts": "Not exposed ports",
+  "publicPort": "Public port",
+  "privatePort": "Private port",
+  "source": "Source",
+  "destination": "Destination",
+  "mode": "Mode",
+  "propagation": "Propagation"
 }

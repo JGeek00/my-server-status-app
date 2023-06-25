@@ -101,7 +101,7 @@ class _InformationTabState extends State<InformationTab> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
+                  if (data!.images != null) Column(
                     children: [
                       Icon(
                         DockerIcons.cd,
@@ -125,7 +125,7 @@ class _InformationTabState extends State<InformationTab> {
                       )
                     ],
                   ),
-                  Column(
+                  if (data!.containers != null) Column(
                     children: [
                       Icon(
                         DockerIcons.drive,
@@ -169,17 +169,23 @@ class _InformationTabState extends State<InformationTab> {
                           data: [
                             PieChartTile(
                               label: "running", 
-                              value: data!.containersRunning!.toDouble(), 
+                              value: data!.containersRunning != null
+                                ? data!.containersRunning!.toDouble()
+                                : 0.0, 
                               color: Colors.green
                             ),
                             PieChartTile(
                               label: "paused", 
-                              value: data!.containersPaused!.toDouble(), 
+                              value: data!.containersPaused != null
+                                ? data!.containersPaused!.toDouble()
+                                : 0.0, 
                               color: Colors.orange
                             ),
                             PieChartTile(
                               label: "stopped", 
-                              value: data!.containersStopped!.toDouble(), 
+                              value: data!.containersStopped != null
+                                ? data!.containersStopped!.toDouble()
+                                : 0.0, 
                               color: Colors.red
                             ),
                           ]
@@ -202,19 +208,25 @@ class _InformationTabState extends State<InformationTab> {
                         legendTile(
                           AppLocalizations.of(context)!.running, 
                           Colors.green, 
-                          data!.containersRunning!.toString()
+                          data!.containersRunning != null
+                            ? data!.containersRunning!.toString()
+                            : '0'
                         ),
                         const SizedBox(height: 16),
                         legendTile(
                           AppLocalizations.of(context)!.paused, 
                           Colors.orange, 
-                          data!.containersPaused!.toString()
+                          data!.containersPaused != null
+                            ? data!.containersPaused!.toString()
+                            : '0'
                         ),
                         const SizedBox(height: 16),
                         legendTile(
                           AppLocalizations.of(context)!.stopped, 
                           Colors.red, 
-                          data!.containersStopped!.toString()
+                           data!.containersStopped != null
+                            ? data!.containersStopped!.toString()
+                            : '0'
                         ),
                       ],
                     ),
@@ -229,7 +241,7 @@ class _InformationTabState extends State<InformationTab> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
+                  if (data!.ncpu != null) Column(
                     children: [
                       Icon(
                         Icons.memory_rounded,
@@ -253,7 +265,7 @@ class _InformationTabState extends State<InformationTab> {
                       )
                     ],
                   ),
-                  Column(
+                  if (data!.memTotal != null) Column(
                     children: [
                       Icon(
                         DockerIcons.drive,
