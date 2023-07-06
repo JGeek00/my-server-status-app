@@ -3,15 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:my_server_status/config/globals.dart';
+
 void copyToClipboard({
-  required BuildContext context,
   required String value,
   required String successMessage
 }) async {
   await Clipboard.setData(
     ClipboardData(text: value)
   );
-  ScaffoldMessenger.of(context).showSnackBar(
+  scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(successMessage),
       backgroundColor: Colors.green,
