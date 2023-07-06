@@ -158,7 +158,7 @@ jobs:
       - name: Build installer witn innosetup
         run: iscc /Q windows/innosetup_installer_builder.iss
       - name: Move installer file to root directory
-        run: move build/windows/aghm_installer.exe MyServerStatus_${{ github.event.inputs.version }}_Windows_x64.exe
+        run: move build/windows/myserverstatus_installer.exe MyServerStatus_${{ github.event.inputs.version }}_Windows_x64.exe
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
