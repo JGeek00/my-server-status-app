@@ -152,12 +152,12 @@ class StorageTab extends StatelessWidget {
                       subtitle: device.type,
                     ),
                   ),
-                  listTile(
+                  if (device.size != null) listTile(
                     CustomListTile(
                       title: AppLocalizations.of(context)!.size,
-                      subtitle: device.size > 104857600 
-                        ? "${convertMemoryToGb(device.size)} GB" 
-                        : "${convertMemoryToMb(device.size.toDouble())} MB" 
+                      subtitle: device.size! > 104857600 
+                        ? "${convertMemoryToGb(device.size!)} GB" 
+                        : "${convertMemoryToMb(device.size!.toDouble())} MB" 
                     ),
                   ),
                   if (device.mount != "") listTile(

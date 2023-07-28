@@ -135,11 +135,11 @@ class StorageModalDetails extends StatelessWidget {
                             title: AppLocalizations.of(context)!.type,
                             subtitle: device.type,
                           ),
-                          CustomListTile(
+                          if (device.size != null) CustomListTile(
                             title: AppLocalizations.of(context)!.size,
-                            subtitle: device.size > 104857600 
-                              ? "${convertMemoryToGb(device.size)} GB" 
-                              : "${convertMemoryToMb(device.size.toDouble())} MB" 
+                            subtitle: device.size! > 104857600 
+                              ? "${convertMemoryToGb(device.size!)} GB" 
+                              : "${convertMemoryToMb(device.size!.toDouble())} MB" 
                           ),
                           if (device.mount != "") CustomListTile(
                             title: AppLocalizations.of(context)!.mountPoint,

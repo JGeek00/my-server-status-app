@@ -59,7 +59,7 @@ class DiskLayout {
     vendor: json["vendor"],
     size: json["size"],
     interfaceType: json["interfaceType"],
-    temperature: json["temperature"],
+    temperature: json["temperature"] != null ? double.parse(json["temperature"]) : null,
     serialNum: json["serialNum"],
     firmwareRevision: json["firmwareRevision"],
   );
@@ -82,7 +82,7 @@ class BlockDevices {
   final String type;
   final String fsType;
   final String mount;
-  final int size;
+  final int? size;
   final String physical;
   final String label;
   final String? model;

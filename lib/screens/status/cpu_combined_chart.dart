@@ -62,7 +62,9 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
       for (var item in removedNullValues) {
         allValues = [...allValues, ...item[coreChartConfig.name]];
       }
-      return allValues.reduce(max);
+      return allValues.isNotEmpty
+        ? allValues.reduce(max)
+        : 0.0;
     }
 
     double generateMaxScale() {
@@ -72,11 +74,12 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
 
         case CoreChartConfig.speed:
           final maxValue = getMaxValueDouble();
-          if (maxValue > widget.data[0].specs!.maxSpeed) {
+          if (widget.data[0].specs!.maxSpeed == null) return maxValue;
+          if (maxValue > widget.data[0].specs!.maxSpeed!) {
             return maxValue;
           }
           else {
-            return widget.data[0].specs!.maxSpeed;
+            return widget.data[0].specs!.maxSpeed!;
           }
 
         case CoreChartConfig.temperature:
@@ -120,11 +123,15 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
           yScaleTextFormatter: (v) => v.toStringAsFixed(0),
           tooltipTextFormatter: (v, i) => "${AppLocalizations.of(context)!.core(i)}: ${configUnit(i)}",
           linesInterval: coreChartConfig == CoreChartConfig.speed
-            ? widget.data[0].specs!.maxSpeed/4
+            ? widget.data[0].specs!.maxSpeed != null 
+              ? widget.data[0].specs!.maxSpeed!/4
+              : getMaxValueDouble()
             : 10.0,
           labelsInterval: coreChartConfig == CoreChartConfig.speed
-            ? widget.data[0].specs!.maxSpeed/4
-            : 10,
+            ? widget.data[0].specs!.maxSpeed != null 
+              ? widget.data[0].specs!.maxSpeed!/4
+              : getMaxValueDouble()
+            : 10.0,
         ),
       );
     }

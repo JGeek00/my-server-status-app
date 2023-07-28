@@ -51,7 +51,7 @@ class CustomLinearChart extends StatelessWidget {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: false,
-        horizontalInterval: linesInterval,
+        horizontalInterval: linesInterval != null ? linesInterval! > 0 ? labelsInterval : 1 : null,
         getDrawingHorizontalLine: (value) => FlLine(
           color: selectedTheme == ThemeMode.light
             ? Colors.black12
