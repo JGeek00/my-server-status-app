@@ -27,10 +27,16 @@ class _ImagesTabState extends State<ImagesTab> {
     final server = Provider.of<ServersProvider>(context, listen: false).selectedServer;
     final result = await getDockerImages(server: server!);
     if (result['result'] == 'success') {
-      setState(() {
+      if (mounted) {
+        setState(() {
+          data = result['data'];
+          loadStatus = LoadStatus.loaded;
+        });
+      }
+      else {
         data = result['data'];
         loadStatus = LoadStatus.loaded;
-      });
+      }
     }
     else {
       setState(() => loadStatus = LoadStatus.error);

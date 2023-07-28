@@ -101,23 +101,29 @@ class _CpuSeparatedChartState extends State<CpuSeparatedChart> {
                       data: values,
                       color: appConfigProvider.statusColorsCharts 
                         ? generateIntermediateColor(
-                            (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100 > 100
+                            (widget.data[widget.data.length-1].cores[nCore].speed/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100 > 100
                               ? 100
-                              : (widget.data[widget.data.length-1].cores[nCore].speed/widget.data[0].specs!.maxSpeed)*100
+                              : (widget.data[widget.data.length-1].cores[nCore].speed/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100
                           )
                         : Theme.of(context).colorScheme.primary
                     )
                   ],
                   scale: Scale(
                     min: 0, 
-                    max: maxValue > widget.data[0].specs!.maxSpeed
-                      ? maxValue
-                      : widget.data[0].specs!.maxSpeed
+                    max: widget.data[0].specs!.maxSpeed != null
+                      ? maxValue > widget.data[0].specs!.maxSpeed!
+                        ? maxValue
+                        : widget.data[0].specs!.maxSpeed!
+                      : maxValue
                   ),
                   yScaleTextFormatter: (v) => v.toStringAsFixed(2),
                   tooltipTextFormatter: (v, i) => "${v.toStringAsFixed(2)} GHz",
-                  linesInterval: widget.data[0].specs!.maxSpeed/4,
-                  labelsInterval: widget.data[0].specs!.maxSpeed/4,
+                  linesInterval: widget.data[0].specs!.maxSpeed != null
+                    ? widget.data[0].specs!.maxSpeed!/4
+                    : maxValue/4,
+                  labelsInterval: widget.data[0].specs!.maxSpeed != null
+                    ? widget.data[0].specs!.maxSpeed!/4
+                    : maxValue/4,
                 )
               : Center(
                   child: Text(

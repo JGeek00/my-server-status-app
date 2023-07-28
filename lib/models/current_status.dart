@@ -17,7 +17,7 @@ class CurrentStatus {
 
   factory CurrentStatus.fromJson(Map<String, dynamic> json) => CurrentStatus(
     cpu: Cpu.fromJson(json["cpu"]),
-    socketTemperature: List<double>.from(json["socketTemperature"].map((x) => x.toDouble())),
+    socketTemperature: json["socketTemperature"] != null ? List<double>.from(json["socketTemperature"].map((x) => x.toDouble())) : [],
     chipsetTemperature: json["chipsetTemperature"]?.toDouble(),
     memory: Memory.fromJson(json["memory"]),
     storage: json["storage"] != null ? Storage.fromJson(json["storage"]) : null,
@@ -61,7 +61,7 @@ class CpuSpecs {
   final String name;
   final double? minSpeed;
   final double speed;
-  final double maxSpeed;
+  final double? maxSpeed;
 
   CpuSpecs({
     required this.name,

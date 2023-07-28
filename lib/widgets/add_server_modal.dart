@@ -244,7 +244,12 @@ class _AddServerModalState extends State<AddServerModal> {
 
       final result = await login(serverObj);
 
-      setState(() => isConnecting = false);
+      if (mounted) {
+        setState(() => isConnecting = false);
+      }
+      else {
+        isConnecting = false;
+      }
 
       if (result['result'] == 'success') {
         if (serverObj.user != null && serverObj.password != null) {

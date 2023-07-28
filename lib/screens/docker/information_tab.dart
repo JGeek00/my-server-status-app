@@ -28,10 +28,16 @@ class _InformationTabState extends State<InformationTab> {
     final server = Provider.of<ServersProvider>(context, listen: false).selectedServer;
     final result = await getDockerInfo(server: server!);
     if (result['result'] == 'success') {
-      setState(() {
+      if (mounted) {
+        setState(() {
+          data = result['data'];
+          loadStatus = LoadStatus.loaded;
+        });
+      }
+      else {
         data = result['data'];
         loadStatus = LoadStatus.loaded;
-      });
+      }
     }
     else {
       setState(() => loadStatus = LoadStatus.error);
