@@ -7,6 +7,14 @@
 </h5>
 
 <br>
+
+<p>
+  <b>⚠️ PROJECT DISCONTINUED ⚠️</b>
+  <br>
+  This project is discontinued and won't receive more updates. If you are looking for a server monitoring software, I recommend you checking out <a href="https://github.com/dani3l0/Status">Status</a>. Also, if you are an iOS user, I have developed <a href="https://apps.apple.com/us/app/server-status-server-monitor/id6479648296">Server Status</a> a client for this service.
+</p>
+
+<br>
 <p>
 ❗️ <b>IMPORTANT</b> ❗️
 <br>
