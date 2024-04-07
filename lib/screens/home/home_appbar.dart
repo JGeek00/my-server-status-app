@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_server_status/functions/compare_versions.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -105,32 +106,34 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(width: 48),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (serversProvider.selectedServer != null) ...[
-                  Text(
-                    server!.name,
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (serversProvider.selectedServer != null) ...[
+                    Text(
+                      server!.name,
+                      style: const TextStyle(
+                        fontSize: 24
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "${server.connectionMethod}://${server.domain}${server.path ?? ""}${server.port != null ? ':${server.port}' : ""}",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).listTileTheme.textColor
+                      ),
+                    )
+                  ],
+                  if (serversProvider.selectedServer == null) Text(
+                    AppLocalizations.of(context)!.noServerSelected,
                     style: const TextStyle(
-                      fontSize: 24
+                      fontSize: 20
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "${server.connectionMethod}://${server.domain}${server.path ?? ""}${server.port != null ? ':${server.port}' : ""}",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).listTileTheme.textColor
-                    ),
-                  )
                 ],
-                if (serversProvider.selectedServer == null) Text(
-                  AppLocalizations.of(context)!.noServerSelected,
-                  style: const TextStyle(
-                    fontSize: 20
-                  ),
-                ),
-              ],
+              ),
             ),
             PopupMenuButton(
               itemBuilder: (context) => [
