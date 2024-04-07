@@ -7,9 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -110,35 +108,8 @@ void main() async {
   }
 }
 
-class Main extends StatefulWidget {
+class Main extends StatelessWidget {
   const Main({super.key});
-
-  @override
-  State<Main> createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  List<DisplayMode> modes = <DisplayMode>[];
-  DisplayMode? active;
-  DisplayMode? preferred;
-
-  Future<void> displayMode() async {
-    try {
-      modes = await FlutterDisplayMode.supported;
-      preferred = await FlutterDisplayMode.preferred;
-      active = await FlutterDisplayMode.active;
-      await FlutterDisplayMode.setHighRefreshRate();
-      setState(() {});
-    } catch (_) {
-      // ---- //
-    }
-  }
-
-  @override
-  void initState() {
-    displayMode();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

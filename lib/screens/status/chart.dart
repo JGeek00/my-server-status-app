@@ -61,13 +61,13 @@ class CustomLinearChart extends StatelessWidget {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: AxisTitles(
+        rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: AxisTitles(
+        topTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        bottomTitles: AxisTitles(
+        bottomTitles: const AxisTitles(
           sideTitles: SideTitles(
             showTitles: false,
           ),
@@ -105,13 +105,13 @@ class CustomLinearChart extends StatelessWidget {
           ),
         )
       ),
-      minY: scale != null ? scale!.min : null,
-      maxY: scale != null ? scale!.max : null,
+      minY: scale?.min,
+      maxY: scale?.max,
       lineBarsData: chartData['data'],
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: selectedTheme == ThemeMode.light
+          getTooltipColor: (_) => selectedTheme == ThemeMode.light
             ? const Color.fromRGBO(220, 220, 220, 1)
             : const Color.fromRGBO(35, 35, 35, 1),
           maxContentWidth: 150,
@@ -156,7 +156,7 @@ class CustomLinearChart extends StatelessWidget {
           barWidth: 2,
           preventCurveOverShooting: true,
           isStrokeCapRound: true,
-          dotData: FlDotData(
+          dotData: const FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
@@ -170,7 +170,7 @@ class CustomLinearChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: LineChart(
-        swapAnimationDuration: const Duration(milliseconds: 0),
+        duration: const Duration(milliseconds: 0),
         mainData(
           {
             'data': lines,

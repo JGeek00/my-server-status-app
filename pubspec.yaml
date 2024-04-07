@@ -41,29 +41,28 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_localizations:
     sdk: flutter  
-  provider: ^6.0.5
-  sqflite: ^2.2.5
-  package_info_plus: ^3.0.3
-  flutter_displaymode: ^0.5.0
-  dynamic_color: ^1.6.2
-  animations: ^2.0.7
-  uuid: ^3.0.7
+  provider: ^6.1.2
+  sqflite: ^2.3.3
+  package_info_plus: ^5.0.1
+  dynamic_color: ^1.7.0
+  animations: ^2.0.11
+  uuid: ^4.3.3
   expandable: ^5.0.1
   flutter_web_browser: ^0.17.1
-  flutter_svg: ^2.0.3
-  device_info_plus: ^8.1.0
+  flutter_svg: ^2.0.9
+  device_info_plus: ^9.1.2
   percent_indicator: ^4.2.3
-  url_launcher: ^6.1.10
-  fl_chart: ^0.61.0
+  url_launcher: ^6.2.5
+  fl_chart: ^0.67.0
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
       path: plugins/window_size
-  sqlite3_flutter_libs: ^0.5.13
-  sqflite_common_ffi: ^2.2.3
-  sentry_flutter: ^7.5.2
-  flutter_dotenv: ^5.0.2 
-  pie_chart: ^5.3.2
+  sqlite3_flutter_libs: ^0.5.20
+  sqflite_common_ffi: ^2.3.3
+  sentry_flutter: ^7.18.0
+  flutter_dotenv: ^5.1.0
+  pie_chart: ^5.4.0
 
 dev_dependencies:
   flutter_test:
@@ -74,9 +73,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
 
-  flutter_launcher_icons: "^0.12.0"
+  flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.2.10+1
 
 flutter_icons:
