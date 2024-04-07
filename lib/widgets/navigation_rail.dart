@@ -36,6 +36,9 @@ class SideNavigationRail extends StatelessWidget {
         case 'status':
           return AppLocalizations.of(context)!.status;
 
+        case 'docker':
+          return "Docker";
+
         default:
           return '';
       }

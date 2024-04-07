@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -163,81 +165,88 @@ class _InformationTabState extends State<InformationTab> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 0
               ),
-              child: Row(
-                children: [
-                  Container(
-                    width: (MediaQuery.of(context).size.width-32)*0.5,
-                    height: (MediaQuery.of(context).size.width-32)*0.5,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Stack(
-                      children: [
-                        CustomPieChart(
-                          data: [
-                            PieChartTile(
-                              label: "running", 
-                              value: data!.containersRunning != null
-                                ? data!.containersRunning!.toDouble()
-                                : 0.0, 
-                              color: Colors.green
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Row(
+                    children: [
+                      Container(
+                        width: (constraints.maxWidth-32)*0.5,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 200),
+                              child: CustomPieChart(
+                                data: [
+                                  PieChartTile(
+                                    label: "running", 
+                                    value: data!.containersRunning != null
+                                      ? data!.containersRunning!.toDouble()
+                                      : 0.0, 
+                                    color: Colors.green
+                                  ),
+                                  PieChartTile(
+                                    label: "paused", 
+                                    value: data!.containersPaused != null
+                                      ? data!.containersPaused!.toDouble()
+                                      : 0.0, 
+                                    color: Colors.orange
+                                  ),
+                                  PieChartTile(
+                                    label: "stopped", 
+                                    value: data!.containersStopped != null
+                                      ? data!.containersStopped!.toDouble()
+                                      : 0.0, 
+                                    color: Colors.red
+                                  ),
+                                ]
+                              ),
                             ),
-                            PieChartTile(
-                              label: "paused", 
-                              value: data!.containersPaused != null
-                                ? data!.containersPaused!.toDouble()
-                                : 0.0, 
-                              color: Colors.orange
+                            Center(
+                              child: Icon(
+                                DockerIcons.drive,
+                                size: 36,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        width: (constraints.maxWidth-32)*0.5,
+                        child: Column(
+                          children: [
+                            legendTile(
+                              AppLocalizations.of(context)!.running, 
+                              Colors.green, 
+                              data!.containersRunning != null
+                                ? data!.containersRunning!.toString()
+                                : '0'
                             ),
-                            PieChartTile(
-                              label: "stopped", 
-                              value: data!.containersStopped != null
-                                ? data!.containersStopped!.toDouble()
-                                : 0.0, 
-                              color: Colors.red
+                            const SizedBox(height: 16),
+                            legendTile(
+                              AppLocalizations.of(context)!.paused, 
+                              Colors.orange, 
+                              data!.containersPaused != null
+                                ? data!.containersPaused!.toString()
+                                : '0'
                             ),
-                          ]
+                            const SizedBox(height: 16),
+                            legendTile(
+                              AppLocalizations.of(context)!.stopped, 
+                              Colors.red, 
+                               data!.containersStopped != null
+                                ? data!.containersStopped!.toString()
+                                : '0'
+                            ),
+                          ],
                         ),
-                        Center(
-                          child: Icon(
-                            DockerIcons.drive,
-                            size: 36,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    width: (MediaQuery.of(context).size.width-32)*0.5,
-                    child: Column(
-                      children: [
-                        legendTile(
-                          AppLocalizations.of(context)!.running, 
-                          Colors.green, 
-                          data!.containersRunning != null
-                            ? data!.containersRunning!.toString()
-                            : '0'
-                        ),
-                        const SizedBox(height: 16),
-                        legendTile(
-                          AppLocalizations.of(context)!.paused, 
-                          Colors.orange, 
-                          data!.containersPaused != null
-                            ? data!.containersPaused!.toString()
-                            : '0'
-                        ),
-                        const SizedBox(height: 16),
-                        legendTile(
-                          AppLocalizations.of(context)!.stopped, 
-                          Colors.red, 
-                           data!.containersStopped != null
-                            ? data!.containersStopped!.toString()
-                            : '0'
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    ],
+                  );
+                }
               ),
             ),
             const SizedBox(height: 16),
