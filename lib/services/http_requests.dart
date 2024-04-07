@@ -113,8 +113,18 @@ Future<Map<String, dynamic>> apiRequest({
         message: 'HandshakeException'
       )
     };
+  } on FormatException catch (e, stackTrace) {
+    Sentry.captureException(e, stackTrace: stackTrace);
+    return {
+      'result': 'format_error', 
+      'message': 'FormatException',
+      'log': AppLog(
+        type: type, 
+        dateTime: DateTime.now(), 
+        message: 'FormatException'
+      )
+    };
   } catch (e) {
-    Sentry.captureException(e);
     return {
       'result': 'error', 
       'message': e.toString(),
@@ -204,8 +214,19 @@ Future getHardwareInfo({required Server server, required bool overrideTimeout}) 
           'result': 'success',
           'data': GeneralInfo.fromJson(jsonDecode(result['body']))
         };
+      } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'general_info', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
@@ -299,8 +320,19 @@ Future getSystemInformation({required Server server, required bool overrideTimeo
           'result': 'success',
           'data': SystemSpecsInformationData.fromJson(mappedData)
         };
+       } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'get_system_information', 
+            dateTime: DateTime.now(), 
+            message: 'no_response',
+            statusCode: result.map((res) => res['statusCode'] ?? 'null').toString(),
+            resBody: result.map((res) => res['body'] ?? 'null').toString()
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
@@ -356,8 +388,19 @@ Future getCurrentStatus({required Server server, required bool overrideTimeout})
           'result': 'success',
           'data': CurrentStatus.fromJson(jsonDecode(result['body']))
         };
+      } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'status', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
@@ -542,8 +585,19 @@ Future getDockerInfo({required Server server}) async {
           'result': 'success',
           'data': DockerInformation.fromJson(jsonDecode(result['body']))
         };
+      } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'status', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
@@ -613,8 +667,19 @@ Future getDockerImages({required Server server}) async {
           'result': 'success',
           'data': List<DockerImage>.from(jsonDecode(result['body']).map((i) => DockerImage.fromJson(i)))
         };
+      } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'status', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
@@ -684,8 +749,19 @@ Future getDockerContainers({required Server server}) async {
           'result': 'success',
           'data': List<DockerContainer>.from(jsonDecode(result['body']).map((i) => DockerContainer.fromJson(i)))
         };
+      } on FormatException catch (e, stackTrace) {
+        Sentry.captureException(e, stackTrace: stackTrace);
+        return {
+          'result': 'error',
+          'log': AppLog(
+            type: 'status', 
+            dateTime: DateTime.now(), 
+            message: 'error_code_not_expected',
+            statusCode: result['statusCode'].toString(),
+            resBody: result['body']
+          )
+        };
       } catch (e) {
-        Sentry.captureException(e);
         return {
           'result': 'error',
           'log': AppLog(
