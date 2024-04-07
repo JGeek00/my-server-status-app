@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -24,6 +25,7 @@ import 'package:my_server_status/providers/servers_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowMinSize(const Size(500, 500));
@@ -117,7 +119,7 @@ class Main extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) => MaterialApp(
-        title: 'AdGuard Home Manager',
+        title: 'My Server Status',
         theme: appConfigProvider.androidDeviceInfo != null && appConfigProvider.androidDeviceInfo!.version.sdkInt >= 31
           ? appConfigProvider.useDynamicColor == true
             ? lightTheme(lightDynamic)
@@ -141,12 +143,6 @@ class Main extends StatelessWidget {
           Locale('es', '')
         ],
         scaffoldMessengerKey: scaffoldMessengerKey,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child!,
-          );
-        },
         home: Base(appConfigProvider: appConfigProvider),
       ),
     );
