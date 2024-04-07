@@ -287,5 +287,6 @@
   "mode": "Mode",
   "propagation": "Propagation",
   "hideServerAddress": "Hide server address",
-  "hideServerAddressDescription": "Don't show the server address on the home screen."
+  "hideServerAddressDescription": "Don't show the server address on the home screen.",
+  "uptime": "Uptime"
 }

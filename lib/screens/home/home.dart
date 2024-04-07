@@ -11,6 +11,7 @@ import 'package:my_server_status/screens/home/home_appbar.dart';
 import 'package:my_server_status/screens/home/storage_section.dart';
 
 import 'package:my_server_status/providers/app_config_provider.dart';
+import 'package:my_server_status/functions/datetime.dart';
 import 'package:my_server_status/services/http_requests.dart';
 import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
@@ -137,6 +138,32 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           if (width > 700) {
             return ListView(
               children: [
+                if (serversProvider.serverInfo.data!.system?.uptime != null) Card(
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            AppLocalizations.of(context)!.uptime,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Text(
+                          convertSecondsToTime(serversProvider.serverInfo.data!.system!.uptime!.toInt()),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -210,6 +237,32 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           else {
             return ListView(
               children: [
+                if (serversProvider.serverInfo.data!.system?.uptime != null) Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            AppLocalizations.of(context)!.uptime,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Text(
+                          convertSecondsToTime(serversProvider.serverInfo.data!.system!.uptime!.toInt()),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 CpuSectionHome(
                   cpuInfo: serversProvider.serverInfo.data!.cpu
                 ),
