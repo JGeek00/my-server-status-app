@@ -109,6 +109,7 @@ class _DockerScreenState extends State<DockerScreen> with TickerProviderStateMix
                     controller: tabController,
                     unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                     tabs: tabsList()
                   )
                 ),

@@ -78,6 +78,7 @@ class _InformationScreenState extends State<InformationScreen> with TickerProvid
         controller: tabController,
         unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
         isScrollable: true,
+        tabAlignment: TabAlignment.start,
         tabs: [
           Tab(
             child: Row(
