@@ -285,5 +285,8 @@
   "source": "Fuente",
   "destination": "Destino",
   "mode": "Modo",
-  "propagation": "Propagación"
+  "propagation": "Propagación",
+  "hideServerAddress": "Ocultar dirección del servidor",
+  "hideServerAddressDescription": "No mostrar la dirección del servidor en la pantalla de inicio.",
+  "uptime": "Tiempo de actividad"
 }

@@ -3,12 +3,14 @@ class GeneralInfo {
   final Memory memory;
   final List<StorageFs> storageFs;
   final List<Network> network;
+  final System? system;
 
   GeneralInfo({
     required this.cpu,
     required this.memory,
     required this.storageFs,
     required this.network,
+    required this.system,
   });
 
   factory GeneralInfo.fromJson(Map<String, dynamic> json) => GeneralInfo(
@@ -23,6 +25,7 @@ class GeneralInfo {
       }
     }).where((x) => x != null)),
     network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),
+    system: json["system"] != null ? System.fromJson(json["system"]) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +33,7 @@ class GeneralInfo {
     "memory": memory.toJson(),
     "storageFs": List<dynamic>.from(storageFs.map((x) => x.toJson())),
     "network": List<dynamic>.from(network.map((x) => x.toJson())),
+    "system": system?.toJson(),
   };
 }
 
@@ -260,5 +264,21 @@ class StorageFs {
     "used": used,
     "use": use,
     "mount": mount,
+  };
+}
+
+class System {
+  final double? uptime;
+
+  System({
+    this.uptime,
+  });
+
+  factory System.fromJson(Map<String, dynamic> json) => System(
+    uptime: json["uptime"]?.toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "uptime": uptime,
   };
 }

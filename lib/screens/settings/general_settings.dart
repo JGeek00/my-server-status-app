@@ -121,6 +121,16 @@ class GeneralSettings extends StatelessWidget {
               : AppLocalizations.of(context)!.autoRefreshValue(appConfigProvider.autoRefreshTimeHome),
             onTap: () => openAutoRefreshTimeModal(appConfigProvider.autoRefreshTimeHome, "Home"),
           ),
+          CustomSwitchListTile(
+            icon: Icons.dns_rounded,
+            title: AppLocalizations.of(context)!.hideServerAddress,
+            subtitle: AppLocalizations.of(context)!.hideServerAddressDescription,
+            value: appConfigProvider.hideServerAddress,
+            onChanged: (v) => changeSetting(
+              fn: appConfigProvider.setHideServerAddress, 
+              value: v
+            ),
+          ),
           SectionLabel(label: AppLocalizations.of(context)!.information),
           CustomSwitchListTile(
             icon: Icons.storage_rounded,

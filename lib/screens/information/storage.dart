@@ -190,7 +190,7 @@ class StorageTab extends StatelessWidget {
           ),
           ...storage.fsSize.map((fs) => Column(
             children: [
-              SectionLabel(label: fs.fs),
+              SectionLabel(label: fs.fs ?? "Unknown"),
               Wrap(
                 children: [
                   listTile(
@@ -205,12 +205,12 @@ class StorageTab extends StatelessWidget {
                       subtitle: fs.type,
                     ),
                   ),
-                  listTile(
+                  if (fs.size != null) listTile(
                     CustomListTile(
                       title: AppLocalizations.of(context)!.size,
-                      subtitle: fs.size > 104857600 
-                        ? "${convertMemoryToGb(fs.size)} GB" 
-                        : "${convertMemoryToMb(fs.size.toDouble())} MB" 
+                      subtitle: fs.size! > 104857600 
+                        ? "${convertMemoryToGb(fs.size!)} GB" 
+                        : "${convertMemoryToMb(fs.size!.toDouble())} MB" 
                     ),
                   ),
                   listTile(

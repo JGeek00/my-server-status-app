@@ -39,6 +39,8 @@ class AppConfigProvider with ChangeNotifier {
 
   bool _combinedCpuChart = true;
 
+  bool _hideServerAddress = false;
+
   final List<AppLog> _logs = [];
 
   PackageInfo? get getAppInfo {
@@ -125,6 +127,10 @@ class AppConfigProvider with ChangeNotifier {
 
   bool get combinedCpuChart {
     return _combinedCpuChart;
+  }
+
+  bool get hideServerAddress {
+    return _hideServerAddress;
   }
 
   void setDbInstance(Database db) {
@@ -278,6 +284,18 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> setHideServerAddress(bool value) async {
+    final updated = await updateConfigQuery(_dbInstance!, 'hideServerAddress', value == true ? 1 : 0);
+    if (updated == true) {
+      _hideServerAddress = value;
+      notifyListeners();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   Future<bool> setCombinedCpuChart(bool value) async {
     final updated = await updateConfigQuery(_dbInstance!, 'combinedCpuChart', value == true ? 1 : 0);
     if (updated == true) {
@@ -302,6 +320,7 @@ class AppConfigProvider with ChangeNotifier {
     _statusColorsCharts = convertFromIntToBool(dbData['statusColorsCharts'])!;
     _hideVolumesNoMountPoint = convertFromIntToBool(dbData['hideVolumesNoMountPoint'])!;
     _combinedCpuChart = convertFromIntToBool(dbData['combinedCpuChart'])!;
+    _hideServerAddress = convertFromIntToBool(dbData['hideServerAddress'])!;
 
     _dbInstance = dbInstance;
     notifyListeners();

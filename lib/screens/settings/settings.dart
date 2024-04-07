@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:my_server_status/screens/settings/advanced_setings.dart';
 import 'package:my_server_status/screens/settings/general_settings.dart';
-import 'package:my_server_status/screens/settings/contact_me_modal.dart';
 import 'package:my_server_status/screens/settings/customization/customization.dart';
 import 'package:my_server_status/screens/servers/servers.dart';
 import 'package:my_server_status/widgets/custom_list_tile.dart';
@@ -41,13 +40,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final serversProvider = Provider.of<ServersProvider>(context);
 
     final width = MediaQuery.of(context).size.width;
-
-    void openContactModal() {
-      showDialog(
-        context: context, 
-        builder: (context) => const ContactMeModal()
-      );
-    }
 
     void onScreenChange(int val, BuildContext context) {
       if (selectedItem == val) {
@@ -147,13 +139,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       onTap: () => openUrl(Urls.apiRepo),
-                    ),
-                    CustomSettingsTile(
-                      selectedItem: selectedItem,
-                      thisItem: 5,
-                      title: AppLocalizations.of(context)!.contactDeveloper, 
-                      subtitle: AppLocalizations.of(context)!.issuesSuggestions, 
-                      onTap: openContactModal,
                     ),
                     CustomSettingsTile(
                       selectedItem: selectedItem,
@@ -319,11 +304,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               onTap: () => openUrl(Urls.apiRepo),
-            ),
-            CustomListTile(
-              title: AppLocalizations.of(context)!.contactDeveloper, 
-              subtitle: AppLocalizations.of(context)!.issuesSuggestions, 
-              onTap: openContactModal,
             ),
             CustomListTile(
               title: AppLocalizations.of(context)!.appVersion, 

@@ -285,5 +285,8 @@
   "source": "Source",
   "destination": "Destination",
   "mode": "Mode",
-  "propagation": "Propagation"
+  "propagation": "Propagation",
+  "hideServerAddress": "Hide server address",
+  "hideServerAddressDescription": "Don't show the server address on the home screen.",
+  "uptime": "Uptime"
 }

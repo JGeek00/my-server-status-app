@@ -167,7 +167,7 @@ class StorageModalDetails extends StatelessWidget {
                       ),
                       ...data.fsSize.map((fs) => Column(
                         children: [
-                          SectionLabel(label: fs.fs),
+                          SectionLabel(label: fs.fs ?? "Unknown"),
                           CustomListTile(
                             title: AppLocalizations.of(context)!.mountPoint,
                             subtitle: fs.mount,
@@ -176,11 +176,11 @@ class StorageModalDetails extends StatelessWidget {
                             title: AppLocalizations.of(context)!.type,
                             subtitle: fs.type,
                           ),
-                          CustomListTile(
+                          if (fs.size != null) CustomListTile(
                             title: AppLocalizations.of(context)!.size,
-                            subtitle: fs.size > 104857600 
-                              ? "${convertMemoryToGb(fs.size)} GB" 
-                              : "${convertMemoryToMb(fs.size.toDouble())} MB" 
+                            subtitle: fs.size! > 104857600 
+                              ? "${convertMemoryToGb(fs.size!)} GB" 
+                              : "${convertMemoryToMb(fs.size!.toDouble())} MB" 
                           ),
                           CustomListTile(
                             title: "RW",

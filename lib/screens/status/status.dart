@@ -17,36 +17,14 @@ import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/providers/app_config_provider.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
-class StatusScreen extends StatelessWidget {
+class StatusScreen extends StatefulWidget {
   const StatusScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final serversProvider = Provider.of<ServersProvider>(context);
-    final appConfigProvider = Provider.of<AppConfigProvider>(context);
-
-    return CurrentStatusWidget(
-      serversProvider: serversProvider,
-      appConfigProvider: appConfigProvider,
-    );
-  }
+  State<StatusScreen> createState() => _StatusScreenState();
 }
 
-class CurrentStatusWidget extends StatefulWidget {
-  final ServersProvider serversProvider;
-  final AppConfigProvider appConfigProvider;
-
-  const CurrentStatusWidget({
-    Key? key,
-    required this.serversProvider,
-    required this.appConfigProvider,
-  }) : super(key: key);
-
-  @override
-  State<CurrentStatusWidget> createState() => _CurrentStatusWidgetState();
-}
-
-class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerProviderStateMixin {
+class _StatusScreenState extends State<StatusScreen> with TickerProviderStateMixin {
   late TabController tabController;
   final ScrollController scrollController = ScrollController();
 
@@ -58,40 +36,45 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
   bool isRefreshing = false;
 
   Future<bool> requestCurrentStatus() async {
-    isRefreshing = true;
+    final serversProvider = Provider.of<ServersProvider>(context, listen: false);
+    final appConfigProvider = Provider.of<AppConfigProvider>(context, listen: false);
+    setState(() =>  isRefreshing = true);
     final result = await getCurrentStatus(
-      server: widget.serversProvider.selectedServer!,
-      overrideTimeout: !widget.appConfigProvider.timeoutRequests
+      server: serversProvider.selectedServer!,
+      overrideTimeout: !appConfigProvider.timeoutRequests
     );
-    isRefreshing = false;
+    if (!mounted) return false;
+    setState(() =>  isRefreshing = false);
     if (result['result'] == 'success') {
       currentStatus.add(result['data']);
       if (currentStatus.length > 20) {
         currentStatus.removeAt(0);
       }
       loadStatus = LoadStatus.loaded;
-      widget.serversProvider.setServerConnected(true);
+      serversProvider.setServerConnected(true);
       return true;
     }
     else {
-      widget.serversProvider.setServerConnected(false);
+      serversProvider.setServerConnected(false);
       loadStatus = LoadStatus.error;
-      widget.appConfigProvider.addLog(result['log']);
+      appConfigProvider.addLog(result['log']);
       return false;
     }
   }
 
   @override
   void initState() {
-    if (widget.serversProvider.selectedServer != null) {
+    final serversProvider = Provider.of<ServersProvider>(context, listen: false);
+    final appConfigProvider = Provider.of<AppConfigProvider>(context, listen: false);
+    if (serversProvider.selectedServer != null) {
       requestCurrentStatus();
-      isRefreshing = false;
-      if (widget.appConfigProvider.autoRefreshTimeStatus > 0) {
+      setState(() => isRefreshing = false);
+      if (appConfigProvider.autoRefreshTimeStatus > 0) {
         refreshTimer = Timer.periodic(
-          Duration(seconds: widget.appConfigProvider.autoRefreshTimeStatus), (_) async {
+          Duration(seconds: appConfigProvider.autoRefreshTimeStatus), (_) async {
             if (isRefreshing == false) {
               final result = await requestCurrentStatus();
-              if (result == false) {
+              if (result == false && mounted) {
                 refreshTimer!.cancel();
               }
             }
@@ -164,11 +147,12 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
                 controller: tabController,
                 unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                 isScrollable: true,
+                tabAlignment: TabAlignment.start,
                 tabs: [
-                  Tab(
+                  const Tab(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.memory_rounded),
                         SizedBox(width: 8),
                         Text("CPU")
@@ -250,10 +234,10 @@ class _CurrentStatusWidgetState extends State<CurrentStatusWidget> with TickerPr
                     unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                     isScrollable: true,
                     tabs: [
-                      Tab(
+                      const Tab(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(Icons.memory_rounded),
                             SizedBox(width: 8),
                             Text("CPU")

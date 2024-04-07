@@ -59,7 +59,7 @@ class DiskLayout {
     vendor: json["vendor"],
     size: json["size"],
     interfaceType: json["interfaceType"],
-    temperature: json["temperature"] != null ? double.parse(json["temperature"]) : null,
+    temperature: json["temperature"] != null ? int.parse(json["temperature"]).toDouble() : null,
     serialNum: json["serialNum"],
     firmwareRevision: json["firmwareRevision"],
   );
@@ -138,14 +138,14 @@ class BlockDevices {
 }
 
 class FsSize {
-  final String fs;
-  final String type;
-  final int size;
-  final int used;
-  final int available;
-  final double use;
-  final String mount;
-  final bool rw;
+  final String? fs;
+  final String? type;
+  final int? size;
+  final int? used;
+  final int? available;
+  final double? use;
+  final String? mount;
+  final bool? rw;
 
   FsSize({
     required this.fs,

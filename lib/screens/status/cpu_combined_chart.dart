@@ -38,10 +38,10 @@ class _CpuCombinedChartState extends State<CpuCombinedChart> {
     String configUnit(int core) {
       switch (coreChartConfig) {
         case CoreChartConfig.load:
-          return "${widget.data[widget.data.length-1].cores[core].load['load']!.toStringAsFixed(0)}%";
+          return "${widget.data[widget.data.length-1].cores[core].load?['load']!.toStringAsFixed(0)}%";
 
         case CoreChartConfig.speed:
-          return "${widget.data[widget.data.length-1].cores[core].speed.toStringAsFixed(2)} GHz";
+          return "${widget.data[widget.data.length-1].cores[core].speed?.toStringAsFixed(2)} GHz";
 
         case CoreChartConfig.temperature:
           final value = widget.data[widget.data.length-1].cores[core].temperature;

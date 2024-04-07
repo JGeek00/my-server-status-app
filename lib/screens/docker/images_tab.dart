@@ -39,6 +39,7 @@ class _ImagesTabState extends State<ImagesTab> {
       }
     }
     else {
+      if (!context.mounted) return;
       setState(() => loadStatus = LoadStatus.error);
     }
   }
@@ -78,6 +79,7 @@ class _ImagesTabState extends State<ImagesTab> {
           child: Container(
             padding: const EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data![i].id!,

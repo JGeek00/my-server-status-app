@@ -51,8 +51,8 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = List.filled(20, 0.0);
 
           for (var j = 0; j < widget.data.length; j++) {
-            speed[j] = widget.data[j].cores[i].speed;
-            load[j] = widget.data[j].cores[i].load["load"] ?? 0.0;
+            speed[j] = widget.data[j].cores[i].speed ?? 0.0;
+            load[j] = widget.data[j].cores[i].load?["load"] ?? 0.0;
           }
 
           for (var j = 0; j < widget.data.length; j++) {
@@ -84,8 +84,8 @@ class _CpuTabState extends State<CpuTab> {
           List<double> load = [];
 
           for (var d in widget.data) {
-            speed.add(d.cores[i].speed);
-            load.add(d.cores[i].load["load"] ?? 0.0);
+            speed.add(d.cores[i].speed ?? 0.0);
+            load.add(d.cores[i].load?["load"] ?? 0.0);
           }
 
           for (var d in widget.data) {

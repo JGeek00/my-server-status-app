@@ -23,60 +23,41 @@ import 'package:my_server_status/constants/app_icons.dart';
 import 'package:my_server_status/constants/enums.dart';
 import 'package:my_server_status/providers/servers_provider.dart';
 
-class InformationScreen extends StatelessWidget {
+class InformationScreen extends StatefulWidget {
   const InformationScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final serversProvider = Provider.of<ServersProvider>(context);
-    final appConfigProvider = Provider.of<AppConfigProvider>(context);
-
-    return InformationScreenWidget(
-      serversProvider: serversProvider,
-      appConfigProvider: appConfigProvider,
-    );
-  }
+  State<InformationScreen> createState() => _InformationScreenState();
 }
 
-class InformationScreenWidget extends StatefulWidget {
-  final ServersProvider serversProvider;
-  final AppConfigProvider appConfigProvider;
-
-  const InformationScreenWidget({
-    Key? key,
-    required this.serversProvider,
-    required this.appConfigProvider
-  }) : super(key: key);
-
-  @override
-  State<InformationScreenWidget> createState() => _InformationScreenWidgetState();
-}
-
-class _InformationScreenWidgetState extends State<InformationScreenWidget> with TickerProviderStateMixin {
+class _InformationScreenState extends State<InformationScreen> with TickerProviderStateMixin {
   late TabController tabController;
   final ScrollController scrollController = ScrollController();
   int selectedTab = 0;
   
   Future requestHardwareInfo() async {
+    final serversProvider = Provider.of<ServersProvider>(context, listen: false);
+    final appConfigProvider = Provider.of<AppConfigProvider>(context, listen: false);
     final result = await getSystemInformation(
-      server: widget.serversProvider.selectedServer!,
-      overrideTimeout: !widget.appConfigProvider.timeoutRequests
+      server: serversProvider.selectedServer!,
+      overrideTimeout: appConfigProvider.timeoutRequests
     );
     if (result['result'] == 'success') {
-      widget.serversProvider.setSystemSpecsInfoData(result['data']);
-      widget.serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loaded);
-      widget.serversProvider.setServerConnected(true);
+      serversProvider.setSystemSpecsInfoData(result['data']);
+      serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.loaded);
+      serversProvider.setServerConnected(true);
     }
     else {
-      widget.serversProvider.setServerConnected(false);
-      widget.serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.error);
-      widget.appConfigProvider.addLog(result['log']);
+      serversProvider.setServerConnected(false);
+      serversProvider.setSystemSpecsInfoLoadStatus(LoadStatus.error);
+      appConfigProvider.addLog(result['log']);
     }
   }
 
   @override
   void initState() {
-    if (widget.serversProvider.systemSpecsInfo.loadStatus != LoadStatus.loaded) {
+    final serversProvider = Provider.of<ServersProvider>(context, listen: false);
+    if (serversProvider.systemSpecsInfo.loadStatus != LoadStatus.loaded && serversProvider.selectedServer != null) {
       requestHardwareInfo();
     }
     super.initState();
@@ -97,6 +78,7 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
         controller: tabController,
         unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
         isScrollable: true,
+        tabAlignment: TabAlignment.start,
         tabs: [
           Tab(
             child: Row(
@@ -108,10 +90,10 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
               ],
             )
           ),
-          Tab(
+          const Tab(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.memory_rounded),
                 SizedBox(width: 8),
                 Text("CPU")
@@ -189,9 +171,9 @@ class _InformationScreenWidgetState extends State<InformationScreenWidget> with 
           );
 
         case LoadStatus.loaded:
-          return SingleChildScrollView(
+          return const SingleChildScrollView(
             child: Wrap(
-              children: const [
+              children: [
                 SystemDesktop(),
                 CpuDesktop(),
                 MemoryDesktop(),

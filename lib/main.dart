@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:window_size/window_size.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,6 +25,7 @@ import 'package:my_server_status/providers/servers_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowMinSize(const Size(500, 500));
@@ -110,35 +110,8 @@ void main() async {
   }
 }
 
-class Main extends StatefulWidget {
+class Main extends StatelessWidget {
   const Main({super.key});
-
-  @override
-  State<Main> createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  List<DisplayMode> modes = <DisplayMode>[];
-  DisplayMode? active;
-  DisplayMode? preferred;
-
-  Future<void> displayMode() async {
-    try {
-      modes = await FlutterDisplayMode.supported;
-      preferred = await FlutterDisplayMode.preferred;
-      active = await FlutterDisplayMode.active;
-      await FlutterDisplayMode.setHighRefreshRate();
-      setState(() {});
-    } catch (_) {
-      // ---- //
-    }
-  }
-
-  @override
-  void initState() {
-    displayMode();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +119,7 @@ class _MainState extends State<Main> {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) => MaterialApp(
-        title: 'AdGuard Home Manager',
+        title: 'My Server Status',
         theme: appConfigProvider.androidDeviceInfo != null && appConfigProvider.androidDeviceInfo!.version.sdkInt >= 31
           ? appConfigProvider.useDynamicColor == true
             ? lightTheme(lightDynamic)
@@ -170,12 +143,6 @@ class _MainState extends State<Main> {
           Locale('es', '')
         ],
         scaffoldMessengerKey: scaffoldMessengerKey,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child!,
-          );
-        },
         home: Base(appConfigProvider: appConfigProvider),
       ),
     );
