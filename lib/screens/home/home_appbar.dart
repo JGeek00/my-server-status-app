@@ -117,14 +117,16 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         fontSize: 24
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      "${server.connectionMethod}://${server.domain}${server.path ?? ""}${server.port != null ? ':${server.port}' : ""}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).listTileTheme.textColor
-                      ),
-                    )
+                    if (appConfigProvider.hideServerAddress == false) ...[
+                      const SizedBox(height: 5),
+                      Text(
+                        "${server.connectionMethod}://${server.domain}${server.path ?? ""}${server.port != null ? ':${server.port}' : ""}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).listTileTheme.textColor
+                        ),
+                      )
+                    ]
                   ],
                   if (serversProvider.selectedServer == null) Text(
                     AppLocalizations.of(context)!.noServerSelected,
