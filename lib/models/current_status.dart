@@ -5,6 +5,7 @@ class CurrentStatus {
   final Memory memory;
   final Storage? storage;
   final List<Network>? network;
+  final System? system;
 
   CurrentStatus({
     required this.cpu,
@@ -13,6 +14,7 @@ class CurrentStatus {
     required this.memory,
     this.storage,
     this.network,
+    this.system,
   });
 
   factory CurrentStatus.fromJson(Map<String, dynamic> json) => CurrentStatus(
@@ -22,6 +24,7 @@ class CurrentStatus {
     memory: Memory.fromJson(json["memory"]),
     storage: json["storage"] != null ? Storage.fromJson(json["storage"]) : null,
     network: List<Network>.from(json["network"].map((x) => Network.fromJson(x))),
+    system: json["system"] != null ? System.fromJson(json["system"]) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +32,9 @@ class CurrentStatus {
     "socketTemperature": socketTemperature != null ? List<double>.from(socketTemperature!.map((x) => x)) : null,
     "chipsetTemperature": chipsetTemperature,
     "memory": memory.toJson(),
-    "storage": storage != null ? storage!.toJson() : null,
+    "storage": storage?.toJson(),
     "network": network != null ? List<Network>.from(network!.map((x) => x.toJson())) : null,
+    "system": system?.toJson(),
   };
 }
 
@@ -108,10 +112,10 @@ class Average {
 }
 
 class Load {
-  final double average;
-  final double user;
-  final double system;
-  final double idle;
+  final double? average;
+  final double? user;
+  final double? system;
+  final double? idle;
 
   Load({
     required this.average,
@@ -136,9 +140,9 @@ class Load {
 }
 
 class Core {
-  final double speed;
+  final double? speed;
   final int? temperature;
-  final Map<String, double> load;
+  final Map<String, double>? load;
 
   Core({
     this.temperature,
@@ -151,13 +155,13 @@ class Core {
     temperature: json["temperature"] != null 
       ? json["temperature"].runtimeType == double ? json["temperature"].toInt() : json["temperature"]
       : null,
-    load: Map.from(json["load"]).map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
+    load: json["load"] != null ? Map.from(json["load"]).map((k, v) => MapEntry<String, double>(k, v?.toDouble())) : null,
   );
 
   Map<String, dynamic> toJson() => {
     "speed": speed,
     "temperature": temperature,
-    "load": Map.from(load).map((k, v) => MapEntry<String, dynamic>(k, v)),
+    "load": load != null ? Map.from(load!).map((k, v) => MapEntry<String, dynamic>(k, v)) : null,
   };
 }
 
@@ -253,5 +257,21 @@ class Storage {
   Map<String, dynamic> toJson() => {
     "rx": rx,
     "wx": wx,
+  };
+}
+
+class System {
+  final double? uptime;
+
+  System({
+    this.uptime,
+  });
+
+  factory System.fromJson(Map<String, dynamic> json) => System(
+    uptime: json["uptime"]?.toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "uptime": uptime,
   };
 }

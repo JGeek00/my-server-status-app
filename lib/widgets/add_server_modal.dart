@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -257,6 +255,7 @@ class _AddServerModalState extends State<AddServerModal> {
         }
         final serverCreated = await serversProvider.createServer(serverObj);
         if (serverCreated == null) {
+          if (!context.mounted) return;
           Navigator.pop(context);
         }
         else {
@@ -267,6 +266,7 @@ class _AddServerModalState extends State<AddServerModal> {
               message: serverCreated.toString()
             )
           );
+          if (!context.mounted) return;
           showSnackbar(
             appConfigProvider: appConfigProvider, 
             label: AppLocalizations.of(context)!.connectionNotCreated, 
@@ -275,7 +275,7 @@ class _AddServerModalState extends State<AddServerModal> {
           );
         }
       }
-      else if (result['result'] == 'invalid_username_password') {
+      else if (result['result'] == 'invalid_username_password' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -284,7 +284,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'no_connection') {
+      else if (result['result'] == 'no_connection' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -293,7 +293,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'ssl_error') {
+      else if (result['result'] == 'ssl_error' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -302,7 +302,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'server_error') {
+      else if (result['result'] == 'server_error' && context.mounted) {
         appConfigProvider.addLog(result['log']);       
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -313,6 +313,7 @@ class _AddServerModalState extends State<AddServerModal> {
       }
       else {
         appConfigProvider.addLog(result['log']);
+        if (!context.mounted) return;
         showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.unknownError, 
@@ -346,6 +347,7 @@ class _AddServerModalState extends State<AddServerModal> {
         }
         final serverSaved = await serversProvider.editServer(serverObj);
         if (serverSaved == null) {
+          if (!context.mounted) return;
           Navigator.pop(context);
         }
         else {
@@ -356,6 +358,7 @@ class _AddServerModalState extends State<AddServerModal> {
               message: serverSaved.toString()
             )
           );
+          if (!context.mounted) return;
           showSnackbar(
             appConfigProvider: appConfigProvider, 
             label: AppLocalizations.of(context)!.connectionNotCreated, 
@@ -364,7 +367,7 @@ class _AddServerModalState extends State<AddServerModal> {
           );
         }
       }
-      else if (result['result'] == 'invalid_username_password') {
+      else if (result['result'] == 'invalid_username_password' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -373,7 +376,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'no_connection') {
+      else if (result['result'] == 'no_connection' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -382,7 +385,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'ssl_error') {
+      else if (result['result'] == 'ssl_error' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -391,7 +394,7 @@ class _AddServerModalState extends State<AddServerModal> {
           labelColor: Colors.white
         );
       }
-      else if (result['result'] == 'server_error') {
+      else if (result['result'] == 'server_error' && context.mounted) {
         appConfigProvider.addLog(result['log']);
         showSnackbar(
           appConfigProvider: appConfigProvider, 
@@ -402,6 +405,7 @@ class _AddServerModalState extends State<AddServerModal> {
       }
       else {
         appConfigProvider.addLog(result['log']);
+        if (!context.mounted) return;
         showSnackbar(
           appConfigProvider: appConfigProvider, 
           label: AppLocalizations.of(context)!.unknownError, 

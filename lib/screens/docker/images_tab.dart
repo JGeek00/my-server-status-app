@@ -39,6 +39,7 @@ class _ImagesTabState extends State<ImagesTab> {
       }
     }
     else {
+      if (!context.mounted) return;
       setState(() => loadStatus = LoadStatus.error);
     }
   }

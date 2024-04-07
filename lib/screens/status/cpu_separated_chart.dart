@@ -61,7 +61,7 @@ class _CpuSeparatedChartState extends State<CpuSeparatedChart> {
                 ChartData(
                   data: List<double>.from(value['load'].map((e) => e.toDouble())), 
                   color: appConfigProvider.statusColorsCharts
-                    ? generateIntermediateColor(widget.data[widget.data.length-1].cores[nCore].load['load'] ?? 0)
+                    ? generateIntermediateColor(widget.data[widget.data.length-1].cores[nCore].load?['load'] ?? 0)
                     : Theme.of(context).colorScheme.primary
                 )
               ],
@@ -101,9 +101,9 @@ class _CpuSeparatedChartState extends State<CpuSeparatedChart> {
                       data: values,
                       color: appConfigProvider.statusColorsCharts 
                         ? generateIntermediateColor(
-                            (widget.data[widget.data.length-1].cores[nCore].speed/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100 > 100
+                            (widget.data[widget.data.length-1].cores[nCore].speed ?? 0.0/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100 > 100
                               ? 100
-                              : (widget.data[widget.data.length-1].cores[nCore].speed/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100
+                              : (widget.data[widget.data.length-1].cores[nCore].speed ?? 0.0/(widget.data[0].specs!.maxSpeed != null ? widget.data[0].specs!.maxSpeed! : maxValue))*100
                           )
                         : Theme.of(context).colorScheme.primary
                     )
